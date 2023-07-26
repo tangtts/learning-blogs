@@ -3,7 +3,7 @@
 
 <template>
   <div>
-    adfad
+    a
   </div>
 </template>
 
