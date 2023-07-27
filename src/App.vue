@@ -3,7 +3,7 @@
 
 <template>
   <div>
-    a
+    <el-button type="primary">adf</el-button>
   </div>
 </template>
 

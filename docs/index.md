@@ -3,9 +3,9 @@
 layout: home
 
 hero:
-  name: "tsk Awesome Blob"
-  text: "tsk Blob"
-  tagline: 📓 记录知识
+  name: "🦆 好大鸭 🦆"
+  text: "TSK 个人博客"
+  tagline: 📓 记录知识, 记录成长
   actions:
     - theme: brand
       text: Markdown Examples
@@ -15,11 +15,15 @@ hero:
       link: /api-examples
 
 features:
-  - title: 🦝 全面
-    details: 在平时的工作或者学习中，记录遇到的知识点
-  - title: 🙉 清晰
-    details: 把知识点进行分类
-  - title: 🦁 原因
-    details: 可以使用 vue3 和 ts 进行编写例子
+  - icon: 🛠️
+    title: 💻 前端
+    details: 🟧HTML、🟥CSS、🟨JS、🟦TS、🟩VUE、REACT ...
+
+  - icon: ⚽
+    title: 💾 后端
+    details: 🚀 Nest、🐬Mysql、🥦Redis...
+  - icon: 🔥
+    title: ❤️ 其他
+    details:  设计模式，代码规范，函数编程...
 ---
 
