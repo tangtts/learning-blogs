@@ -8,8 +8,8 @@ hero:
   tagline: 📓 记录知识, 记录成长
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: HTML
+      link: /HTML/标签
     - theme: alt
       text: API Examples
       link: /api-examples
