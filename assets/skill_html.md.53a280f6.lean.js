@@ -1,0 +1,1 @@
+import{_ as s,o as a,c as o,U as l}from"./chunks/framework.2a013da7.js";const d=JSON.parse('{"title":"HTML-技巧","description":"","frontmatter":{},"headers":[],"relativePath":"skill/html.md","filePath":"skill/html.md"}'),t={name:"skill/html.md"},n=l("",9),e=[n];function p(r,c,i,D,F,y){return a(),o("div",null,e)}const u=s(t,[["render",p]]);export{d as __pageData,u as default};

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #mouseTarget {
+      width: 100px;
+      height: 100px;
+      margin: 20px auto;
+      background-color: antiquewhite;
+    }
+
+    #unorderedList {
+      height: 50px;
+      background-color: yellowgreen;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mouseTarget">
+    <div id="unorderedList"></div>
+  </div>
+  <p>
+    无冒泡:mouseover
+    <span id="mouseenter">This is mouseenter event 0</span>
+  </p>
+  <p>
+    有冒泡:mouseover
+    <span id="mouseover">This is mouseover event 0</span>
+
+  </p>
+  <script>
+    let enterEventCount = 0;
+    let overEventCount = 0;
+
+    const mouseTarget = document.getElementById('mouseTarget');
+    const unorderedList = document.getElementById('unorderedList');
+
+
+    const mouseenter = document.getElementById('mouseenter');
+    const mouseover = document.getElementById('mouseover');
+
+    mouseTarget.addEventListener('mouseenter', (e) => {
+      enterEventCount++;
+      mouseenter.innerHTML = `This is mouseenter event ${enterEventCount}.`
+    });
+
+    unorderedList.addEventListener("mouseover", function () {
+      overEventCount++
+      mouseover.innerHTML = `This is mouseover event ${overEventCount}.`
+    })
+
+
+  </script>
+</body>
+
+</html>
