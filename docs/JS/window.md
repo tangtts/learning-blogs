@@ -33,6 +33,44 @@ jquery.js 可能在 script2 和 script3 之前或之后调用，如果这样，�
 - 如果脚本无需等待页面解析，且无依赖独立运行，那么应使用 async。
 - 如果脚本需要等待页面解析，且依赖于其它脚本，调用这些脚本时应使用 defer，将关联的脚本按所需顺序置于 HTML 中。
 
+### preload
+
+:::tip
+提供一种声明式的命令,让浏览器提前加载资源(加载后并不执行),在需要执行的时候再执行
+- 将加载和执行分离开，不阻塞渲染和document的onload 事件
+- 提交加载指定资源，不再出现依赖的font字体隔了一段时间才刷出
+:::
+#### 使用 HTTP 响应头的 Link 字段创建
+如我们常用到的 antd 会依赖一个 CDN 上的 font.js 字体文件，我们可以设置为提前加载，以及有一些模块虽然是按需异步加载，但在某些场景下知道其必定会加载的，则可以设置 preload 进行预加载，如：
+
+```html
+<link rel="preload" as="font"   href="https://at.alicdn.com/t/font_zck90zmlh7hf47vi.woff">
+
+<link rel="preload" as="script" href="https://a.xxx.com/xxx/PcCommon.js">
+
+<link rel="preload" as="script" href="https://a.xxx.com/xxx/TabsPc.js">
+```
+#### 如何区分 preload 和 prefetch
+- preload 是告诉浏览器页面必定需要的资源，浏览器一定会加载这些资源;不管资源是否被使用
+- prefetch 是告诉浏览器页面可能需要的资源，浏览器不一定会加载这些资源(有空闲时加载)
+#### 避免错用 preload 加载跨域资源
+若 css 中有应用于已渲染到 DOM 树的元素的选择器，且设置了 @font-face 规则时，会触发字体文件的加载。而字体文件加载中时，DOM 中的这些元素，是处于不可见的状态。对已知必加载的 font 文件进行预加载，除了有性能提升外，更有体验优化的效果。
+
+在我们的场景中，已知 antd.css 会依赖 font 文件，所以我们可以对这个字体文件进行 preload:
+```html
+<link rel="preload" as="font" href="https://at.alicdn.com/t/font_zck90zmlh7hf47vi.woff">
+```
+然而我发现这个文件加载了两次：
+<img src="/docs/assets/img/v2-49ecba5aac6bbbd1fac6fd4789905f2b_720w.png"/>
+
+原因是对跨域的文件进行 preload 的时候，我们必须加上 crossorigin 属性：
+```html
+  <link rel="preload" as="font" crossorigin href="https://at.alicdn.com/t/font_zck90zmlh7hf47vi.woff">
+```
+
+####  Dns-prefetch(dns预获取) 
+是尝试在请求资源之前解析域名。 仅对跨域域上的 DNS 查找有效
+<img src="/docs/assets/img/image.png"/>
 
 ## Promise
 
@@ -467,3 +505,74 @@ appendChild() 返回的是被附加的子元素,不支持多参数，不支持 s
 var p = document.createElement("p");
 document.body.appendChild(p);
 ```
+## [encodeURIComponent](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent)/[encodeURI](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/encodeURI)
+
+:::tip
+与 encodeURI() 相比，此函数会编码更多的字符，包括 URI 语法的一部分。
+:::
+
+encodeURIComponent 转义除了如下所示外的所有字符：
+
+不转义的字符：  A-Z a-z 0-9 - _ . ! ~ * ' ( )
+```js
+var set1 = ";,/?:@&=+$"; // 保留字符
+var set2 = "-_.!~*'()"; // 不转义字符
+var set3 = "#"; // 数字标志
+var set4 = "ABC abc 123"; // 字母数字字符和空格
+
+console.log(encodeURI(set1)); // ;,/?:@&=+$
+console.log(encodeURI(set2)); // -_.!~*'()
+console.log(encodeURI(set3)); // #
+console.log(encodeURI(set4)); // ABC%20abc%20123 (空格被编码为 %20)
+
+console.log(encodeURIComponent(set1)); // %3B%2C%2F%3F%3A%40%26%3D%2B%24
+console.log(encodeURIComponent(set2)); // -_.!~*'()
+console.log(encodeURIComponent(set3)); // %23
+console.log(encodeURIComponent(set4)); // ABC%20abc%20123 (空格被编码为 %20)
+
+```
+
+## [URL](https://developer.mozilla.org/zh-CN/docs/Web/API/URL)
+
+```js
+let s = new URL(
+  "http://zs:123456@localhost:8080/directorPerformance/todo?id=1#name=zs#age=5");
+  console.log(s)
+```
+<img src="assets/../../assets/img/url.png"/>
+
+
+<iframe
+  height="280"
+  width="100%"
+  frameborder="1"
+  src="//unpkg.com/javascript-playgrounds@^1.0.0/public/index.html?#data=%7B%22code%22%3A%22let%20s%20%3D%20new%20URL(%5Cn%20%20%5C%22http%3A%2F%2Fzs%3A123456%40localhost%3A8080%2FdirectorPerformance%2Ftodo%3Fid%3D1%23name%3Dzs%23age%3D5%5C%22)%3B%5Cn%20%20console.log(s)%22%7D"
+></iframe>
+
+### 属性
+- search
+一个USVString ，指示 URL 的参数字符串；如果提供了任何参数，则此字符串包括所有参数，并以开头的“？”开头 字符。
+
+- searchParams 只读
+URLSearchParams对象，可用于访问search中找到的各个查询参数。
+```js
+// https://some.site/?id=123
+const parsedUrl = new URL(window.location.href);
+console.log(parsedUrl.searchParams.get("id")); // "123"
+```
+- hash
+包含'#'的USVString，后跟 URL 的片段标识符。
+
+- pathname
+以 '/' 起头紧跟着 URL 文件路径的 DOMString。
+
+
+### 静态方法
+createObjectURL()
+返回一个DOMString ，包含一个唯一的 blob 链接（该链接协议为以 blob:，后跟唯一标识浏览器中的对象的掩码）。
+
+revokeObjectURL()
+销毁之前使用URL.createObjectURL()方法创建的 URL 实例。
+
+
+
