@@ -1,1 +1,0 @@
-import{_ as e,o as a,c as p,U as i}from"./chunks/framework.2a013da7.js";const P=JSON.parse('{"title":"像素","description":"","frontmatter":{},"headers":[],"relativePath":"HTML/像素.md","filePath":"HTML/像素.md"}'),o={name:"HTML/像素.md"},r=i("",26),t=[r];function n(d,h,c,s,l,S){return a(),p("div",null,t)}const x=e(o,[["render",n]]);export{P as __pageData,x as default};

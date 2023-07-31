@@ -1,1 +1,0 @@
-import{_ as s,o as n,c as a,U as l}from"./chunks/framework.2a013da7.js";const A=JSON.parse('{"title":"包含块","description":"","frontmatter":{},"headers":[],"relativePath":"HTML/包含块.md","filePath":"HTML/包含块.md"}'),p={name:"HTML/包含块.md"},o=l("",17),t=[o];function e(c,r,D,y,F,C){return n(),a("div",null,t)}const d=s(p,[["render",e]]);export{A as __pageData,d as default};
