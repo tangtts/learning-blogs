@@ -13,17 +13,22 @@ hero:
     - theme: alt
       text: API Examples
       link: /api-examples
-
+  # image:
+  #   src: /public/B.Duck.svg
+  #   alt: 网页的logo图标
 features:
   - icon: 🛠️
     title: 💻 前端
+    link: /HTML/标签
     details: 🟧HTML、🟥CSS、🟨JS、🟦TS、🟩VUE、REACT ...
 
   - icon: ⚽
     title: 💾 后端
+    link: /backend/node
     details: 🚀 Nest、🐬Mysql、🥦Redis...
   - icon: 🔥
     title: ❤️ 其他
+    link: /skill/html
     details:  设计模式，代码规范，函数编程...
 ---
 
