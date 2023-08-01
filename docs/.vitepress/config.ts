@@ -9,11 +9,12 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       {
-        text: "前端基础",
+        text: "前端",
         items: [
           { text: "HTML", link: "/HTML/标签" },
           { text: "CSS", link: "/CSS/基础" },
           { text: "JS", link: "/JS/window" },
+          { text: "TS", link: "/TS/index" },
         ],
       },
       {
