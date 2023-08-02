@@ -3,16 +3,16 @@
 layout: home
 
 hero:
-  name: "🦆 好大鸭 🦆"
+  name: "🦆 好大鸭"
   text: "TSK 个人博客"
   tagline: 📓 记录知识, 记录成长
   actions:
     - theme: brand
-      text: HTML
+      text: 🦌 前端
       link: /HTML/标签
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: 🔥 后端
+      link: /backend/node
   # image:
   #   src: /public/B.Duck.svg
   #   alt: 网页的logo图标

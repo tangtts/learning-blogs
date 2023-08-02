@@ -79,7 +79,8 @@ export default defineConfig({
           collapsed: true,
           text: "后端",
           items:[
-            {text:"node",link:"/backend/node"}
+            {text:"node",link:"/backend/node"},
+            {text:"promise",link:"/backend/promise"},
           ],
         }
       ],
