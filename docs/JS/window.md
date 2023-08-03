@@ -574,5 +574,41 @@ createObjectURL()
 revokeObjectURL()
 销毁之前使用URL.createObjectURL()方法创建的 URL 实例。
 
+## IntersectionObserver
+
+```js
+var observer = new IntersectionObserver(callback[, options])
+```
+options:
+-  root
+   监听元素的祖先元素的element 对象,其边界盒作为视口
+- rootMargin
+  距离边界盒的一组偏移量,类型为字符串,与margin相同,默认值是 `0px 0px 0px 0px`
+
+- threshold 
+  一个包含阈值的列表，按升序排列，列表中的每个阈值都是监听对象的交叉区域与边界区域的比率。当监听对象的任何阈值被越过时，都会生成一个通知（Notification）。如果构造器未传入值，则默认值为 0。 
+  
+```js
+// Register IntersectionObserver
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    // Add 'active' class if observation target is inside viewport
+    if (entry.intersectionRatio > 0) {
+      entry.target.classList.add("active");
+    }
+    // Remove 'active' class otherwise
+    else {
+      entry.target.classList.remove("active");
+    }
+  });
+});
+
+// Declares what to observe, and observes its properties.
+const boxElList = document.querySelectorAll(".box");
+boxElList.forEach((el) => {
+  io.observe(el);
+});
+
+```
 
 

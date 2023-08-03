@@ -1,0 +1,45 @@
+
+<html>
+<head>
+  <style>
+    div {
+      padding: 0;
+      margin: 0;
+      display: inline-block;
+      widtH: 100px;
+      height: 100px;
+      background: blue;
+    }
+    #microTaskDom {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <span>
+    第一个会突然红一下
+  </span>
+  <button onclick="load()">点击重新执行</button>
+  <div id="taskDom"></div>
+  <div id="microTaskDom"></div>
+  <script>
+
+    function load (){
+      setTimeout(() => {
+          taskDom.style.background = 'red'
+          setTimeout(() => {
+            taskDom.style.background = 'black'
+          }, 0);
+          
+          microTaskDom.style.background = 'red'
+          Promise.resolve().then(() => {
+            microTaskDom.style.background = 'black'
+          })
+        }, 1000);
+    }
+
+
+    window.onload = load;
+  </script>
+</body>
+</html>

@@ -20,19 +20,24 @@ export default defineConfig({
       {
         text: "后端",
         items: [
-          {text:"node",link:"/backend/node"}
+          {text:"node",link:"/backend/node"},
+          {text:"promise",link:"/backend/promise"},
+          {text:"Cookie/session/jwt",link:"/backend/jwt"},
+          {text:"任务队列",link:"/backend/任务队列"},
         ],
       },
       {
-        text: "技巧",
+        text: "其他",
         items: [
-          { text: "html", link: "/skill/html" },
-          { text: "js", link: "/skill/js" },
+          { text: "html技巧", link: "/skill/html" },
+          { text: "js技巧", link: "/skill/js" },
           { text: "正则", link: "/skill/正则" },
+          { text: "代码规范", link: "/skill/代码规范" },
+          { text: "git", link: "/skill/git" },
           { text: "快捷键", link: "/skill/快捷键" },
         ],
       },
-      
+      {text:"算法",link:"/algorithm/算法"},
     ],
     sidebar: {
       HTML: [
@@ -81,17 +86,22 @@ export default defineConfig({
           items:[
             {text:"node",link:"/backend/node"},
             {text:"promise",link:"/backend/promise"},
+            {text:"Cookie/session/jwt",link:"/backend/jwt"},
+            {text:"任务队列",link:"/backend/任务队列"},
           ],
         }
       ],
       skill: [
         {
           collapsed: true,
-          text: "技巧",
+          text: "其他",
           items: [
-            { text: "js技巧", link: "/skill/js" },
             { text: "html技巧", link: "/skill/html" },
+            { text: "js技巧", link: "/skill/js" },
             { text: "正则", link: "/skill/正则" },
+            { text: "代码规范", link: "/skill/代码规范" },
+            { text: "git", link: "/skill/git" },
+            { text: "快捷键", link: "/skill/快捷键" },
           ],
         },
       ],

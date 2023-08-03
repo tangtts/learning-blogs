@@ -83,70 +83,112 @@ do {
 	flag = true
 }while(false)
 ```
+## filter 过滤下标
+```js
+ fucntion DEL_LEFT_VIEWS (state, view) {
+    const index = 5
+   
+    state.visitedViews = state.visitedViews.filter((item, idx) => {
+      if (idx >= index) {
+        return true
+      }
 
-## git
-### commit message
-- feat：新功能(feature(功能))
-- fix：修补bug
-- docs：文档（documentation）
-- style： 格式（不影响代码运行的变动）
-- refactor：重构（即不是新增功能，也不是修改bug的代码变动）
-- test：增加测试
-- chore：构建过程或辅助工具的变动
-### 仓库
-- 工作区(working tree): 本地编辑器
-- 暂存区(index):git add操作后进入暂存区，可用git status查看
-- 本地仓库(repository):git commit 后进入本地仓库
+      return false
+    })
+  }
+```
+## break 中断
+对于 for 循环,要及时的中断
+```js
+for (let v of state.visitedViews) {
+	if (v.path === view.path) {
+		v = Object.assign(v, view)
+		break
+	}
+}
 
-### 修改 commit
-#### (amend)修改上一次
-```bash
-# 把上一次的commit记录去除，修改commit信息。
-git commit --amend
+let array = [1,2,3]
+for (let index = 0; index < array.length; index++) {
+	const element = array[index];
+	if(element == 2) break;
+}
+```
+## 判断元素是否已经触底
+
+scrollHeight = 等于该元素在不使用滚动条的情况下为了适应视口中所用内容所需的最小高度  
+可视高度 + 滚动条在 Y 轴上的滚动距离 = 总高度    
+clientHeight + scrollTop === scrollHeight;
+```js
+const dom = document.getElementById('scrollElement');
+
+dom.addEventListener('scroll', () => {
+	const clientHeight = dom.clientHeight;
+	const scrollTop = dom.scrollTop;
+	const scrollHeight = dom.scrollHeight;
+	if (clientHeight + scrollTop === scrollHeight) {
+		console.log('竖向滚动条已经滚动到底部')
+	}
+})
 ```
 
-#### git reset 
-```bash
-# 回退到指定commit，该commit之后的提交内容，保留工作目录，新内容放进暂存区
-git reset --soft
+```vue
+<template>
+  <div v-if="!has_more">暂无更多数据</div>
+  <div class="load_more" v-else>加载中</div>
+</template>
 
-# 回退到指定commit，该commit之后的提交内容，工作区和暂存区的内容都被抹掉
-git reset --hard
-
-# 不带参数,或带参数–mixed(默认参数)，与git reset --soft 不同，新内容放到工作区
-git reset 
-git reset --mixed 
+<script lang="ts">
+  import { defineComponent, ref, watch } from 'vue';
+  export default defineComponent({
+    props: {
+      has_more: {
+        type: Boolean,
+        require: true
+      }
+    },
+    mounted() {
+      const io = new IntersectionObserver(entries => {
+        if (entries[0].intersectionRatio > 0) {
+          this.$emit('loadMore');
+        }
+      });
+      io.observe(document.querySelector('.load_more'));
+    },
+  })
+</script>
 ```
-```bash
-# 回到过去的某个版本
-git reset --soft 158bd35
+主要利用了 `IntersectionObserver`
 
-#  回退到上一个版本
-git reset --soft HEAD^
+## 按位与 判断奇偶
+按位与（&）运算符在两个操作数对应的二进位都为 1 时，该位的结果值才为 1(**必须同时为 1 才为 1**)  
 
-# 回退N个版本
-git reset --soft HEAD~n
+可以利用 1 的二进制是 `00001`来进行最后一位的判断
+因为偶数的最后一位一定是 0,奇数的末尾一定是 1
+`(2).toString(2)`
+```js
+	2 & 1 // 0
+	4 & 1 // 0
+	6 & 1  //0
+
+	3 & 1 // 1
+	5 & 1 //1
 ```
-#### git rebase 
-使用git rebase –i xxxx（commit编号），此处的编号是合并编号后一个提交的内容开始
-- pick  的意思是要会执行这个 commit
-- squash(压扁)  的意思是这个 commit 会被合并到前一个 commit
 
-```txt
-首先，这个commitid表示你要进行rebase的base(基)，
-也就是在commitId到当前HEAD之间的commit都会被列出来。然后你决定pick哪些 squash哪些
-假设 你的commit log类似这样
-commit 8 (HEAD)
-commit 7
-commit 6
-commit 5
-commit 4
-commit 3
-commit 2
-...
-
-你期望将从4到8的 commit 合并为一个，也就是基于3进行 rebase, 有两种方式，
-
-1：直接 git rebase -i 3
-2：相对当前HEAD, 因为3前面有5个 commit，那就是 git rebase -i HEAD~5
+## switch/case使用区间
+```js
+const age = 26;
+switch (true) {
+	case isNaN(age):
+		console.log("not a number");
+		break;
+	case (age < 18):
+		console.log("under age");
+		break;
+	case (age >= 18):
+		console.log("adult");
+		break;
+	default:
+		console.log("please set your age");
+		break;
+}
 ```
