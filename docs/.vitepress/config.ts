@@ -15,15 +15,16 @@ export default defineConfig({
           { text: "CSS", link: "/CSS/基础" },
           { text: "JS", link: "/JS/window" },
           { text: "TS", link: "/TS/index" },
+          { text: "Vue", link: "/Vue/lazy" },
         ],
       },
       {
         text: "后端",
         items: [
-          {text:"node",link:"/backend/node"},
-          {text:"promise",link:"/backend/promise"},
-          {text:"Cookie/session/jwt",link:"/backend/jwt"},
-          {text:"任务队列",link:"/backend/任务队列"},
+          { text: "node", link: "/backend/node" },
+          { text: "promise", link: "/backend/promise" },
+          { text: "Cookie/session/jwt", link: "/backend/jwt" },
+          { text: "任务队列", link: "/backend/任务队列" },
         ],
       },
       {
@@ -32,12 +33,13 @@ export default defineConfig({
           { text: "html技巧", link: "/skill/html" },
           { text: "js技巧", link: "/skill/js" },
           { text: "正则", link: "/skill/正则" },
+          { text: "设计模式", link: "/skill/设计模式" },
           { text: "代码规范", link: "/skill/代码规范" },
           { text: "git", link: "/skill/git" },
           { text: "快捷键", link: "/skill/快捷键" },
         ],
       },
-      {text:"算法",link:"/algorithm/算法"},
+      { text: "算法", link: "/algorithm/算法" },
     ],
     sidebar: {
       HTML: [
@@ -79,17 +81,27 @@ export default defineConfig({
           ],
         },
       ],
-      backend:[
+      Vue: [
+        {
+          collapsed: true,
+          text: "Vue",
+          items: [
+            { text: "Lazy", link: "/Vue/lazy" },
+            { text: "loading", link: "/Vue/loading" },
+        ],
+        },
+      ],
+      backend: [
         {
           collapsed: true,
           text: "后端",
-          items:[
-            {text:"node",link:"/backend/node"},
-            {text:"promise",link:"/backend/promise"},
-            {text:"Cookie/session/jwt",link:"/backend/jwt"},
-            {text:"任务队列",link:"/backend/任务队列"},
+          items: [
+            { text: "node", link: "/backend/node" },
+            { text: "promise", link: "/backend/promise" },
+            { text: "Cookie/session/jwt", link: "/backend/jwt" },
+            { text: "任务队列", link: "/backend/任务队列" },
           ],
-        }
+        },
       ],
       skill: [
         {
@@ -99,6 +111,7 @@ export default defineConfig({
             { text: "html技巧", link: "/skill/html" },
             { text: "js技巧", link: "/skill/js" },
             { text: "正则", link: "/skill/正则" },
+            { text: "设计模式", link: "/skill/设计模式" },
             { text: "代码规范", link: "/skill/代码规范" },
             { text: "git", link: "/skill/git" },
             { text: "快捷键", link: "/skill/快捷键" },
@@ -123,9 +136,13 @@ export default defineConfig({
     },
     socialLinks: [
       { icon: "github", link: "https://github.com/tangtts/learning-blogs" },
-      { icon:{
-        svg:'<svg t="1690806613078" class="icon" viewBox="0 0 1272 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2313" width="36" height="36"><path d="M729.641 165.277l-95.314-75.152-99.563 78.527-5.179 4.16 104.742 83.503 105.09-83.503-9.776-7.535z m361.212 291.472L634.065 816.943l-456.498-359.99-67.442 54.174 523.94 413.118 524.23-413.35-67.442-54.146zM634.065 485.96L385.478 290.006l-67.412 54.117 315.97 249.168 316.29-249.4-67.413-54.146L634.065 485.96z" p-id="2314" fill="#8a8a8a"></path></svg>'
-      }, link: "https://juejin.cn/user/308289423282296",ariaLabel:"掘金" },
+      {
+        icon: {
+          svg: '<svg t="1690806613078" class="icon" viewBox="0 0 1272 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2313" width="36" height="36"><path d="M729.641 165.277l-95.314-75.152-99.563 78.527-5.179 4.16 104.742 83.503 105.09-83.503-9.776-7.535z m361.212 291.472L634.065 816.943l-456.498-359.99-67.442 54.174 523.94 413.118 524.23-413.35-67.442-54.146zM634.065 485.96L385.478 290.006l-67.412 54.117 315.97 249.168 316.29-249.4-67.413-54.146L634.065 485.96z" p-id="2314" fill="#8a8a8a"></path></svg>',
+        },
+        link: "https://juejin.cn/user/308289423282296",
+        ariaLabel: "掘金",
+      },
     ],
   },
 });

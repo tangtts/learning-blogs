@@ -7,6 +7,10 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    DirectiveLazy: typeof import('./src/components/DirectiveLazy.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
