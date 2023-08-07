@@ -6,6 +6,114 @@
 scss 尽可能的简洁
 :::
 
+## 变量
+### $
+SCSS中变量名使用中划线或下划线都是指向同一变量的
+
+1. $border-color 和$border_color 是同一个变量
+2. 后定义的会被忽略,但是会执行赋值
+
+```scss
+  $border-color:#aaa; //声明变量
+  $border_color:#ccc;
+
+   //  .a {
+   //    color: #ccc;
+  //    }
+  // 不论是 $border-color 还是 $border_color 都是一样的
+  .a{
+      color:$border_color;
+  }
+ 
+```
+### [#{}](https://sass-lang.com/documentation/interpolation/)
+
+**将 SassScript 表达式的结果嵌入到 CSS 块中**
+
+作用是引用表达式   
+
+这个时候不能使用 ${name}
+```scss
+@mixin corner-icon($name, $top-or-bottom, $left-or-right) {
+  .icon-#{$name} {
+    background-image: url("/icons/#{$name}.svg");
+    position: absolute;
+    #{$top-or-bottom}: 0;
+    #{$left-or-right}: 0;
+  }
+}
+
+@include corner-icon("mail", top, left);
+```
+生成结果
+```css
+.icon-mail {
+  background-image: url("/icons/mail.svg");
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+```
+
+:::tip
+插值对于将值 ***注入字符串*** 非常有用，但除此之外，它在SassScript表达式中很少需要。  
+您绝对不需要仅在属性值中使用变量。不用写作 color: #{$accent}，您可以写作  color: $accent！
+:::
+
+## 嵌套
+
+scss识别一个属性以分号结尾时则判断为一个属性  
+以大括号结尾时则判断为一个嵌套属性  
+规则是将外部的属性以及内部的属性通过中划线连接起来形成一个新的属性
+1. 
+```scss
+li {
+    border:1px solid #aaa {
+        left:0;
+        right:0;
+    }
+}
+```
+结果
+```css
+  li {
+    border: 1px solid #aaa;
+    border-left: 0;
+    border-right: 0;
+}
+```
+2. 
+```scss
+.info-page {
+  margin: auto {
+    bottom: 10px;
+    top: 2px;
+  }
+}
+```
+```css
+.info-page {
+  margin: auto;
+  margin-bottom: 10px;
+  margin-top: 2px;
+}
+```
+
+## [隐藏变量](https://sass-lang.com/documentation/style-rules/declarations/#hidden-declarations)
+```scss
+$rounded-corners: false;
+
+.button {
+  border: 1px solid black;
+  border-radius: if($rounded-corners, 5px, null);
+}
+```
+```css
+.button {
+  border: 1px solid black;
+}
+```
+
 ## @each
 ```scss
 @each $animal in puma, sea-slug, egret, salamander {

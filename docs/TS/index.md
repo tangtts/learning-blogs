@@ -71,8 +71,44 @@ const res = test(12, false);
 
 ### 函数兼容
 
-目的是为了安全
+**子类型比父类型更加具体,父类型比子类型更宽泛,子类型可以赋值给父类型,父类型不能赋值给子类型(逆变除外)** 目的是为了安全
 
+#### 可赋值性
+
+```ts
+interface Animal {
+  name: string;
+}
+
+interface Dog extends Animal {
+  break(): void;
+}
+
+let a: Animal;
+let b: Dog;
+
+// 可以赋值，子类型更佳具体，可以赋值给更佳宽泛的父类型
+a = b;
+// 反过来不行
+b = a;
+```
+可赋值性在联合类型中的特性
+```ts
+type A = 1 | 2 | 3;
+type B = 2 | 3;
+let a: A;
+let b: B;
+
+// 不可赋值
+b = a;
+// 可以赋值
+a = b;
+```
+A此处类型更多但是其表达的类型更宽泛，所以A是父类型，B是子类型。
+
+因此b = a不成立（父类型不能赋值给子类型），而a = b成立（子类型可以赋值给父类型）
+
+---
 :::tip
 **_赋值的主要是赋值的是函数体_**  
 形参数量少的可以赋值给形参数量多的,因为形参少，在 **_函数体内_** 只能用到这些形参
@@ -133,8 +169,8 @@ sum().age / sum.name;
 **`TS` 中只有 `函数参数` 这一处逆变**
 
 :::tip 🚀 逆变/协变
-**在逆变位置，可推导出交叉类型**  
-**在协变位置，可推导出联合类型**
+**infer 推导的名称相同并且都处于逆变的位置，可推导出交叉类型**  
+**infer 推导的名称相同并且都处于协变的位置，可推导出联合类型**
 :::
 交叉类型
 
@@ -296,6 +332,32 @@ Object 表示一个 js 的全局对象,任何时候都不建议使用
 :::
 
 <iframe src="https://www.typescriptlang.org/play?#code/FDA2FMBcAIHsCMBWAuOTwGNIG5gMdALzQDeAvttAPRXSAQKoKs2gMP+BeXoJ-aghjGD0ZmopjIG8fQNHqeJEWgBtALqUa9ZoAdTQCN+PfP2jDRBYgAoAlEQB8pCtVqMmgX8UFq9Fg0j84gIyVo7s9EB66QwA0PADsAVwBbeHAAJwcQCBh8ACZUAHk7HC148XJZc2Z2bmgUvntNBPFpbPkmZR5C9RKkDN0DQmMszwtrGtTo0uJnDwH2v36uosERGKhoAA9UNXtiACIAC3BQUFhFisBYOQtAdW1AMm9AJjkuQHzlQGnNYSZt2zHosCmAT2TupYB3WAjQABMtz13mIcThcrjcCt1NJMYAAvZDkcSLACGi2AQA" width="100%" height="600"/>
+
+## Class
+### 类型
+- 当把类直接作为类型时，该类型约束的是该类型必须是类的实例；即该类型获取的是该类上的实例属性和实例方法（也叫原型方法）；
+- 当把typeof 类作为类型时，约束的满足该类的类型；即该类型获取的是该类上的静态属性和方法。
+```ts
+class People {
+  name: number|undefined;
+  age: number|undefined;
+  constructor() {}
+  static a(){}
+}
+
+// p1可以正常赋值
+const p1: People = new People();
+
+// 等号后面的People报错，类型“typeof People”缺少类型“People”中的以下属性: name, age
+// const p2: People = People; //[!code error]
+
+
+// p3报错，类型 "People" 中缺少属性 "prototype"，但类型 "typeof People" 中需要该属性
+// const p3: typeof People = new People(); //[!code error]
+// p4可以正常赋值
+const p4: typeof People = People;
+p4.a
+``` 
 
 ## 关键字
 
@@ -573,11 +635,14 @@ const instance: MyInstanceType = new MyClass("Alice", 30);
 ```
 
 ## any / unknown
+### keyof any 为啥是 string | number | symbol
+因为 keyof 本意是提取key值,key 的类型只能是 string / number / symbol
 
 :::info
 unknown 是 top type  
 any 有时候是 top type，有时候是 bottom type
 :::
+
 
 顶级类型
 

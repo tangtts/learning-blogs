@@ -8,6 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     DirectiveLazy: typeof import('./src/components/DirectiveLazy.vue')['default']
+    ElButton: typeof import('element-plus/es')['ElButton']
     Tree: typeof import('./src/components/tree.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
