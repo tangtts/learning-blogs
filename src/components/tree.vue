@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
@@ -156,4 +155,3 @@ function toggleNode(node: TreeNode) {
     </div>
   </div>
 </template>
-

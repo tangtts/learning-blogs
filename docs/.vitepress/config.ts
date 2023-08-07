@@ -88,6 +88,7 @@ export default defineConfig({
           items: [
             { text: "Lazy", link: "/Vue/lazy" },
             { text: "loading", link: "/Vue/loading" },
+            { text: "tree", link: "/Vue/tree" },
         ],
         },
       ],
