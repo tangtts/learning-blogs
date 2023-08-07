@@ -25,6 +25,7 @@ export default defineConfig({
           { text: "promise", link: "/backend/promise" },
           { text: "Cookie/session/jwt", link: "/backend/jwt" },
           { text: "任务队列", link: "/backend/任务队列" },
+          { text: "加密", link: "/backend/加密" },
         ],
       },
       {
@@ -101,6 +102,7 @@ export default defineConfig({
             { text: "promise", link: "/backend/promise" },
             { text: "Cookie/session/jwt", link: "/backend/jwt" },
             { text: "任务队列", link: "/backend/任务队列" },
+            { text: "加密", link: "/backend/加密" },
           ],
         },
       ],
