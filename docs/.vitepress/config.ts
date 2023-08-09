@@ -33,6 +33,7 @@ export default defineConfig({
         items: [
           { text: "html技巧", link: "/skill/html" },
           { text: "js技巧", link: "/skill/js" },
+          { text: "网络", link: "/skill/网络" },
           { text: "正则", link: "/skill/正则" },
           { text: "设计模式", link: "/skill/设计模式" },
           { text: "代码规范", link: "/skill/代码规范" },
@@ -72,7 +73,6 @@ export default defineConfig({
           text: "JS",
           items: [
             { text: "windowApi", link: "/JS/window" },
-            { text: "浏览器", link: "/JS/浏览器" },
             { text: "对象", link: "/JS/对象" },
             { text: "函数", link: "/JS/函数" },
             { text: "数组", link: "/JS/数组" },
@@ -113,6 +113,7 @@ export default defineConfig({
           items: [
             { text: "html技巧", link: "/skill/html" },
             { text: "js技巧", link: "/skill/js" },
+            { text: "网络", link: "/skill/网络" },
             { text: "正则", link: "/skill/正则" },
             { text: "设计模式", link: "/skill/设计模式" },
             { text: "代码规范", link: "/skill/代码规范" },
