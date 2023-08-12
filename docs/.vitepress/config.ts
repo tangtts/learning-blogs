@@ -39,9 +39,20 @@ export default defineConfig({
           { text: "代码规范", link: "/skill/代码规范" },
           { text: "git", link: "/skill/git" },
           { text: "快捷键", link: "/skill/快捷键" },
+          {
+            text: "",
+            items: [{ text: "uview源码", link: "/source/uview/index" }],
+          },
         ],
       },
-      { text: "算法", link: "/algorithm/算法" },
+      {
+        text: "算法",
+        items: [
+          { text: "数组", link: "/algorithm/数组" },
+          { text: "hash", link: "/algorithm/hash" },
+          { text: "回溯", link: "/algorithm/回溯" },
+        ],
+      },
     ],
     sidebar: {
       HTML: [
@@ -90,7 +101,7 @@ export default defineConfig({
             { text: "Lazy", link: "/Vue/lazy" },
             { text: "loading", link: "/Vue/loading" },
             { text: "tree", link: "/Vue/tree" },
-        ],
+          ],
         },
       ],
       backend: [
@@ -119,6 +130,18 @@ export default defineConfig({
             { text: "代码规范", link: "/skill/代码规范" },
             { text: "git", link: "/skill/git" },
             { text: "快捷键", link: "/skill/快捷键" },
+          ],
+        },
+      ],
+      "source/uview": [
+        {
+          collapsed: true,
+          text: "源码",
+          items: [
+            {
+              text: "uview",
+              items: [{ text: "起步", link: "/source/uview/index" }],
+            },
           ],
         },
       ],
