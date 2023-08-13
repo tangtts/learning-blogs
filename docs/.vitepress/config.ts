@@ -51,6 +51,8 @@ export default defineConfig({
           { text: "数组", link: "/algorithm/数组" },
           { text: "hash", link: "/algorithm/hash" },
           { text: "回溯", link: "/algorithm/回溯" },
+          { text: "动态规划", link: "/algorithm/动规" },
+          { text: "单调栈", link: "/algorithm/单调栈" },
         ],
       },
     ],
