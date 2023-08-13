@@ -138,22 +138,24 @@ const flattenTree = computed(() => {
 
 
 function toggleNode(node: TreeNode) {
-  if(expandedKeySet.value.has(node.value)){
+  if (expandedKeySet.value.has(node.value)) {
     expandedKeySet.value.delete(node.value)
-  }else {
+  } else {
     expandedKeySet.value.add(node.value)
   }
 }
+import Calendar from './components/Calendar.vue';
 </script>
 
 <template>
   <div>
-    <div v-for="node in flattenTree" 
+    <Calendar />
+    <!-- <div v-for="node in flattenTree" 
     :style="{ 
       paddingLeft: `${node.level * 16}px`,
       color: expandedKeySet.has(node.value) ? 'blue' :''  }" :key="node.value" @click="toggleNode(node)">
       {{ node.label }}
-    </div>
+    </div> -->
   </div>
 </template>
 

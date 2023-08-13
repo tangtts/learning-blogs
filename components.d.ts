@@ -7,8 +7,11 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Calendar: typeof import('./src/components/Calendar.vue')['default']
     DirectiveLazy: typeof import('./src/components/DirectiveLazy.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
+    IEpAddLocation: typeof import('~icons/ep/add-location')['default']
     Tree: typeof import('./src/components/tree.vue')['default']
   }
   export interface ComponentCustomProperties {

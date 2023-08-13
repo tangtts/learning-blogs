@@ -5,9 +5,12 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    "types": ["element-plus/global"],
 
     /* Bundler mode */
     "moduleResolution": "Node",
+    "esModuleInterop":true,
+    "allowSyntheticDefaultImports":true,
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
