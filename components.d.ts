@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Calendar: typeof import('./src/components/Calendar.vue')['default']
     DirectiveLazy: typeof import('./src/components/DirectiveLazy.vue')['default']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     Tree: typeof import('./src/components/tree.vue')['default']
   }
 }

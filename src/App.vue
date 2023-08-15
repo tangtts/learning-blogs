@@ -145,10 +145,18 @@ function toggleNode(node: TreeNode) {
   }
 }
 import Calendar from './components/Calendar.vue';
+import { createNamespace } from "utils/components"
+const { classes, n } = createNamespace("button")
+
 </script>
 
 <template>
   <div>
+    <div :class="classes(n(),
+      n('$--box'),
+      [true,'a','b'] )">
+      abcd
+    </div>
     <Calendar />
     <!-- <div v-for="node in flattenTree" 
     :style="{ 

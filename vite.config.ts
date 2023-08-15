@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import path from "path";
+import path, { resolve } from "path";
 import vue from "@vitejs/plugin-vue";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
@@ -10,6 +10,11 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 export default defineConfig({
   server: {
     port: 5000,
+  },
+  resolve:{
+    alias:{
+      "utils":resolve(__dirname,"src/utils/")
+    },
   },
   plugins: [
     vue(),
