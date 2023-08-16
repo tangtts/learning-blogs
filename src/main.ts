@@ -3,6 +3,7 @@ import App from "./App.vue";
 import Lazy from "./plugins/loadImg";
 import Loading from "./plugins/loading";
 import "./styles/index.scss"
+import Ripple from "./plugins/ripple";
 const app = createApp(App);
 
 app.use(Lazy, {
@@ -19,4 +20,5 @@ app.use(Loading, {
   duration:400
 });
 
+app.directive("ripple",Ripple)
 app.mount("#app");

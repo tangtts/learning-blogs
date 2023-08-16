@@ -15,7 +15,7 @@ export default defineConfig({
           { text: "CSS", link: "/CSS/基础" },
           { text: "JS", link: "/JS/window" },
           { text: "TS", link: "/TS/index" },
-          { text: "Vue", link: "/Vue/lazy" },
+          { text: "Vue", link: "/Vue/directives/ripple" },
         ],
       },
       {
@@ -100,9 +100,27 @@ export default defineConfig({
           collapsed: true,
           text: "Vue",
           items: [
-            { text: "Lazy", link: "/Vue/lazy" },
-            { text: "loading", link: "/Vue/loading" },
-            { text: "tree", link: "/Vue/tree" },
+            {
+              text: "指令",
+              items: [{ text: "水波纹", link: "/Vue/directives/ripple" }],
+            },
+            {
+              text: "组件",
+              items: [{ text: "树", link: "/Vue/components/tree" }],
+            },
+            {
+              text: "插件",
+              items: [
+                { text: "Lazy", link: "/Vue/plugins/lazy" },
+                { text: "loading", link: "/Vue/plugins/loading" },
+              ],
+            },
+            {
+              text: "函数",
+              items: [
+                { text: "clickOutSide", link: "/Vue/funtions/clickOutSide" },
+              ],
+            },
           ],
         },
       ],

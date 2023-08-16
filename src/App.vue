@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, unref } from 'vue';
 
 interface Tree {
   value: number | string
@@ -148,13 +148,42 @@ import Calendar from './components/Calendar.vue';
 import { createNamespace } from "utils/components"
 const { classes, n } = createNamespace("button")
 
+const a = ref<HTMLElement | null>(null);
+
+export type UseClickOutsideTarget = Element | Ref<Element | undefined | null> | (() => Element)
+
+function useOutSideClick(target: UseClickOutsideTarget, listener: EventListener) {
+  const el = typeof target === 'function' ? target() : unref(target);
+
+  const handler = (e: MouseEvent) => {
+
+    if (el && !el.contains(e.target as Node)) {
+      listener(e)
+    }
+  }
+
+  document.addEventListener("click", handler)
+}
+onMounted(() => {
+  useOutSideClick(a, (e) => {
+    console.log(e)
+  })
+})
+
 </script>
 
 <template>
   <div>
-    <div :class="classes(n(),
+    <div class="a" ref="a">
+
+
+    </div>
+
+
+
+    <div v-ripple :class="classes(n(),
       n('$--box'),
-      [true,'a','b'] )">
+      [true, 'a', 'b'])">
       abcd
     </div>
     <Calendar />
@@ -166,4 +195,43 @@ const { classes, n } = createNamespace("button")
     </div> -->
   </div>
 </template>
+<style>
+.a {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+}
+
+
+
+.var-button {
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+}
+
+:root {
+  --ripple-cubic-bezier: cubic-bezier(0.68, 0.01, 0.62, 0.6);
+  --ripple-color: currentColor;
+}
+
+.var-button {
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+}
+
+.var-ripple {
+  position: absolute;
+  transition: transform 0.2s var(--ripple-cubic-bezier), opacity 0.14s linear;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform, opacity;
+  pointer-events: none;
+  z-index: 100;
+  background-color: var(--ripple-color);
+}
+</style>
 
