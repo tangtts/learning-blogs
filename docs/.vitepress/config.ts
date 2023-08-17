@@ -106,7 +106,10 @@ export default defineConfig({
             },
             {
               text: "组件",
-              items: [{ text: "树", link: "/Vue/components/tree" }],
+              items: [
+                { text: "树", link: "/Vue/components/tree" },
+                { text: "折叠", link: "/Vue/components/collapse" },
+              ],
             },
             {
               text: "插件",
@@ -118,7 +121,7 @@ export default defineConfig({
             {
               text: "函数",
               items: [
-                { text: "clickOutSide", link: "/Vue/funtions/clickOutSide" },
+                { text: "clickOutSide", link: "/Vue/functions/clickOutSide" },
               ],
             },
           ],

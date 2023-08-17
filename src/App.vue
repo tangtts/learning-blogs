@@ -145,6 +145,7 @@ function toggleNode(node: TreeNode) {
   }
 }
 import Calendar from './components/Calendar.vue';
+import CollapseItem from './components/CollapseItem.vue';
 import { createNamespace } from "utils/components"
 const { classes, n } = createNamespace("button")
 
@@ -166,7 +167,7 @@ function useOutSideClick(target: UseClickOutsideTarget, listener: EventListener)
 }
 onMounted(() => {
   useOutSideClick(a, (e) => {
-    console.log(e)
+    // console.log(e)
   })
 })
 
@@ -174,8 +175,14 @@ onMounted(() => {
 
 <template>
   <div>
-    <div class="a" ref="a">
+    <CollapseItem>
+      egfadfasd
+      </CollapseItem>
 
+      <div class="a" style="margin-top: 100px;">
+
+      </div>
+    <div class="a" ref="a">
 
     </div>
 

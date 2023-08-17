@@ -166,5 +166,5 @@ const data: Tree[] = [
 
 <Tree/>
 <script setup>
-import Tree from '../../src/components/tree.vue'
+import Tree from '../../../src/components/tree.vue'
 </script>
