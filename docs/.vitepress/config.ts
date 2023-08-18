@@ -3,7 +3,10 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "「🦆TSK的博客」",
   description: "tsk Blog",
-  head: [["link", { rel: "icon", href: "/vue.svg" }]],
+  head: [
+    ["link", { rel: "icon", href: "/vue.svg" }], 
+    ['link', { rel: 'stylesheet', href:'https://unpkg.com/tailwindcss@2.0.4/dist/tailwind.min.css' }]
+  ],
   themeConfig: {
     outline: "deep",
     // https://vitepress.dev/reference/default-theme-config
@@ -92,6 +95,7 @@ export default defineConfig({
             { text: "数字", link: "/JS/数字" },
             { text: "字符串", link: "/JS/字符串" },
             { text: "日期", link: "/JS/日期" },
+            { text: "DOM", link: "/JS/DOM" },
           ],
         },
       ],
@@ -109,6 +113,7 @@ export default defineConfig({
               items: [
                 { text: "树", link: "/Vue/components/tree" },
                 { text: "折叠", link: "/Vue/components/collapse" },
+                { text: "无限滚动", link: "/Vue/components/scrollList" },
               ],
             },
             {

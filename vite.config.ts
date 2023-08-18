@@ -11,26 +11,21 @@ export default defineConfig({
   server: {
     port: 5000,
   },
-  resolve:{
-    alias:{
-      "utils":resolve(__dirname,"src/utils/")
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src/"),
+      utils: resolve(__dirname, "src/utils/"),
     },
   },
   plugins: [
     vue(),
     AutoImport({
       imports: ["vue"],
-      resolvers: [
-        ElementPlusResolver(),
-        IconsResolver({}),
-      ],
+      resolvers: [ElementPlusResolver(), IconsResolver({})],
       dts: path.resolve(pathSrc, "auto-imports.d.ts"),
     }),
     Components({
-      resolvers: [
-        ElementPlusResolver(),
-        IconsResolver(),
-      ],
+      resolvers: [ElementPlusResolver(), IconsResolver()],
     }),
   ],
 });

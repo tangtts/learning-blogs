@@ -11,6 +11,8 @@ declare module 'vue' {
     CollapseItem: typeof import('./src/components/CollapseItem.vue')['default']
     DirectiveLazy: typeof import('./src/components/DirectiveLazy.vue')['default']
     ElIcon: typeof import('element-plus/es')['ElIcon']
+    ScrollList: typeof import('./src/components/scrollList.vue')['default']
+    Swipper: typeof import('./src/components/swipper.vue')['default']
     Tree: typeof import('./src/components/tree.vue')['default']
   }
 }

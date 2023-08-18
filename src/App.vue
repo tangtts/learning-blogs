@@ -146,6 +146,10 @@ function toggleNode(node: TreeNode) {
 }
 import Calendar from './components/Calendar.vue';
 import CollapseItem from './components/CollapseItem.vue';
+
+import scrollList from './components/scrollList.vue';
+import swipper from './components/swipper.vue'
+
 import { createNamespace } from "utils/components"
 const { classes, n } = createNamespace("button")
 
@@ -166,15 +170,19 @@ function useOutSideClick(target: UseClickOutsideTarget, listener: EventListener)
   document.addEventListener("click", handler)
 }
 onMounted(() => {
-  useOutSideClick(a, (e) => {
+  useOutSideClick(a, (e:any) => {
     // console.log(e)
   })
 })
+
 
 </script>
 
 <template>
   <div>
+    <swipper/>
+    <!-- <scrollList/> -->
+
     <CollapseItem>
       egfadfasd
       </CollapseItem>
