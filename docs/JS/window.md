@@ -469,42 +469,55 @@ setTimeout(()=>{
 
 <iframe src="/demo/mouseEnter.html" width="100%" height="400"></iframe>
 
-## Dom
-### append & appendChlid
-#### append
-是比appendChild更加新的api,可以传入多个参数，还可以传入文本，但是没有返回值
-```js
-let div = document.createElement("div")
-let p = document.createElement("p")
-div.append(p)
+## [requestAnimationFrame](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame)
+并且要求浏览器在下次重绘之前调用指定的回调函数更新动画。该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行。
 
-console.log(div.childNodes) // NodeList [ <p> ]
-
-// 插入文本
-let div = document.createElement("div")
-div.append("Some text")
-
-console.log(div.textContent) // "Some text"
-
-// 传入多个参数
-let div = document.createElement("div")
-let p = document.createElement("p")
-div.append("Some text", p)
-
-console.log(div.childNodes) // NodeList [ #text "Some text", <p> ]
-```
-#### appendChild
-如果将被插入的节点已经存在于当前文档的文档树中，那么 appendChild() 只会将它从原先的位置移动到新的位置，这意味着，一个节点不可能同时出现在文档的不同位置，如果想保留，使用 `Node.cloneNode()` 创建一个副本，再将副本附加到目标父节点下
-
-:::danger
-appendChild() 返回的是被附加的子元素,不支持多参数，不支持 string
+:::tip
+ 若你想在浏览器下次重绘之前继续更新下一帧动画，那么回调函数自身必须再次调用 requestAnimationFrame()。requestAnimationFrame() 是一次性的。
 :::
 
+
+举个栗子：
+
+假设屏幕每隔16.7ms刷新一次，而setTimeout每隔10ms设置图像向左移动1px， 就会出现如下绘制过程：
+
+1. 第0ms: 屏幕未刷新，等待中，setTimeout也未执行，等待中；
+2. 第10ms: 屏幕未刷新，等待中，setTimeout开始执行并设置图像属性left=1px；
+2. 第16.7ms: 屏幕开始刷新，屏幕上的图像向左移动了1px， setTimeout 未执行，继续等待中；
+2. 第20ms: 屏幕未刷新，等待中，setTimeout开始执行并设置left=2px;
+3. 第30ms: 屏幕未刷新，等待中，setTimeout开始执行并设置left=3px;
+4. 第33.4ms:屏幕开始刷新，屏幕上的图像向左移动了3px， setTimeout未执行，继续等待中；
+…
+
+从上面的绘制过程中可以看出，屏幕 *`没有更新left=2px`* 的那一帧画面，图像直接从 `1px` 的位置跳到了 `3px` 的的位置，这就是丢帧现象，这种现象就会引起动画卡顿。
+
 ```js
-// 创建一个新的段落元素 <p>，然后添加到 <body> 的最尾部
-var p = document.createElement("p");
-document.body.appendChild(p);
+var start = null;
+var element = document.getElementById('SomeElementYouWantToAnimate');
+element.style.position = 'absolute';
+ 
+function step(timestamp) {
+  if (!start) start = timestamp;
+  var progress = timestamp - start;
+  element.style.left = Math.min(progress / 10, 200) + 'px';
+  if (progress < 2000) {
+    // 不断的自我调用，因为是一次性的
+    window.requestAnimationFrame(step); // [!code ++]
+  }
+}
+ 
+window.requestAnimationFrame(step);
 ```
+
+**下次重绘之前继续更新下一帧动画**
+```ts
+function nextTickFrame(fn: FrameRequestCallback) {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(fn)
+  })
+}
+```
+
 ## [encodeURIComponent](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent)/[encodeURI](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/encodeURI)
 
 :::tip

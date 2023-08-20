@@ -3,6 +3,7 @@ import { ElementPlusContainer } from '@vitepress-demo-preview/component'
 import '@vitepress-demo-preview/component/dist/style.css'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import './tailwind.postcss'
 export default {
   ...theme,
   enhanceApp({app}) {

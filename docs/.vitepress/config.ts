@@ -1,15 +1,12 @@
 import { defineConfig } from "vitepress";
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "「🦆TSK的博客」",
   description: "tsk Blog",
   head: [
     ["link", { rel: "icon", href: "/vue.svg" }], 
-    ['link', { rel: 'stylesheet', href:'https://unpkg.com/tailwindcss@2.0.4/dist/tailwind.min.css' }]
   ],
   themeConfig: {
     outline: "deep",
-    // https://vitepress.dev/reference/default-theme-config
     nav: [
       {
         text: "前端",
@@ -42,6 +39,10 @@ export default defineConfig({
           { text: "代码规范", link: "/skill/代码规范" },
           { text: "git", link: "/skill/git" },
           { text: "快捷键", link: "/skill/快捷键" },
+          {
+            text: "",
+            items: [{ text: "英语", link: "/skill/英语" }],
+          },
           {
             text: "",
             items: [{ text: "uview源码", link: "/source/uview/index" }],
@@ -114,6 +115,9 @@ export default defineConfig({
                 { text: "树", link: "/Vue/components/tree" },
                 { text: "折叠", link: "/Vue/components/collapse" },
                 { text: "无限滚动", link: "/Vue/components/scrollList" },
+                { text: "轮播", link: "/Vue/components/swipper" },
+                { text: "图片预览", link: "/Vue/components/imgPreview" },
+                { text: "水印", link: "/Vue/components/watermark" },
               ],
             },
             {
@@ -158,6 +162,7 @@ export default defineConfig({
             { text: "代码规范", link: "/skill/代码规范" },
             { text: "git", link: "/skill/git" },
             { text: "快捷键", link: "/skill/快捷键" },
+            { text: "英语", link: "/skill/英语" },
           ],
         },
       ],
