@@ -17,6 +17,9 @@ export default defineConfig({
       utils: resolve(__dirname, "src/utils/"),
     },
   },
+  build:{
+    chunkSizeWarningLimit:1500
+  },
   plugins: [
     vue(),
     AutoImport({

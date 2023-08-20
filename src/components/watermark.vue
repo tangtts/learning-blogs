@@ -61,7 +61,9 @@ function svgToBlobUrl(svgStr: string) {
 const resize = async function () {
   await nextTick()
   revokeWatermarkUrl()
-  watermarkUrl.value = svgToBlobUrl(svgRef.value!.innerHTML)
+  if(svgRef.value && svgRef.value.innerHTML){
+    watermarkUrl.value = svgToBlobUrl(svgRef.value.innerHTML)
+  }
 }
 
 resize()

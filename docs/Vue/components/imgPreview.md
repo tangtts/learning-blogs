@@ -32,7 +32,7 @@ function random():number{
   </div>
 </template>
 ```
-
+<ClientOnly>
 <script setup>
 import { computed, ref, unref } from 'vue';
 import {previewImage} from "../../../src/components/imgPreview/index"
@@ -52,9 +52,11 @@ function random(){
   return now
 }
 </script>
-<div class="imgPreviewContainer">
-    <el-button class="mb-2" type="warning" @click="previewImage(imgs[random()])">点击</el-button>
-</div>
+
+  <div class="imgPreviewContainer">
+      <el-button class="mb-2" type="warning" @click="previewImage(imgs[random()])">点击</el-button>
+  </div>
+</ClientOnly>
 
 ## 解析
 重点在于 `mgPreview/index` 中的 `previewImage`方法  
