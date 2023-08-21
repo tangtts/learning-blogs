@@ -26,7 +26,6 @@ function removeRipple(this: RippleHTMLElement) {
   const task = () => {
     const ripples: NodeListOf<RippleHTMLElement> =
       this.querySelectorAll(".var-ripple");
-    console.log("🚀 ~ file: ripple.ts:30 ~ task ~ ripples:", ripples);
     if (!ripples.length) {
       return;
     }
@@ -104,13 +103,13 @@ function createRipple(this: RippleHTMLElement, event: MouseEvent) {
     this.appendChild(ripple);
 
     window.setTimeout(() => {
-      ripple.style.transform = `translate(${centerX}px, ${centerY}px) scale3d(4, 4, 4)`;
+      ripple.style.transform = `translate(${centerX}px, ${centerY}px) scale3d(2, 2, 2)`;
       ripple.style.opacity = `.25`;
 
       setTimeout(() => {
         _ripple.removeRipple();
       }, ANIMATION_DURATION);
-    }, 20);
+    }, 200);
   };
   _ripple.tasker = window.setTimeout(task, 30);
 }

@@ -8,13 +8,15 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Calendar: typeof import('./src/components/Calendar.vue')['default']
+    Child: typeof import('./src/components/test/child.vue')['default']
     CollapseItem: typeof import('./src/components/CollapseItem.vue')['default']
     DirectiveLazy: typeof import('./src/components/DirectiveLazy.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
-    ElIcon: typeof import('element-plus/es')['ElIcon']
     ImgPreview: typeof import('./src/components/imgPreview/index.vue')['default']
+    Parent: typeof import('./src/components/test/parent.vue')['default']
     ScrollList: typeof import('./src/components/scrollList.vue')['default']
     Swipper: typeof import('./src/components/swipper.vue')['default']
+    Tab: typeof import('./src/components/tab.vue')['default']
     Tree: typeof import('./src/components/tree.vue')['default']
     Watermark: typeof import('./src/components/watermark.vue')['default']
   }

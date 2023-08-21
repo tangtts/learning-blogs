@@ -118,6 +118,7 @@ export default defineConfig({
                 { text: "轮播", link: "/Vue/components/swipper" },
                 { text: "图片预览", link: "/Vue/components/imgPreview" },
                 { text: "水印", link: "/Vue/components/watermark" },
+                { text: "tab", link: "/Vue/components/tab" },
               ],
             },
             {
@@ -133,6 +134,7 @@ export default defineConfig({
                 { text: "clickOutSide", link: "/Vue/functions/clickOutSide" },
               ],
             },
+            { text:"其他",link:"/Vue/other" },
           ],
         },
       ],

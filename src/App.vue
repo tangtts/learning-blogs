@@ -23,26 +23,27 @@ function c() {
   let r = previewImage(imgs[random()])
   return r
 }
-import watermark from './components/watermark.vue';
-import vWatermask from "./plugins/watermask";
 const a = ref('abcd');
 setTimeout(()=>{
   a.value = "efg"
 },1000)
+import vRipple from "./plugins/ripple"
 </script>
 
 <template>
   <div>
-    <div v-watermask="a"></div>
-    <watermark>
-      abcd
-      <template #content>
-      <span style="font-size: 20px; color: #7986cb">Varlet UI</span>
-    </template>
-    </watermark>
+    <div v-ripple class="h-32 bg-gray-200 w-32 mx-auto"></div>
     <el-button type="warning" @click="c">点击</el-button>
     <!-- <scrollList/> -->
   </div>
 </template>
-<style></style>
+<style>
+body{
+  margin: 0;
+  padding: 0;
+}
+.var-ripple{
+  @apply absolute inset-0 bg-red-200
+}
+</style>
 
