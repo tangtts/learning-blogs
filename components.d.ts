@@ -11,6 +11,7 @@ declare module 'vue' {
     Child: typeof import('./src/components/test/child.vue')['default']
     CollapseItem: typeof import('./src/components/CollapseItem.vue')['default']
     DirectiveLazy: typeof import('./src/components/DirectiveLazy.vue')['default']
+    Drag: typeof import('./src/components/drag.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ImgPreview: typeof import('./src/components/imgPreview/index.vue')['default']
     Parent: typeof import('./src/components/test/parent.vue')['default']
