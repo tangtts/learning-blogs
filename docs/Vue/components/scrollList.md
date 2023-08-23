@@ -2,7 +2,8 @@
 **可以自动执行无限滚动，但是并不是虚拟滚动**
 
 ## 原理
-会在最底部设置一个`div`,然后判断container的元素的 `getBoundingClientRect`的bottom 值 与 `div` 的bottom的差
+会在最底部设置一个`div`,然后判断 **滚动元素的父元素(`container`)** 的元素的 `getBoundingClientRect`的bottom 值与 `最底部的div` 的bottom的差  
+如果最底部的元素的 `bottom` 与 `container` 的 `bottom` 相等,则说明已经滚动到底部了,然后执行`scrollList`的`loadMore`方法,加载数据
 
 <img src="../assets/img/../../../assets/img/element-box-diagram.png"/>
 
