@@ -107,7 +107,8 @@ export default defineConfig({
           items: [
             {
               text: "指令",
-              items: [{ text: "水波纹", link: "/Vue/directives/ripple" }],
+              items: [
+                { text: "水波纹", link: "/Vue/directives/ripple" }],
             },
             {
               text: "组件",
@@ -119,6 +120,7 @@ export default defineConfig({
                 { text: "图片预览", link: "/Vue/components/imgPreview" },
                 { text: "水印", link: "/Vue/components/watermark" },
                 { text: "tab", link: "/Vue/components/tab" },
+                { text: "drag", link: "/Vue/components/drag" },
               ],
             },
             {
