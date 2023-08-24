@@ -1,26 +1,22 @@
 
 <script setup lang="ts">
-import Snackbar from "./components/Snackbar/Snackbar.vue";
-import Snackbar2 from "./components/Snackbar/Snackbar.tsx";
-let s = 1
-const mountInstance = (component: Component,props:object = {})=>{
-        const app = createApp(h(component,{...props}))
-        const host = document.createElement('div')
-        app.mount(host)
-        document.body.appendChild(host)
-      }
-
+import drag from "./components/drag.vue";
+import InfiniteScroll from "./components/InfiniteScroll.vue";
+import vDrag from './plugins/drag';
 </script>
 
 <template>
   <div>
-    <el-button @click="mountInstance(Snackbar)">adfasf</el-button>
-    <el-button @click="Snackbar2({
-      content: s,
-      onclose: () => {
-        console.log('abcd')
-      }
-    })">点击</el-button>
+    <InfiniteScroll/>
+    <!-- <div class="w-12 h-12 bg-red-600"
+         v-drag="{left:0,top:0,bottom:0,right:0}"></div>
+
+         <div class="w-12 h-12 bg-red-600"
+         v-drag="{x:true}"></div> -->
+
+         <div class="w-12 h-12 bg-red-600"
+         v-drag="{y:true}"></div>
+    <drag/>
   </div>
 </template>
 <style lang="scss">

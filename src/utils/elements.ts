@@ -11,6 +11,27 @@ function assetsHTML<T extends Ref<HTMLElement | null> | HTMLElement | null>(
   }
 }
 
+
+
+
+function getOverScrollEle(el: HTMLElement) {
+  let reg = /(scroll)|(auto)/g;
+  while (el != document.documentElement) {
+    let overflow = getComputedStyle(el).overflow
+    if (reg.test(overflow)) {
+      return el
+    } else {
+      if (el.parentElement) {
+        el = el.parentElement
+      } else {
+        el = document.documentElement
+        return
+      }
+    }
+  }
+}
+
+
 function getRect(el: MaybeElement | Window): DOMRect {
   el = unref(el);
   if (el instanceof Window) {

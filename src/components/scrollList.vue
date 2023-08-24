@@ -1,13 +1,11 @@
 <template>
-  <div ref="container" class="h-40 overflow-y-auto py-4">
+  <div ref="container" class="h-56 overflow-y-auto py-4">
     <div class="inner" ref="listEl">
-      <ul>
-        <li class="p-2 border border-solid border-gray-400 rounded mt-2" v-for="d in info.data">
+        <div class="text-center text-white bg-blue-400 p-2 border border-solid border-gray-400 rounded mt-2" v-for="d in info.data">
           {{ d }}
-        </li>
-      </ul>
+        </div>
 
-      <div v-if="info.loading" class="flex items-center justify-center">
+      <div v-if="info.loading" class="flex items-center justify-center mt-4">
         <el-icon :size="40">
           <Loading />
         </el-icon>

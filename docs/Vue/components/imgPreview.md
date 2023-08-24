@@ -4,6 +4,7 @@
 可以添加 `mask`
 
 ## 使用
+
 ```vue
 <script setup>
 import { computed, ref, unref } from 'vue';
@@ -32,31 +33,29 @@ function random():number{
   </div>
 </template>
 ```
-<ClientOnly>
-<script setup>
-import { computed, ref, unref } from 'vue';
-import {previewImage} from "../../../src/components/imgPreview/index"
-const imgs = [
-  "https://varlet.gitee.io/varlet-ui/varlet_icon.png",
-  "https://varlet.gitee.io/varlet-ui/cat.jpg",
-  "https://varlet.gitee.io/varlet-ui/cat2.jpg",
-  "https://varlet.gitee.io/varlet-ui/cat3.jpg",
-];
-let prev = -1;
-function random(){
-  let now = Math.floor(Math.random()*imgs.length);
-  if(prev == now){
-    random();
-  }
-  prev = now
-  return now
-}
-</script>
 
+  <script setup>
+  import { computed, ref, unref } from 'vue';
+  import {previewImage} from "../../../src/components/imgPreview/index"
+  const imgs = [
+    "https://varlet.gitee.io/varlet-ui/varlet_icon.png",
+    "https://varlet.gitee.io/varlet-ui/cat.jpg",
+    "https://varlet.gitee.io/varlet-ui/cat2.jpg",
+    "https://varlet.gitee.io/varlet-ui/cat3.jpg",
+  ];
+  let prev = -1;
+  function random(){
+    let now = Math.floor(Math.random()*imgs.length);
+    if(prev == now){
+      random();
+    }
+    prev = now
+    return now
+  }
+  </script>
   <div class="imgPreviewContainer">
-      <el-button class="mb-2" type="warning" @click="previewImage(imgs[random()])">点击</el-button>
+        <el-button class="mb-2" type="warning" @click="previewImage(imgs[random()])">点击</el-button>
   </div>
-</ClientOnly>
 
 ## 解析
 重点在于 `mgPreview/index` 中的 `previewImage`方法  
