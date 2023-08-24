@@ -1,10 +1,13 @@
 # Collapes
-**折叠面板高度**
+**折叠面板**
 
 ## 效果
 
 <CollapseItem>
-    lorem
+    lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, doloremque.
+    lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    lorem ipsum dolor sit amet, consectetur adipiscing elit.
 </CollapseItem>
 
 <script setup>
@@ -12,29 +15,34 @@
 </script>
 
 ## 思路
-通过 `v-show` 控制显示隐藏
-1. 当打开面板的时候
-   1. 设置 `height` 为 "空字符串"
+**🐘必须通过 `v-show` 控制显示隐藏**
+### 1. 打开面板
+   1. 设置 `height` 为 "空字符串",是为了触发重排,也可以使用其他方式``
    2. 设置 `v-show` 为 `true`,此时还没有渲染
    3. 使用 `requestAnimationFrame`回调中 获取元素的高度 `offsetHeight`,设置高度为`0px`
    4. 再上一个的 `requestAnimationFrame` 的回调中继续使用 `requestAnimationFrame`,把 高度设置为 `offsetHeight`
-2. 关闭面板的时候
+### 2. 关闭面板
    从高度 `offsetHeight` 滚动到 `0px` 
 
+:::tip
+ 核心在于 **`requestAnimationFrame`** 的使用
+:::
 ## 核心代码
-```ts
+```ts:line-numbers{5,7,12-14,22-24}
 const openPanel = () => {
   if (!contentEl.value) return
   if (showContent.value) return;
+
   (contentEl.value as unknown as HTMLElement).style.height = "";
+  // 此时还未渲染
   showContent.value = true;
 
   requestAnimationFrame(() => {
     if (!contentEl.value) return
-    const { offsetHeight } = contentEl.value;
+    const { offsetHeight } = contentEl.value;   
     (contentEl.value as unknown as HTMLElement).style.height = "0px";
     requestAnimationFrame(() => {
-      (contentEl.value as unknown as HTMLElement).style.height = offsetHeight + 'px';
+      (contentEl.value as unknown as HTMLElement).style.height = offsetHeight + 'px'; 
     })
   })
 }

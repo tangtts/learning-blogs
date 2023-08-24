@@ -16,6 +16,7 @@ declare module 'vue' {
     ImgPreview: typeof import('./src/components/imgPreview/index.vue')['default']
     Parent: typeof import('./src/components/test/parent.vue')['default']
     ScrollList: typeof import('./src/components/scrollList.vue')['default']
+    Snackbar: typeof import('./src/components/Snackbar/Snackbar.vue')['default']
     Swipper: typeof import('./src/components/swipper.vue')['default']
     Tab: typeof import('./src/components/tab.vue')['default']
     Tree: typeof import('./src/components/tree.vue')['default']

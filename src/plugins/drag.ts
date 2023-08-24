@@ -18,7 +18,7 @@ type DragOptions =
       x: boolean;
       y: boolean;
     };
-    
+
 const prevPos = reactive({
   x: 0,
   y: 0,
@@ -103,8 +103,6 @@ const attract = () => {
   if (boundary.x) {
     pos.x = nearLeft ? minX : maxX;
   }
-
-  console.log("🚀 ~ file: drag.ts:108 ~ attract ~ boundary:", boundary);
   if (boundary.y) {
     pos.y = nearTop ? minY : maxY;
   }

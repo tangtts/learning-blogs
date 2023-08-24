@@ -5,6 +5,7 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import IconsResolver from "unplugin-icons/resolver";
 const pathSrc = path.resolve(__dirname, "src");
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -21,6 +22,7 @@ export default defineConfig({
     chunkSizeWarningLimit:1500
   },
   plugins: [
+    vueJsx(),
     vue(),
     AutoImport({
       imports: ["vue"],

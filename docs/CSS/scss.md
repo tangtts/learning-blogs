@@ -65,7 +65,7 @@ SCSS中变量名使用中划线或下划线都是指向同一变量的
 scss识别一个属性以分号结尾时则判断为一个属性  
 以大括号结尾时则判断为一个嵌套属性  
 规则是将外部的属性以及内部的属性通过中划线连接起来形成一个新的属性
-1. 
+1. 属性值嵌套
 ```scss
 li {
     border:1px solid #aaa {
@@ -82,7 +82,7 @@ li {
     border-right: 0;
 }
 ```
-2. 
+2. 属性嵌套
 ```scss
 .info-page {
   margin: auto {
@@ -98,6 +98,24 @@ li {
   margin-top: 2px;
 }
 ```
+3. 类名嵌套
+  ```scss
+      $prefix: fade;
+      .#{$prefix}{
+
+        &-enter-active,
+        &-leave-active {
+          transition: opacity 1.5s;
+        }
+      }
+
+      .#{$prefix}{
+        &-enter-from,
+        &-leave-to {
+          opacity: 0;
+        }
+      }
+  ```
 
 ## [隐藏变量](https://sass-lang.com/documentation/style-rules/declarations/#hidden-declarations)
 ```scss

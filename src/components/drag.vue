@@ -22,10 +22,8 @@ const getOffset = () => {
 
   const top = dragRect.top - parentRect.top
   const bottom = parentRect.bottom - dragRect.bottom;
-
   const left = dragRect.left - parentRect.left
-  const right = parentRect.right - dragRect.right
-
+  const right = parentRect.right - dragRect.right;
   const { width, height } = dragRect
   const { width: parentWidth, height: parentHeight } = parentRect
 
@@ -66,6 +64,7 @@ const getRange = () => {
 
 const attract = () => {
   const { halfWidth, halfHeight, top, bottom, left, right } = getOffset()
+
   const { minX, minY, maxX, maxY } = getRange();
 
   const leftDistance = left + halfWidth - boundary.left;

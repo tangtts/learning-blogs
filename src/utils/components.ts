@@ -50,6 +50,46 @@ function createNamespace<C extends string>(name: C) {
   };
 }
 
+export interface MountInstance {
+  instance: ComponentPublicInstance
+  unmount: () => void
+}
+
+export function mount(component: Component): MountInstance {
+  const app = createApp(component)
+  const host = document.createElement('div')
+  document.body.appendChild(host)
+
+  return {
+    instance: app.mount(host),
+    unmount() {
+      app.unmount()
+      document.body.removeChild(host)
+    },
+  }
+}
+
+export function mountInstance(
+  component: Component,
+  props: Record<string, any> = {},
+  eventListener: Record<string, any> = {}
+): {
+  unmountInstance: () => void
+} {
+  const Host = {
+    setup() {
+      return () =>
+        h(component, {
+          ...props,
+          ...eventListener,
+        })
+    },
+  }
+
+  const { unmount } = mount(Host)
+  return { unmountInstance: unmount }
+}
+
 let r = createNamespace("button").n();
 
 export { createNamespace };

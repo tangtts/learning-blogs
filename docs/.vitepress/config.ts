@@ -1,11 +1,30 @@
 import { defineConfig } from "vitepress";
+import { fileURLToPath, URL } from 'node:url'
+import AutoImport from "unplugin-auto-import/vite";
+import vueJsx from '@vitejs/plugin-vue-jsx'
 export default defineConfig({
+  vite:{
+    plugins:[
+      AutoImport({
+        imports: ["vue"],
+        resolvers: [],
+        dts: fileURLToPath(new URL("auto-imports.d.ts",import.meta.url)),
+      }),
+      vueJsx(),
+    ],
+    resolve:{
+      alias:{
+        utils: fileURLToPath(new URL("../../src/utils", import.meta.url)),
+        "@":fileURLToPath(new URL("../../src", import.meta.url))
+    },
+  }},
   title: "「🦆TSK的博客」",
   description: "tsk Blog",
   head: [
     ["link", { rel: "icon", href: "/vue.svg" }], 
   ],
   themeConfig: {
+    
     outline: "deep",
     nav: [
       {
@@ -134,6 +153,7 @@ export default defineConfig({
               text: "函数",
               items: [
                 { text: "clickOutSide", link: "/Vue/functions/clickOutSide" },
+                { text: "消息条", link: "/Vue/functions/snackBar" },
               ],
             },
             { text:"其他",link:"/Vue/other" },

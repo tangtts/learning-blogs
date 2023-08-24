@@ -1,6 +1,6 @@
 <template>
   <div>
-      <div @click="toggle" style="cursor: pointer;">title</div>
+      <div @click="toggle" style="cursor: pointer;">标题</div>
       <div v-show="showContent" class="content" ref="contentEl" @transitionend="transitionend">
         <div>
           <slot />
@@ -9,7 +9,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, computed, reactive, watch } from "vue";
 const showContent = ref(false);
 const contentEl = ref<HTMLElement | null>(null);
 
@@ -32,12 +31,15 @@ const toggle = () => {
 const openPanel = () => {
   if (!contentEl.value) return
   if (showContent.value) return;
+
+
   (contentEl.value as unknown as HTMLElement).style.height = "";
   showContent.value = true;
 
   requestAnimationFrame(() => {
     if (!contentEl.value) return
     const { offsetHeight } = contentEl.value;
+    console.log("🚀 ~ file: CollapseItem.vue:42 ~ requestAnimationFrame ~ offsetHeight:", offsetHeight);
     (contentEl.value as unknown as HTMLElement).style.height = "0px";
     requestAnimationFrame(() => {
       (contentEl.value as unknown as HTMLElement).style.height = offsetHeight + 'px';

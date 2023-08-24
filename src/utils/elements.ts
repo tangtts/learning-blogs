@@ -1,6 +1,7 @@
 import { unref } from "vue";
 type MaybeElement = Ref<HTMLElement> | HTMLElement;
-
+const isVitepress = (): boolean => window && localStorage['vitepress-theme-appearance']
+    
 function assetsHTML<T extends Ref<HTMLElement | null> | HTMLElement | null>(
   el: T
 ): asserts el is NonNullable<T> {
@@ -81,6 +82,7 @@ const easeInOutCubic = (value: number): number =>
   value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;
 
 export {
+  isVitepress,
   getRect,
   assetsHTML,
   nextTickFrame,

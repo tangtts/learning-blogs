@@ -105,6 +105,7 @@ const flattenTree = computed(() => {
   const expandedKeys = expandedKeySet.value // 需要展开的key
   const flattenNodes: TreeNode[] = [] // 真实存放节点
 
+  // 格式化后的数据
   const nodes = formatedData || []
 
   const stack: TreeNode[] = [] // 临时存放节点的
@@ -146,12 +147,15 @@ function toggleNode(node: TreeNode) {
 </script>
 
 <template>
-  <div>
-    <div v-for="node in flattenTree" 
+  展开的节点:{{[...expandedKeySet]}}
+  <div class="border border-blue-400 border-solid rounded-md p-4 mt-2">
+    <div 
+    class="cursor-pointer text-lg hover:text-red-600"
+    v-for="node in flattenTree" 
     :style="{ 
       paddingLeft: `${node.level * 16}px`,
-      color: expandedKeySet.has(node.value) ? 'blue' :''  }" :key="node.value" @click="toggleNode(node)">
-      {{ node.label }}
+      color: expandedKeySet.has(node.value) ? '#60a5fa' :''  }" :key="node.value" @click="toggleNode(node)">
+        {{ node.label }}
     </div>
   </div>
 </template>
