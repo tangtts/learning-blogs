@@ -11,11 +11,12 @@
 <script setup lang="ts">
 import { throttle } from "../utils/helpers"
 import { getOverScrollEle } from "../utils/elements"
-import { computed, DirectiveBinding, nextTick, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 import type { ObjectDirective } from "vue"
 
-let count = ref(2),
-  loading = ref(false)
+let count = ref(0),
+    loading = ref(false)
+    
 const noMore = computed(() => {
   return count.value >= 20
 })
@@ -80,16 +81,16 @@ function getScrollOptions(el: HTMLElement): Option {
 };
 
 
-
 function handleScroll(el: InfiniteScrollEl, fn: Function) {
   const { observer, container } = el[SCOPE]
   const { disabled, distance } = getScrollOptions(el);
 
   if (disabled) return;
-  //  说明已经触底
+  //  说明没有触底
   if (container.scrollTop + container.clientHeight + Number(distance) >= container.scrollHeight) {
     fn()
   } else {
+    // 已经触底
     // 如果是 immediate 模式，则会有observe
     if (observer) {
       observer.disconnect()
@@ -123,7 +124,7 @@ const vInfiniteScroll: ObjectDirective<InfiniteScrollEl, Function> = {
       // 当为 true 时，将会监听以 target 为根节点的整个子树。包括子树中所有节点的属性，而不仅仅是针对 target
       observe.observe(container, {
         childList: true, // 儿子节点
-        subtree: true // 儿子的儿子
+        // subtree: true // 儿子的儿子
       })
       onScroll()
     }

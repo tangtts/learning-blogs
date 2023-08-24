@@ -1,7 +1,7 @@
 <template>
   <div>
-      <div @click="toggle" style="cursor: pointer;">标题</div>
-      <div v-show="showContent" class="content" ref="contentEl" @transitionend="transitionend">
+      <div @click="toggle" class="cursor-pointer select-none  text-lg font-bold border border-solid rounded-md p-4 hover:bg-blue-50">标题</div>
+      <div v-show="showContent" class="overflow-hidden duration-300 transition-all text-lg rounded-md " ref="contentEl" @transitionend="transitionend">
         <div>
           <slot />
         </div>
@@ -32,15 +32,13 @@ const openPanel = () => {
   if (!contentEl.value) return
   if (showContent.value) return;
 
-
   (contentEl.value as unknown as HTMLElement).style.height = "";
   showContent.value = true;
 
   requestAnimationFrame(() => {
     if (!contentEl.value) return
     const { offsetHeight } = contentEl.value;
-    console.log("🚀 ~ file: CollapseItem.vue:42 ~ requestAnimationFrame ~ offsetHeight:", offsetHeight);
-    (contentEl.value as unknown as HTMLElement).style.height = "0px";
+    (contentEl.value as unknown as HTMLElement).style.height = "0";
     requestAnimationFrame(() => {
       (contentEl.value as unknown as HTMLElement).style.height = offsetHeight + 'px';
     })

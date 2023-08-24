@@ -12,8 +12,6 @@ function assetsHTML<T extends Ref<HTMLElement | null> | HTMLElement | null>(
 }
 
 
-
-
 function getOverScrollEle(el: HTMLElement) {
   let reg = /(scroll)|(auto)/g;
   while (el != document.documentElement) {
@@ -103,6 +101,7 @@ const easeInOutCubic = (value: number): number =>
   value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;
 
 export {
+  getOverScrollEle,
   isVitepress,
   getRect,
   assetsHTML,

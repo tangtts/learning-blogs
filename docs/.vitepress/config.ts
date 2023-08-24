@@ -135,6 +135,7 @@ export default defineConfig({
                 { text: "树", link: "/Vue/components/tree" },
                 { text: "折叠", link: "/Vue/components/collapse" },
                 { text: "无限滚动", link: "/Vue/components/scrollList" },
+                { text: "无限滚动2", link: "/Vue/components/InfiniteScroll" },
                 { text: "轮播", link: "/Vue/components/swipper" },
                 { text: "图片预览", link: "/Vue/components/imgPreview" },
                 { text: "水印", link: "/Vue/components/watermark" },

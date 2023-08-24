@@ -25,7 +25,11 @@
    从高度 `offsetHeight` 滚动到 `0px` 
 
 :::tip
- 核心在于 **`requestAnimationFrame`** 的使用
+ 核心在于 **`requestAnimationFrame`** 的使用,第一个动画帧设置高度为 `0px`,第二个动画帧设置高度为 `offsetHeight`,这样才会有动画
+:::
+:::info height:''的原因
+ 设置为''是为了有一个高度变化,设置 auto 元素的高度由内容决定，浏览器无法预先知道这个值  
+ 设置为 0 无法获取自然高度
 :::
 ## 核心代码
 ```ts:line-numbers{5,7,12-14,22-24}
