@@ -1,7 +1,7 @@
 # 图片预览函数式组件
 
 
-可以添加 `mask`
+添加 `mask` 遮罩层可能效果会更好
 
 ## 使用
 
@@ -58,7 +58,6 @@ function random():number{
   </div>
 
 ## 解析
-重点在于 `mgPreview/index` 中的 `previewImage`方法  
 1. 引入 `Preview` 组件
 2. 通过 `mountInstance` 生成实例，并返回 `unmounted` 方法，方便以后卸载当前实例
 3. 通过使用响应式数据 `show` 改变 `Preview` 组件的显示隐藏

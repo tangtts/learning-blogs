@@ -1,6 +1,7 @@
 <template>
   <div class="w-[200px] h-40 overflow-hidden mx-auto relative">
-    <div class="h-full flex flex-nowrap duration-300 transition-transform" ref="track" :style="{
+    <div class="h-full flex flex-nowrap duration-300 transition-transform" ref="track" 
+    :style="{
       width: trackSize + 'px',
       transform: `translateX(${translate}px)`,
       transitionDuration: lockDuration ? `0ms` : `${300}ms`
@@ -51,14 +52,13 @@ const fixPosition = (fn: () => void) => {
   const overLeft = translate.value >= size.value;
   // 父元素滚动到最后一个位置
   const overRight = translate.value <= -trackSize.value;
-
   const leftTranslate = 0
   // 去除两个最后的位置，-400
   const rightTranslate = -(trackSize.value - size.value)
 
   lockDuration.value = true
+  
   // 检测是否有越界情况 越界修正
-
   if (overRight || overLeft) {
     lockDuration.value = true
     translate.value = overRight ? leftTranslate : rightTranslate
@@ -99,9 +99,6 @@ const startAutoplay = () => {
       (item as HTMLElement).style.transform = `translateX(0px)`
     }
   }
-
-  stopAutoplay()
-
   timer = window.setTimeout(() => {
     next()
     startAutoplay()

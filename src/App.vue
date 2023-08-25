@@ -1,22 +1,14 @@
 
 <script setup lang="ts">
 import drag from "./components/drag.vue";
-import InfiniteScroll from "./components/InfiniteScroll.vue";
+import Virtual from "./components/virtual.vue";
 import vDrag from './plugins/drag';
+
 </script>
 
 <template>
   <div>
-    <InfiniteScroll/>
-    <!-- <div class="w-12 h-12 bg-red-600"
-         v-drag="{left:0,top:0,bottom:0,right:0}"></div>
-
-         <div class="w-12 h-12 bg-red-600"
-         v-drag="{x:true}"></div> -->
-
-         <div class="w-12 h-12 bg-red-600"
-         v-drag="{y:true}"></div>
-    <drag/>
+    <Virtual></Virtual>
   </div>
 </template>
 <style lang="scss">

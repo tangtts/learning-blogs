@@ -2,7 +2,7 @@
 **水印**
 
 ## 介绍
-和别的地方的水印使用 `canvas` 不同，这里使用 `css` 实现，所以水印的样式可以自定义，并且可以和页面元素一起布局。同时可以使用自定义插槽`name=content`自定义样式
+和别的地方的水印使用 `canvas` 不同，这里使用 `css` 实现，所以水印的样式可以使用css自定义。同时可以使用自定义插槽`name=content`自定义样式
 
 ---
 
@@ -21,8 +21,13 @@ import watermark from "../../../src/components/watermark.vue"
     </template>
 </watermark>
 
+## 原理
+1. 获取 `svg` 父元素的 `innerHTML` ,也就是获取 `svg` 的内容
+2. 使用 `new Blob` 的 `type: 'image/svg+xml'`,形成一个 `blob` 实例
+3. 通过 `URL.createObjectURL` 方法传入 `blob` 实例生成一个 `url`,
+4. 最后把 `url` 设置为背景图片
 ## 核心源码
-```vue:line-numbers{11,66}
+```vue:line-numbers{11,30,66}
 <template>
   <div class="relative h-[200px]">
     <slot/>
@@ -51,7 +56,9 @@ import watermark from "../../../src/components/watermark.vue"
               }">
                 <!-- 默认值 -->
                <slot name="content">
-                  <span :style="{  fontSize: `${14}px`, color: 'red' }">{{content}}</span>
+                  <span :style="{  fontSize: `${14}px`, color: 'red' }">
+                    {{content}}
+                  </span>
                 </slot>
               </div>
             </foreignObject>

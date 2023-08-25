@@ -141,6 +141,8 @@ export default defineConfig({
                 { text: "水印", link: "/Vue/components/watermark" },
                 { text: "tab", link: "/Vue/components/tab" },
                 { text: "drag", link: "/Vue/components/drag" },
+                { text: "虚拟滚动", link: "/Vue/components/虚拟滚动" },
+                { text: "flip", link: "/Vue/components/Flip" },
               ],
             },
             {

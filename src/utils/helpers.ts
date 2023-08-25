@@ -12,6 +12,22 @@ function throttle(fn:Function, delay = 200) {
     }, delay)
   }
 }
+
+const getRandomInt = (min:number, max:number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+const shuffle = (arr:number[]) => {
+  let ret = arr.slice();
+  for (let i = 0; i < ret.length; i++) {
+    let j = getRandomInt(0, i);
+    [ret[i], ret[j]] = [ret[j], ret[i]];
+  }
+  return ret;
+};
+
 export {
-  throttle
+  throttle,
+  getRandomInt,
+  shuffle
 }

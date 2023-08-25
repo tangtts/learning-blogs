@@ -34,7 +34,6 @@ const setDom = (el: any) => {
 }
 
 const moveIndicator = (tab: HTMLElement) => {
-  console.log(tab.offsetLeft, tab)
   if (!scroller.value) return;
   indicatorX.value = tab.offsetLeft;
 }

@@ -8,18 +8,25 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Calendar: typeof import('./src/components/Calendar.vue')['default']
+    CardList: typeof import('./src/components/flip/cardList.vue')['default']
     Child: typeof import('./src/components/test/child.vue')['default']
     CollapseItem: typeof import('./src/components/CollapseItem.vue')['default']
+    copy: typeof import('./src/components/virtual copy.vue')['default']
     DirectiveLazy: typeof import('./src/components/DirectiveLazy.vue')['default']
     Drag: typeof import('./src/components/drag.vue')['default']
+    ElButton: typeof import('element-plus/es')['ElButton']
+    Flip: typeof import('./src/components/flip/index.vue')['default']
     ImgPreview: typeof import('./src/components/imgPreview/index.vue')['default']
     InfiniteScroll: typeof import('./src/components/InfiniteScroll.vue')['default']
+    LiList: typeof import('./src/components/flip/liList.vue')['default']
     Parent: typeof import('./src/components/test/parent.vue')['default']
+    Pic: typeof import('./src/components/flip/pic.vue')['default']
     ScrollList: typeof import('./src/components/scrollList.vue')['default']
     Snackbar: typeof import('./src/components/Snackbar/Snackbar.vue')['default']
     Swipper: typeof import('./src/components/swipper.vue')['default']
     Tab: typeof import('./src/components/tab.vue')['default']
     Tree: typeof import('./src/components/tree.vue')['default']
+    Virtual: typeof import('./src/components/virtual.vue')['default']
     Watermark: typeof import('./src/components/watermark.vue')['default']
   }
 }

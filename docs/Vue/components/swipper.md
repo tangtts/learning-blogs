@@ -9,17 +9,18 @@
   import swipper from '../../../src/components/swipper.vue'
 </script>
 
-内部容器宽度小于外部容器宽度会发生滚动
+*内部容器宽度小于外部容器宽度会发生滚动*
 
 通过控制内部容器的 `transform` 来控制滚动距离
-
 当滚动到最右边时,需要使用特殊方式处理，才能进行无缝滚动
 
-:::tip
-核心在于 `fixPosition` 中对于位置的修正,当 **`滚动到最后一个item`** 的时候,由于设置了第一个 item 滚动到最后 `itemRefs[0]!.style.transform = translateX(${items.value * size.value}px);`,所以容器滚动到第二个元素身上即可
+:::tip 视觉欺骗
+**核心在于 `fixPosition` 中对于位置的修正**,当 **`最后一个item出现在视野中`** 的时候
+
+强制第一个 `item` 快速滚动到最后 `(itemRefs[0]!.style.transform = translateX(${items.value * size.value}px))`, **造成视觉欺骗**, 所以容器滚动到第二个元素身上即可
 :::
 
-:::info
+:::info mdn-requestAnimationFrame
 [**`requestAnimationFrame`**](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame) 在下次重绘之前调用指定的回调函数更新动画  
 
 requestAnimationFrame() 是一次性的。  
@@ -108,8 +109,8 @@ const fixPosition = (fn: () => void) => {
   const rightTranslate = -(trackSize.value - size.value)
 
   lockDuration.value = true
+  
   // 检测是否有越界情况 越界修正
-
   if (overRight || overLeft) {
     lockDuration.value = true
     translate.value = overRight ? leftTranslate : rightTranslate
