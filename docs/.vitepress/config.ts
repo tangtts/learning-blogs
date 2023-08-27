@@ -1,30 +1,28 @@
 import { defineConfig } from "vitepress";
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from "node:url";
 import AutoImport from "unplugin-auto-import/vite";
-import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueJsx from "@vitejs/plugin-vue-jsx";
 export default defineConfig({
-  vite:{
-    plugins:[
+  vite: {
+    plugins: [
       AutoImport({
         imports: ["vue"],
         resolvers: [],
-        dts: fileURLToPath(new URL("auto-imports.d.ts",import.meta.url)),
+        dts: fileURLToPath(new URL("auto-imports.d.ts", import.meta.url)),
       }),
       vueJsx(),
     ],
-    resolve:{
-      alias:{
+    resolve: {
+      alias: {
         utils: fileURLToPath(new URL("../../src/utils", import.meta.url)),
-        "@":fileURLToPath(new URL("../../src", import.meta.url))
+        "@": fileURLToPath(new URL("../../src", import.meta.url)),
+      },
     },
-  }},
+  },
   title: "「🦆TSK的博客」",
   description: "tsk Blog",
-  head: [
-    ["link", { rel: "icon", href: "/vue.svg" }], 
-  ],
+  head: [["link", { rel: "icon", href: "/vue.svg" }]],
   themeConfig: {
-    
     outline: "deep",
     nav: [
       {
@@ -121,18 +119,18 @@ export default defineConfig({
       ],
       Vue: [
         {
-          collapsed: true,
           text: "Vue",
           items: [
             {
+              collapsed: false,
               text: "指令",
-              items: [
-                { text: "水波纹", link: "/Vue/directives/ripple" }],
+              items: [{ text: "水波纹", link: "/Vue/directives/ripple" }],
             },
             {
+              collapsed: false,
               text: "组件",
               items: [
-                { text: "树", link: "/Vue/components/tree" },
+                { text: "🌲树", link: "/Vue/components/tree" },
                 { text: "折叠", link: "/Vue/components/collapse" },
                 { text: "无限滚动", link: "/Vue/components/scrollList" },
                 { text: "无限滚动2", link: "/Vue/components/InfiniteScroll" },
@@ -143,9 +141,14 @@ export default defineConfig({
                 { text: "drag", link: "/Vue/components/drag" },
                 { text: "虚拟滚动", link: "/Vue/components/虚拟滚动" },
                 { text: "flip", link: "/Vue/components/Flip" },
+                { text: "日历", link: "/Vue/components/日历" },
+                { text: "剪裁图片", link: "/Vue/components/剪裁图片" },
+                { text: "上传图片", link: "/Vue/components/上传图片" },
+                { text: "放大镜", link: "/Vue/components/放大镜" },
               ],
             },
             {
+              collapsed: false,
               text: "插件",
               items: [
                 { text: "Lazy", link: "/Vue/plugins/lazy" },
@@ -153,13 +156,14 @@ export default defineConfig({
               ],
             },
             {
+              collapsed: false,
               text: "函数",
               items: [
                 { text: "clickOutSide", link: "/Vue/functions/clickOutSide" },
                 { text: "消息条", link: "/Vue/functions/snackBar" },
               ],
             },
-            { text:"其他",link:"/Vue/other" },
+            { text: "其他", link: "/Vue/other" },
           ],
         },
       ],

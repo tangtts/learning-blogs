@@ -31,7 +31,6 @@ const TransitionGroupHost: Component = {
         const style = {
           marginTop: '15px',
         } as any;
-
         setTimeout(() => {
           reactiveSnackOptions.show = false
         }, 2000)

@@ -7,11 +7,12 @@ import "./tailwind.postcss";
 import { h } from "vue";
 type Color = 'red' | 'blue' | 'green'
 const baseColorCompant = (color:Color)=>{
+  let classes = [`text-${color}-500`,"font-bold","mx-2"];
   return {
     render() {
       return h(
         "span",
-        { class: [`text-${color}-600`, "font-bold","mx-2"] },
+        { class:classes },
         this.$slots.default && this.$slots.default()
       );
     },

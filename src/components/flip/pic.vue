@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="action">
       <button class="btn btn-add" @click="add">
         <span v-show="status.adding">下载中……</span>
@@ -97,19 +96,25 @@ async function scheduleAnimation(update: Function) {
 
 const imgRefs = ref<HTMLImageElement[]>([]);
 
-const setImgRef = (el) => {
+const setImgRef = (el:any) => {
   if (el) {
     imgRefs.value.push(el)
   }
 }
 
-function createSrcRectMap(imgs: HTMLImageElement[]) {
+type RectMap = Record<string,{
+  left:number,
+  top:number,
+  img:HTMLImageElement
+}>
+
+function createSrcRectMap(imgs: HTMLImageElement[]):RectMap {
   return imgs.reduce((prev, img) => {
     const rect = img.getBoundingClientRect();
     const { left, top } = rect;
     prev[img.src] = { left, top, img };
     return prev;
-  }, {});
+  }, ({} as RectMap));
 }
 
 

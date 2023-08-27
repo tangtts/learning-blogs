@@ -17,7 +17,7 @@ const getRandomInt = (min:number, max:number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-const shuffle = (arr:number[]) => {
+const shuffle = <T>(arr:T[]) => {
   let ret = arr.slice();
   for (let i = 0; i < ret.length; i++) {
     let j = getRandomInt(0, i);

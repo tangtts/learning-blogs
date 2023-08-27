@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="row">
       <button class="btn btn-add" @click="add">增加</button>
       <button class="btn btn-shuffle" @click="shuffle">乱序</button>
@@ -20,16 +20,19 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, computed, reactive, watch, nextTick } from "vue";
-import Mock, { mockOption } from "mockjs";
+import Mock from "mockjs";
 import { shuffle as shuffleArr } from "./utils"
 import { emojis } from "./mock"
-interface IMock extends Pick<mockOption, "name" | "id"> {
-  emoji: string
-}
+
 interface INode extends HTMLLIElement {
   attributes: { liItem: { value: number } } & HTMLLIElement['attributes']
 }
 
+type IMock = {
+  name:string,
+  id:number
+  emoji:string
+}
 
 const add = () => {
   scheduleAnimation(() => {
@@ -49,7 +52,7 @@ const addOne = (idx: number) => {
   })
 }
 
-const up = (emoji: IMock) => {
+const up = (emoji:IMock) => {
   scheduleAnimation(() => {
     const idx = itemsRef.value.findIndex(item => item == emoji)
 
@@ -60,7 +63,7 @@ const up = (emoji: IMock) => {
 
 }
 
-const stickTop = emoji => {
+const stickTop = (emoji:IMock) => {
   scheduleAnimation(() => {
     const idx = itemsRef.value.findIndex(item => item == emoji)
     itemsRef.value.splice(idx, 1)
@@ -144,8 +147,8 @@ function recordPosition(nodes: INode[]) {
 
 
 const liRefs = ref<INode[]>([])
-const setLiRefs = el => {
-  el && liRefs.value.push(el)
+const setLiRefs = (el:any) => {
+  el && liRefs.value.push(el as INode)
 }
 
 

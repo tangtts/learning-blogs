@@ -7,7 +7,7 @@
     </div>
     <div class="row">
       <div v-for="card of cards" :card="card.id" :key="card.id" class="card" :ref="setCardRef">
-        <div class="head" @click="card.status = !card.status">
+        <div class="head">
           <ul>
             <li>name: {{ card.name }}</li>
             <li>email: {{ card.email }}</li>
@@ -35,6 +35,14 @@ interface INode extends HTMLDivElement {
   attributes: { card: { value: number } } & HTMLDivElement['attributes']
 }
 
+type IMock = {
+  name: string;
+  county: string;
+  email: string;
+  id: number;
+  datetime: string;
+  status:boolean
+}
 function createMock() {
   let t = {
     name: '@name',
@@ -49,7 +57,7 @@ function createMock() {
   }
 }
 
-let m = createMock()
+let m:IMock = createMock()
 const cards = ref([m]);
 const cardRefs = ref<INode[]>([])
 
@@ -60,7 +68,7 @@ const add = () => {
   })
 }
 // 删除单个
-const del = (c) => {
+const del = (c:IMock) => {
   scheduleAnimation(() => {
     cards.value = cards.value.filter(card => card != c)
   })
@@ -74,7 +82,7 @@ const delChoose = () => {
 // 乱序
 const shuffle = () => {
   scheduleAnimation(() => {
-    cards.value = shuffleArr(cards.value);
+    cards.value = shuffleArr(cards.value) ;
   });
 }
 
@@ -83,12 +91,11 @@ async function scheduleAnimation(update: Function) {
   const prev = Array.from(cardRefs.value);
   // 记录 位置
   const prevRectMap = recordPosition(prev);
-  console.log("🚀 ~ file: cardList.vue:86 ~ scheduleAnimation ~ prevRectMap:", prevRectMap);
   update()
+  // 此时还没有渲染
   await nextTick();
   // last 阶段
   const currentRectMap = recordPosition(prev);
-
   Object.keys(prevRectMap).forEach((node) => {
 
     const currentRect = currentRectMap[node];
@@ -115,18 +122,24 @@ async function scheduleAnimation(update: Function) {
   })
 }
 
+type Position = Record<string,{
+    left: number;
+    top: number;
+    node: INode;
+  }>
 
-function recordPosition(nodes: INode[]) {
+function recordPosition(nodes: INode[]):Position {
   return nodes.reduce((prev, node) => {
     const rect = node.getBoundingClientRect();
     const { left, top } = rect;
+    // 即 :card 属性
     prev[node.attributes.card.value] = { left, top, node };
     return prev;
-  }, [{} as any]);
+  }, {} as Position);
 }
 
 
-const setCardRef = (el) => {
+const setCardRef = (el:any) => {
   el && cardRefs.value.push(el)
 }
 </script>
@@ -153,26 +166,6 @@ const setCardRef = (el) => {
 
   .content {
     @apply flex mt-auto justify-between items-center
-  }
-}
-
-.btn {
-  @apply py-1 px-2 rounded-md text-white mx-2;
-
-  &-delete {
-    @apply bg-red-400;
-  }
-
-  &-add {
-    @apply bg-orange-400;
-  }
-
-  &-reset {
-    @apply bg-yellow-400
-  }
-
-  &-shuffle {
-    @apply bg-blue-400
   }
 }
 </style>

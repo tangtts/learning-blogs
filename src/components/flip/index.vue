@@ -1,17 +1,16 @@
 <template>
   <div class="container">
     <div class="action">
-      <baseButton @click="changePage('picFlip')"> 图片动画</baseButton>
-      <baseButton type="success" @click="changePage('cardListFlip')"> card 动画</baseButton>
-      <baseButton type="danger" @click="changePage('itemsListFlip')"> 列表动画</baseButton>
-      <p class="tip">当前页面: <span class="name"> {{ PageName }} </span></p>
+      <el-button type="success" @click="changePage('cardListFlip')"> card 动画</el-button>
+      <el-button type="warning" @click="changePage('itemsListFlip')"> 列表动画</el-button>
+      <el-button @click="changePage('picFlip')"> 图片动画</el-button>
+      <p class="tip">当前动画: <span class="name"> {{ PageName }} </span></p>
     </div>
 
-    <TransitionGroup mode="out-in">
-      <!-- <component :is="radio" /> -->
-      <picFlip v-show="whichPageShow.picFlip" key="picFlip" />
+    <TransitionGroup name="list">
       <cardListFlip v-show="whichPageShow.cardListFlip" key="cardListFlip" />
       <itemsListFlip v-show="whichPageShow.itemsListFlip" key="itemsListFlip" />
+      <picFlip v-show="whichPageShow.picFlip" key="picFlip" />
     </TransitionGroup>
   </div>
 </template>
@@ -19,15 +18,14 @@
 import picFlip from "./pic.vue"
 import cardListFlip from "./cardList.vue"
 import itemsListFlip from "./liList.vue";
-import baseButton from "../base/button/index.vue"
 import { onMounted, ref, computed, reactive, watch, Transition } from "vue";
 
 type PageName = "picFlip" | 'cardListFlip' | 'itemsListFlip'
 
 const radio = ref('picFlip')
 const whichPageShow = reactive<Record<PageName, boolean>>({
-  picFlip: true,
-  cardListFlip: false,
+  picFlip: false,
+  cardListFlip: true,
   itemsListFlip: false
 })
 const changePage = (PageName: PageName) => {
@@ -36,7 +34,7 @@ const changePage = (PageName: PageName) => {
     if (key == PageName) {
       whichPageShow[key] = true
     } else {
-      whichPageShow[key] = false
+      whichPageShow[key as keyof typeof whichPageShow] = false
     }
   }
 }
@@ -46,9 +44,6 @@ const PageName = computed(() => {
 
 </script>
 <style lang="scss" scoped>
-.container {
-  @apply my-8
-}
 
 .action {
   @apply space-x-4 border-solid border-blue-400 p-2 bg-slate-100 rounded-md;
@@ -66,15 +61,21 @@ const PageName = computed(() => {
   }
 
 }
-
-.v-enter-active,
-.v-leave-active {
-  transition: 0.5s ease-out;
+.list-move, /* 对移动中的元素应用的过渡 */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease-out;
 }
 
-.v-enter-from,
-.v-leave-to {
-  transform: translateX(-100%);
-  opacity: 0
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);;
+}
+
+/* 确保将离开的元素从布局流中删除
+  以便能够正确地计算移动的动画。 */
+.list-leave-active {
+  position: absolute;
 }
 </style>

@@ -1,6 +1,6 @@
 import { unref } from "vue";
 type MaybeElement = Ref<HTMLElement> | HTMLElement;
-const isVitepress = (): boolean => window && localStorage['vitepress-theme-appearance']
+const isVitepress = (): boolean => window && localStorage['algoliasearch-client-js-4.8.5-TOPK106WWZ']
     
 function assetsHTML<T extends Ref<HTMLElement | null> | HTMLElement | null>(
   el: T

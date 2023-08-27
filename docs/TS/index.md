@@ -1502,3 +1502,34 @@ let s2: Props = {
   salary: 100,
 };
 ```
+### 字符串拼接
+ 此处必须使用拼接的这种形式,如果使用相加的形式，会转变成字符串
+```ts
+  const addOrMinus = (monthOryear: "month" | "year", addOrMinus: "+" | "-") => {
+  let time = new Date(tempTime.year, tempTime.month, tempTime.date);
+
+  type N = `${"year" | "month"}${"+" | "-"}`
+  let map = new Map<N, Function>([])
+  map.set('year+', function () {
+    tempTime.year = time.getFullYear() + 1;
+  })
+  map.set('year-', function () {
+    tempTime.year = time.getFullYear() - 1;
+  })
+
+  map.set('month+', function () {
+    let m = time.getMonth() + 1;
+    const c = time.setMonth(m);
+    tempTime.month = new Date(c).getMonth();
+  })
+
+  map.set('month-', function () {
+    let m = time.getMonth() - 1;
+    const c = time.setMonth(m);
+    tempTime.month = new Date(c).getMonth();
+  })
+
+  let fn = map.get(`${monthOryear}${addOrMinus}`); //[!code hl]
+  fn?.()
+}
+```

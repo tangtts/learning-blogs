@@ -8,6 +8,9 @@ dependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
     version: 2.1.0(vue@3.3.4)
+  '@styils/vue':
+    specifier: ^1.1.6
+    version: 1.1.6(vue@3.3.4)
   '@vitepress-demo-preview/component':
     specifier: ^2.3.2
     version: 2.3.2(vitepress@1.0.0-beta.6)(vue@3.3.4)
@@ -839,6 +842,14 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
     dev: true
+
+  /@styils/vue@1.1.6(vue@3.3.4):
+    resolution: {integrity: sha512-caxKFOdcaYz3fC/C4fKo4wnABmgO4Ldu3sSfMxdjw/usDsdFpvBBeLXeQG+k5fqism6T160qet3fTKb2PQS1Kw==}
+    peerDependencies:
+      vue: '>=3.0.0'
+    dependencies:
+      vue: 3.3.4
+    dev: false
 
   /@sxzz/popperjs-es@2.11.7:
     resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==}

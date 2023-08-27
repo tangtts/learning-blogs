@@ -1,5 +1,12 @@
 # 无限滚动
 [🔗elememt-plus基础用法](https://element-plus.gitee.io/zh-CN/component/infinite-scroll.html#%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95)
+
+## 效果
+<scrollList/>
+
+<script setup>
+  import scrollList from '../../../src/components/InfiniteScroll.vue'
+</script>
 ## 使用
 ```vue{4-8}
 <template>
@@ -62,12 +69,7 @@ observe.observe(container, {
 onScroll()
 ```
 
-## 效果
-<scrollList/>
 
-<script setup>
-  import scrollList from '../../../src/components/InfiniteScroll.vue'
-</script>
 
 ## 源码
 <<< ../../../src/components/InfiniteScroll.vue
