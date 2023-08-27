@@ -33,7 +33,7 @@ function random():number{
   </div>
 </template>
 ```
-
+<ClientOnly>
   <script setup>
   import { computed, ref, unref } from 'vue';
   import {previewImage} from "../../../src/components/imgPreview/index"
@@ -56,6 +56,7 @@ function random():number{
   <div class="imgPreviewContainer">
         <el-button class="mb-2" type="warning" @click="previewImage(imgs[random()])">点击</el-button>
   </div>
+</ClientOnly>
 
 ## 解析
 1. 引入 `Preview` 组件

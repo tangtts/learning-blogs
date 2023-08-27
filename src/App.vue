@@ -2,14 +2,14 @@
 <script setup lang="ts">
 import drag from "./components/drag.vue";
 import Virtual from "./components/virtual.vue";
-import date from "./components/upload.vue";
+import useFetch from "./functions/useFetch/useFetch.vue";
 import vDrag from './plugins/drag';
 
 </script>
 
 <template>
   <div>
-    <date />
+    <useFetch />
     <span class="text-red-500">asfd</span>
     <Virtual></Virtual>
   </div>

@@ -813,6 +813,86 @@ type PickKeysByValues<T extends object,U>={
 
 type C = PickKeysByValues<Person,string>
 ```
+## 类型声明文件
+### 声明对象
+```ts
+let result = myLib.makeGreeting("hello, world");
+console.log("The computed greeting is:" + result);
+let count = myLib.numberOfGreetings;
+```
+
+使用 `namespace` 以key-value形式声明
+```ts
+  declare namespace myLib {
+  function makeGreeting(s: string): string;
+  let numberOfGreetings: number;
+}
+```
+### 声明变量/函数
+可以以 `var/let/const` 声明变量
+```ts
+declare var foo1: number;
+declare let foo2: boolean;
+declare const foo: string;
+```
+可以声明函数，顺便还有类型重载
+```ts
+declare function foo3(s: string): string;
+declare function foo3(s: number): number;
+```
+
+### 声明 class
+```ts
+  const myGreeter = new Greeter("hello, world");
+myGreeter.greeting = "howdy";
+myGreeter.showGreeting();
+// 静态方法
+Greeter.showGreeting2()
+
+class SpecialGreeter extends Greeter {
+  constructor() {
+    super("Very special greetings");
+  }
+}
+```
+```ts
+  declare class Greeter {
+  constructor(greeting: string);
+  greeting: string;
+  showGreeting(): void;
+  static showGreeting2():void
+}
+```
+
+### 定义 module
+```ts
+import {mock,IMock} from "Mock"
+mock({
+  "@name": "asdf",
+  "@type":12321
+})
+```
+和其他类型一样,需要 export 导出
+```ts
+declare module "Mock" {
+  export interface IMock {
+    "@name": string;
+    "@type": number;
+  }
+  function mock(option: Partial<IMock>): void;
+  export { mock };
+}
+```
+### 全局类型
+只需要在 `.d.ts` 中不加 `export` 即是全局
+```ts
+interface IMock {
+  "@name": string;
+  "@type": number;
+}
+
+type x = 1 | 2 | 3;
+``` 
 
 ## 类型体操
 
