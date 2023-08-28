@@ -21,59 +21,62 @@ export default defineConfig({
   },
   title: "「🦆TSK的博客」",
   description: "tsk Blog",
-  head: [["link", { rel: "icon", href: "/vue.svg" }]],
+  head: [
+    ["link", { rel: "icon", href: "/vue.svg" }],
+  ],
   themeConfig: {
     outline: "deep",
     nav: [
       {
         text: "前端",
         items: [
-          { text: "HTML", link: "/HTML/标签" },
-          { text: "CSS", link: "/CSS/基础" },
-          { text: "JS", link: "/JS/window" },
-          { text: "TS", link: "/TS/index" },
-          { text: "Vue", link: "/Vue/directives/ripple" },
+          { text: "HTML", link: "/HTML/标签",activeMatch: '/HTML/标签' },
+          { text: "CSS", link: "/CSS/基础",activeMatch: '/CSS/基础' },
+          { text: "JS", link: "/JS/window",activeMatch: '/JS/window' },
+          { text: "TS", link: "/TS/index",activeMatch: '/TS/index' },
+          { text: "Vue", link: "/Vue/directives/ripple",activeMatch: '/Vue/' },
         ],
       },
       {
         text: "后端",
         items: [
-          { text: "node", link: "/backend/node" },
-          { text: "promise", link: "/backend/promise" },
-          { text: "Cookie/session/jwt", link: "/backend/jwt" },
-          { text: "任务队列", link: "/backend/任务队列" },
-          { text: "加密", link: "/backend/加密" },
+          { text: "node", link: "/backend/node",activeMatch: '/backend/node' },
+          { text: "promise", link: "/backend/promise",activeMatch: '/backend/promise' },
+          { text: "Cookie/session/jwt", link: "/backend/jwt",activeMatch: '/backend/jwt' },
+          { text: "任务队列", link: "/backend/任务队列",activeMatch: '/backend/任务队列' },
+          { text: "加密", link: "/backend/加密",activeMatch: '/backend/加密' },
         ],
       },
       {
         text: "其他",
         items: [
-          { text: "html技巧", link: "/skill/html" },
-          { text: "js技巧", link: "/skill/js" },
-          { text: "网络", link: "/skill/网络" },
-          { text: "正则", link: "/skill/正则" },
-          { text: "设计模式", link: "/skill/设计模式" },
-          { text: "代码规范", link: "/skill/代码规范" },
-          { text: "git", link: "/skill/git" },
-          { text: "快捷键", link: "/skill/快捷键" },
+          { text: "html技巧", link: "/skill/html",activeMatch:"/skill/html" },
+          { text: "js技巧", link: "/skill/js",activeMatch:"/skill/js" },
+          { text: "网络", link: "/skill/网络",activeMatch:"/skill/网络" },
+          { text: "正则", link: "/skill/正则",activeMatch:"/skill/正则" },
+          { text: "设计模式", link: "/skill/设计模式",activeMatch:"/skill/设计模式" },
+          { text: "代码规范", link: "/skill/代码规范",activeMatch:"/skill/代码规范" },
+          { text: "git", link: "/skill/git",activeMatch:"/skill/git" },
+          { text: "快捷键", link: "/skill/快捷键",activeMatch:"/skill/快捷键" },
           {
             text: "",
-            items: [{ text: "英语", link: "/skill/英语" }],
+            items: [{ text: "英语", link: "/skill/英语",activeMatch:"/skill/英语" }],
           },
           {
             text: "",
-            items: [{ text: "uview源码", link: "/source/uview/index" }],
+            items: [{ text: "uview源码", link: "/source/uview/index",activeMatch:"/source/uview/index" }],
           },
         ],
       },
       {
         text: "算法",
         items: [
-          { text: "数组", link: "/algorithm/数组" },
-          { text: "hash", link: "/algorithm/hash" },
-          { text: "回溯", link: "/algorithm/回溯" },
-          { text: "动态规划", link: "/algorithm/动规" },
-          { text: "单调栈", link: "/algorithm/单调栈" },
+          { text: "数组", link: "/algorithm/数组",activeMatch:"/algorithm/数组" },
+          { text: "hash", link: "/algorithm/hash",activeMatch:"/algorithm/hash" },
+          { text: "回溯", link: "/algorithm/回溯",activeMatch:"/algorithm/回溯" },
+          { text: "动态规划", link: "/algorithm/动规",activeMatch:"/algorithm/动规" },
+          { text: "单调栈", link: "/algorithm/单调栈",activeMatch:"/algorithm/单调栈" },
+          { text: "链表", link: "/algorithm/链表",activeMatch:"/algorithm/链表" },
         ],
       },
     ],
@@ -103,8 +106,8 @@ export default defineConfig({
       ],
       JS: [
         {
-          collapsed: true,
           text: "JS",
+          collapsed: true,
           items: [
             { text: "windowApi", link: "/JS/window" },
             { text: "对象", link: "/JS/对象" },
@@ -122,13 +125,13 @@ export default defineConfig({
           text: "Vue",
           items: [
             {
-              collapsed: false,
               text: "指令",
+              collapsed: false,
               items: [{ text: "水波纹", link: "/Vue/directives/ripple" }],
             },
             {
-              collapsed: false,
               text: "组件",
+              collapsed: false,
               items: [
                 { text: "🌲树", link: "/Vue/components/tree" },
                 { text: "折叠", link: "/Vue/components/collapse" },
@@ -148,19 +151,20 @@ export default defineConfig({
               ],
             },
             {
-              collapsed: false,
               text: "插件",
+              collapsed: false,
               items: [
                 { text: "Lazy", link: "/Vue/plugins/lazy" },
                 { text: "loading", link: "/Vue/plugins/loading" },
               ],
             },
             {
-              collapsed: false,
               text: "函数",
+              collapsed: false,
               items: [
                 { text: "clickOutSide", link: "/Vue/functions/clickOutSide" },
                 { text: "消息条", link: "/Vue/functions/snackBar" },
+                { text: "useStorage", link: "/Vue/functions/useStorage" },
               ],
             },
             { text: "其他", link: "/Vue/other" },
@@ -169,8 +173,8 @@ export default defineConfig({
       ],
       backend: [
         {
-          collapsed: true,
           text: "后端",
+          collapsed: true,
           items: [
             { text: "node", link: "/backend/node" },
             { text: "promise", link: "/backend/promise" },
@@ -182,8 +186,8 @@ export default defineConfig({
       ],
       skill: [
         {
-          collapsed: true,
           text: "其他",
+          collapsed: true,
           items: [
             { text: "html技巧", link: "/skill/html" },
             { text: "js技巧", link: "/skill/js" },
@@ -199,8 +203,8 @@ export default defineConfig({
       ],
       "source/uview": [
         {
-          collapsed: true,
           text: "源码",
+          collapsed: true,
           items: [
             {
               text: "uview",

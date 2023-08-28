@@ -17,9 +17,19 @@ export interface AfterFetchContext<T = any> {
   data: T | null;
 }
 
-export interface UseFetchOptions {
-  fetch?: typeof window.fetch;
+export type HttpMethod =
+  | "GET"
+  | "POST"
+  | "PUT"
+  | "DELETE"
+  | "PATCH"
+  | "HEAD"
+  | "OPTIONS";
 
+export type DataType = "text" | "json" | "blob" | "arrayBuffer" | "formData";
+
+
+export interface UseFetchOptions {
   immediate?: boolean;
   refetch?: Ref<boolean> | boolean;
 
@@ -44,20 +54,13 @@ export interface UseFetchOptions {
   }) => Promise<Partial<OnFetchErrorContext>> | Partial<OnFetchErrorContext>;
 }
 
-export type HttpMethod =
-  | "GET"
-  | "POST"
-  | "PUT"
-  | "DELETE"
-  | "PATCH"
-  | "HEAD"
-  | "OPTIONS";
-
-export type DataType = "text" | "json" | "blob" | "arrayBuffer" | "formData";
-
-export interface InternalConfig {
+export interface fetchConfig extends RequestInit {
+  data:any,
   method: HttpMethod;
   type: DataType;
   payload: unknown;
   payloadType?: string;
+  signal?: AbortSignal;
 }
+
+

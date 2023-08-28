@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ data }}
+    {{a1}}
     <el-button @click="executeClick">execute</el-button>
   </div>
 </template>
@@ -10,8 +10,7 @@ import { onMounted, ref, computed, reactive, watch, useAttrs } from "vue";
 
 // await 有点问题
 const url = new URL('./a.json', import.meta.url).href;
-console.log(new URL('./a.json', import.meta.url).href)
-fetch(url).then(res => res.json()).then(data => console.log(data))
+// fetch(url).then(res => res.json()).then(data => console.log(data))
 // async function fetch() {
 //   // let f = await a()
 //   const r = await useFetch(url)
@@ -19,7 +18,6 @@ fetch(url).then(res => res.json()).then(data => console.log(data))
 //   console.log(r)
 // }
 // fetch()
-const data = ref(123)
 
 function a() {
   const { data: a, onFetchResponse } = useFetch(url, {
@@ -77,21 +75,25 @@ function error() {
 }
 
 
-setTimeout(() => {
-  const { isFetching, error, data } = useFetch(url)
-  const { execute, abort } = useFetch(url, { immediate: false })
+setTimeout( async () => {
+  const r = await useFetch(url)
+  console.log("1214564",r)
+  console.log("🚀 ~ file: useFetch.vue:82 ~ setTimeout ~ data:",  r.data.value);
+  // const { execute, abort } = useFetch(url, { immediate: false })
 
-  execute()
+  // execute()
   // abort()
   //  onFetchResponse()
 })
 
-
-
-const executeClick = () => {
-  const { data } = useFetch(url).get().json();
-  console.log("🚀 ~ file: useFetch.vue:93 ~ executeClick ~ data:", data);
-
+let a1 = ref(0)
+const executeClick = async () => {
+  const { data } = await useFetch(url, {
+    afterFetch: (val) => {
+      return val
+    }
+  }).get().json();
+  console.log(data.value)
 }
 
 

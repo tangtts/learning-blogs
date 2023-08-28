@@ -12,10 +12,11 @@ import createEventHook, { EventHookOn } from "utils/createEventHook";
 import {
   BeforeFetchContext,
   DataType,
+  fetchConfig,
   HttpMethod,
-  InternalConfig,
   UseFetchOptions,
 } from "./types";
+import { UserConfig } from "vite";
 
 function containsProp(obj: object, ...props: string[]) {
   return props.some((k) => k in obj);
@@ -99,44 +100,30 @@ interface UseFetchReturn<T> {
   // type
   json<JSON = any>(): UseFetchReturn<JSON> & PromiseLike<UseFetchReturn<JSON>>;
 }
+
 const payloadMapping: Record<string, string> = {
   json: "application/json",
   text: "text/plain",
 };
+
 export default function useFetch<T>(
   url: string,
-  args?: Partial<InternalConfig & UseFetchOptions>
+  args?: Partial<UseFetchOptions>
 ): UseFetchReturn<T> & PromiseLike<UseFetchReturn<T>> {
-  // 内部的 config
-  const config: InternalConfig = {
+  let config: UseFetchOptions & fetchConfig = {
+    data: {},
     method: "GET",
     type: "text",
     payload: undefined as unknown,
-  };
-
-  /** @type {UseFetchOptions} -  timeout / beforeFetch... */
-  let options: UseFetchOptions = {
     immediate: true,
     refetch: false,
-    timeout: 0,
   };
-
-  // fetch 请求
-  /** @type {RequestInit} fetch 默认请求类型,+ signal */
-  let fetchOptions: RequestInit = {};
 
   // 与用户 传入的类型进行合并
   if (args && isFetchOptions(args)) {
-    options = { ...options, ...args };
+    config = { ...config, ...args };
   }
-  //  解构出需要的数据
-  const { fetch = window.fetch, initialData, timeout } = options;
 
-  /** @type {shallowRef} 初始对时默认的数据做一次浅ref */
-  const data = shallowRef<T | null>(initialData || null);
-
-  const isFinished = ref(false);
-  const isFetching = ref(false);
   /**
    * @description 是否在 loading 状态
    * @param {boolean} isLoading
@@ -155,8 +142,8 @@ export default function useFetch<T>(
     controller?.abort();
     controller = new AbortController();
     controller.signal.onabort = () => (aborted.value = true);
-    fetchOptions = {
-      ...fetchOptions,
+    config = {
+      ...config,
       signal: controller.signal,
     };
   };
@@ -171,37 +158,28 @@ export default function useFetch<T>(
   const response = shallowRef<Response | null>(null);
   const error = shallowRef<any>(null);
 
+  const data = shallowRef(config.data || {});
+
+  const isFinished = ref(false);
+  const isFetching = ref(false);
+
   let execute = async (throwOnFailed = false) => {
     loading(true);
     error.value = null;
     statusCode.value = null;
     aborted.value = false;
-
-    // 默认fetch 参数
-    const defaultFetchOptions: RequestInit = {
-      method: config.method,
-      headers: {},
-    };
+    data.value = null;
 
     if (config.payload) {
-      // 先把 headers 转为 对象
-      const headers = headersToObject(defaultFetchOptions.headers) as Record<
-        string,
-        string
-      >;
-
       if (config.payloadType) {
-        headers["Content-Type"] =
+        (config.headers as any)["Content-Type"] =
           payloadMapping[config.payloadType] ?? config.payloadType;
       }
 
-      // post 请求需要
-      // const { data } = useFetch(url).post().text()
-      // const { data } = useFetch(url, { method: 'GET' }, { refetch: true })
       const payload = resolveUnref(config.payload);
 
       // 如果 payloadType 时 json 就先 JSON.stringify
-      defaultFetchOptions.body =
+      config.body =
         config.payloadType === "json"
           ? JSON.stringify(payload)
           : (payload as BodyInit);
@@ -209,21 +187,17 @@ export default function useFetch<T>(
 
     let isCanceled = false;
 
-    // 拼接 BeforeFetchContext
     const context: BeforeFetchContext = {
       url: resolveUnref(url),
-      options: {
-        ...defaultFetchOptions,
-        ...fetchOptions,
-      },
+      options: config,
       cancel: () => {
         isCanceled = true;
       },
     };
 
-    // 把用户的与当前的context 合并
-    if (options.beforeFetch) {
-      Object.assign(context, await options.beforeFetch(context));
+    // 把用户的与当前的 context 合并
+    if (config.beforeFetch) {
+      Object.assign(context, await config.beforeFetch(context));
     }
 
     // 如果调用了 cancel 函数,就停止
@@ -235,12 +209,12 @@ export default function useFetch<T>(
     /** @type {json / text} 格式化后的真实数据 */
     let responseData: any = null;
 
+    console.log("abcd")
     return new Promise<Response | null>((resolve, reject) => {
       fetch(context.url, {
-        ...defaultFetchOptions,
         ...context.options,
         headers: {
-          ...headersToObject(defaultFetchOptions.headers),
+          ...headersToObject(config.headers),
           ...headersToObject(context.options?.headers),
         },
       })
@@ -252,39 +226,27 @@ export default function useFetch<T>(
           responseData = await fetchResponse[config.type]();
 
           if (!fetchResponse.ok) {
-            data.value = initialData || null;
+            data.value = config.data || null;
             throw new Error(fetchResponse.statusText);
           }
 
-          if (options.afterFetch) {
+          if (config.afterFetch) {
             // 把 json 之后的数据和 没有 json 后的数据 统一传入
             // 返回 数据解构  data
-            ({ data: responseData } = await options.afterFetch({
+            ({ data: responseData } = await config.afterFetch({
               data: responseData,
               response: fetchResponse,
             }));
           }
           data.value = responseData;
-
-          // const { onFetchResponse, onFetchError } = useFetch(url)
-
-          // onFetchResponse((response) => {
-          //   console.log(response.status)
-          // })
-
-          // onFetchError((error) => {
-          //   console.error(error.message)
-          // })
-          // 触发 fetchResponse
-
           responseEvent.trigger(fetchResponse);
           return resolve(fetchResponse);
         })
         .catch(async (fetchError) => {
           let errorData = fetchError.message || fetchError.name;
 
-          if (options.onFetchError)
-            ({ error: errorData } = await options.onFetchError({
+          if (config.onFetchError)
+            ({ error: errorData } = await config.onFetchError({
               data: responseData,
               error: fetchError,
               response: response.value,
@@ -305,17 +267,13 @@ export default function useFetch<T>(
     });
   };
 
-  function resolveRef<T>(r: MaybeComputedRef<T>) {
-    return typeof r === "function" ? computed<T>(r as any) : ref(r);
-  }
+  const refetch = ref(config.refetch);
 
-  const refetch = resolveRef(options.refetch);
-
-  watch([refetch, resolveRef(url)], ([refetch]) => refetch && execute(), {
+  watch([refetch, ref(url)], ([refetch]) => refetch && execute(), {
     deep: true,
   });
 
-  if (options.immediate) {
+  if (config.immediate) {
     setTimeout(execute, 0);
   }
 
@@ -348,13 +306,11 @@ export default function useFetch<T>(
         config.payloadType = payloadType;
 
         // watch for payload changes
-        if (isRef(config.payload)) {
-          watch(
-            [refetch, resolveUnref(config.payload)],
-            ([refetch]) => refetch && execute(),
-            { deep: true }
-          );
-        }
+
+        watch(
+          () => config.payload,
+          () => execute()
+        );
 
         const rawPayload = resolveUnref(config.payload);
         // Set the payload to json type only if it's not provided and a literal object is provided and the object is not `formData`
@@ -366,14 +322,13 @@ export default function useFetch<T>(
           !(rawPayload instanceof FormData)
         )
           config.payloadType = "json";
-
-        return {
-          ...shell,
-          then(onFulfilled: any) {
-            return new Promise(onFulfilled);
-          },
-        } as any;
       }
+      return {
+        ...shell,
+        then(onFulfilled: any) {
+          return new Promise(onFulfilled);
+        },
+      } as any;
     };
   }
 
@@ -381,6 +336,12 @@ export default function useFetch<T>(
     return () => {
       if (!isFetching.value) {
         config.type = type;
+
+        watch(
+          () => config.type,
+          () => execute()
+        );
+
         return {
           ...shell,
           then(onFulfilled: any, onRejected: any) {
@@ -388,14 +349,18 @@ export default function useFetch<T>(
           },
         } as any;
       }
-      return undefined;
+      return {
+        ...shell,
+        then(onFulfilled: any, onRejected: any) {
+          return Promise.resolve().then(onFulfilled, onRejected);
+        },
+      } as any;
     };
   }
-
-  return {
+  return ({
     ...shell,
     then(onFulfilled, onRejected) {
       return Promise.resolve().then(onFulfilled as any, onRejected);
     },
-  };
+  });
 }
