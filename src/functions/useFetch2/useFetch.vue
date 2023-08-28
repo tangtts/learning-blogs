@@ -1,11 +1,11 @@
 <template>
   <div>
-    {{a1}}
+    {{ a1 }}
     <el-button @click="executeClick">execute</el-button>
   </div>
 </template>
 <script lang="ts" setup>
-import useFetch from "./index";
+import { useFetch } from "./index";
 import { onMounted, ref, computed, reactive, watch, useAttrs } from "vue";
 
 // await 有点问题
@@ -75,10 +75,10 @@ function error() {
 }
 
 
-setTimeout( async () => {
+setTimeout(async () => {
+  return
   const r = await useFetch(url)
-  console.log("1214564",r)
-  console.log("🚀 ~ file: useFetch.vue:82 ~ setTimeout ~ data:",  r.data.value);
+  console.log("🚀 ~ file: useFetch.vue:82 ~ setTimeout ~ data:", r.data.value);
   // const { execute, abort } = useFetch(url, { immediate: false })
 
   // execute()
@@ -88,12 +88,13 @@ setTimeout( async () => {
 
 let a1 = ref(0)
 const executeClick = async () => {
+  console.log(6)
   const { data } = await useFetch(url, {
     afterFetch: (val) => {
       return val
     }
   }).get().json();
-  console.log(data.value)
+  console.log(data.value, 778)
 }
 
 

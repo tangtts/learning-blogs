@@ -34,13 +34,15 @@ features:
 
 <style>
 :root {
-  --vp-button-brand-hover-bg:#5672cd;
-  --vp-custom-block-tip-text:#5672cd;
-  --vp-c-green:#5672cd;
-  --vp-c-green-lighter:#5672cd;
-  --vp-button-brand-bg:#5672cd;
+  --activeColor:#5672cd;
+  --vp-button-brand-active-bg:var(--activeColor);
+  --vp-button-brand-hover-bg:var(--activeColor);
+  --vp-custom-block-tip-text:var(--activeColor);
+  --vp-c-green:var(--activeColor);
+  --vp-c-green-lighter:var(--activeColor);
+  --vp-button-brand-bg:var(--activeColor);
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #5672cd 30%, #ccc);
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, var(--activeColor) 30%, #ccc);
   --vp-home-hero-image-background-image: linear-gradient(to top, #fee023 30%, #ebe9e07d 50%);
   --vp-home-hero-image-filter: blur(60px);
 }
