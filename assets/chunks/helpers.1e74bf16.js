@@ -1,0 +1,1 @@
+function a(r,t=200){let e=null,l=!0;return()=>{if(!l)return;l=!1;const n=arguments;e=setTimeout(()=>{l=!0,clearTimeout(e),r.apply(window,n)},t)}}const o=(r,t)=>Math.floor(Math.random()*(t-r+1)+r),s=r=>{let t=r.slice();for(let e=0;e<t.length;e++){let l=o(0,e);[t[e],t[l]]=[t[l],t[e]]}return t};export{s,a as t};
