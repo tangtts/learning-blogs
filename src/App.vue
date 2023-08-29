@@ -1,24 +1,5 @@
 
 <script setup lang="ts">
-import drag from "./components/drag.vue";
-import Virtual from "./components/virtual.vue";
-import useFetch from "./functions/useFetch/useFetch.vue";
-
-function a(x): PromiseLike<any> {
-  return {
-    then: function (onfulfilled): Promise<any> {
-      return Promise.resolve(onfulfilled(x));
-    }
-  }
-}
-
-async function b() {
-  return await a(2)
-}
-let r = b()
-r.then(res => {
-  console.log(res)
-})
 
 type Item = { id: number, isChosen: boolean }
 let d = ref<Item[]>([])
@@ -67,7 +48,7 @@ const mouseUp2 = (e: TouchEvent) => {
   var ele = document.elementFromPoint(touch.clientX, touch.clientY);
   if (ele instanceof HTMLElement) {
     let id = ele.dataset.id;
-    
+
   }
 }
 
@@ -83,9 +64,6 @@ const mouseUp2 = (e: TouchEvent) => {
         {{ i.id }}
       </div>
     </div>
-    <useFetch />
-    <span class="text-red-500">asfd</span>
-    <Virtual></Virtual>
   </div>
 </template>
 <style lang="scss">

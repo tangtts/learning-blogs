@@ -35,6 +35,7 @@ features:
 <style>
 :root {
   --activeColor:#5672cd;
+  --vp-c-green:var(--activeColor);
   --vp-button-brand-active-bg:var(--activeColor);
   --vp-button-brand-hover-bg:var(--activeColor);
   --vp-custom-block-tip-text:var(--activeColor);

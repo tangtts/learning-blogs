@@ -1,5 +1,4 @@
-import { MaybeRef, Stoppable } from "../functions/useFetch2/types";
-import { WatchOptions, WatchSource } from "vue";
+import { WatchOptions, WatchSource, MaybeRef } from "vue";
 
 export type EventHookOn<T = any> = (fn: (param: T) => void) => {
   off: () => void;
@@ -59,7 +58,7 @@ export function useTimeoutFn(
   cb: (...args: unknown[]) => any,
   interval: MaybeRef<number>,
   options: TimeoutFnOptions = {}
-): Stoppable {
+) {
   const { immediate = true } = options;
 
   const isPending = ref(false);
@@ -108,122 +107,124 @@ export interface UntilToMatchOptions {
    *
    * @default 0
    */
-  timeout?: number
+  timeout?: number;
 
   /**
    * Reject the promise when timeout
    *
    * @default false
    */
-  throwOnTimeout?: boolean
+  throwOnTimeout?: boolean;
 
   /**
    * `flush` option for internal watch
    *
    * @default 'sync'
    */
-  flush?: WatchOptions['flush']
+  flush?: WatchOptions["flush"];
 
   /**
    * `deep` option for internal watch
    *
    * @default 'false'
    */
-  deep?: WatchOptions['deep']
+  deep?: WatchOptions["deep"];
 }
 
 export function promiseTimeout(
   ms: number,
   throwOnTimeout = false,
-  reason = 'Timeout',
+  reason = "Timeout"
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (throwOnTimeout)
-      setTimeout(() => reject(reason), ms)
-    else
-      setTimeout(resolve, ms)
-  })
+    if (throwOnTimeout) setTimeout(() => reject(reason), ms);
+    else setTimeout(resolve, ms);
+  });
 }
 
-export function until<T extends unknown[]>(r: WatchSource<T> | MaybeRef<T>): any
-export function until<T>(r: WatchSource<T> | MaybeRef<T>):any
+export function until<T extends unknown[]>(
+  r: WatchSource<T> | MaybeRef<T>
+): any;
+export function until<T>(r: WatchSource<T> | MaybeRef<T>): any;
 export function until<T>(r: any): any {
-  let isNot = false
+  let isNot = false;
 
   function toMatch(
     condition: (v: any) => boolean,
-    { flush = 'sync', deep = false, timeout, throwOnTimeout }: UntilToMatchOptions = {},
+    {
+      flush = "sync",
+      deep = false,
+      timeout,
+      throwOnTimeout,
+    }: UntilToMatchOptions = {}
   ): Promise<void> {
-    let stop: Function | null = null
+    let stop: Function | null = null;
     const watcher = new Promise<void>((resolve) => {
       stop = watch(
         r,
         (v) => {
           if (condition(v) === !isNot) {
-            stop?.()
-            resolve()
+            stop?.();
+            resolve();
           }
         },
         {
           flush,
           deep,
           immediate: true,
-        },
-      )
-    })
+        }
+      );
+    });
 
-    const promises = [watcher]
+    const promises = [watcher];
     if (timeout) {
       promises.push(
         promiseTimeout(timeout, throwOnTimeout).finally(() => {
-          stop?.()
-        }),
-      )
+          stop?.();
+        })
+      );
     }
 
-    return Promise.race(promises)
+    return Promise.race(promises);
   }
 
   function toBe<P>(value: MaybeRef<P | T>, options?: UntilToMatchOptions) {
-    return toMatch(v => v === unref(value), options)
+    return toMatch((v) => v === unref(value), options);
   }
 
   function toBeTruthy(options?: UntilToMatchOptions) {
-    return toMatch(v => Boolean(v), options)
+    return toMatch((v) => Boolean(v), options);
   }
 
   function toBeNull(options?: UntilToMatchOptions) {
-    return toBe<null>(null, options)
+    return toBe<null>(null, options);
   }
 
   function toBeUndefined(options?: UntilToMatchOptions) {
-    return toBe<undefined>(undefined, options)
+    return toBe<undefined>(undefined, options);
   }
 
   function toBeNaN(options?: UntilToMatchOptions) {
-    return toMatch(Number.isNaN, options)
+    return toMatch(Number.isNaN, options);
   }
 
-  function toContains(
-    value: any,
-    options?: any,
-  ) {
+  function toContains(value: any, options?: any) {
     return toMatch((v) => {
-      const array = Array.from(v as any)
-      return array.includes(value) || array.includes(unref(value))
-    }, options)
+      const array = Array.from(v as any);
+      return array.includes(value) || array.includes(unref(value));
+    }, options);
   }
 
-  function changed(options?:any) {
-    return changedTimes(1, options)
+  function changed(options?: any) {
+    return changedTimes(1, options);
   }
 
-  function changedTimes(n = 1, options?:any) {
-    let count = -1 // skip the immediate check
+  function changedTimes(n = 1, options?: any) {
+    let count = -1; // skip the immediate check
     return toMatch(() => {
-      count += 1
-      return count >= n
-    }, options)
+      count += 1;
+      return count >= n;
+    }, options);
   }
 
   if (Array.isArray(unref(r))) {
@@ -233,13 +234,12 @@ export function until<T>(r: any): any {
       changed,
       changedTimes,
       get not() {
-        isNot = !isNot
-        return this
+        isNot = !isNot;
+        return this;
       },
-    }
-    return instance
-  }
-  else {
+    };
+    return instance;
+  } else {
     const instance = {
       toMatch,
       toBe,
@@ -250,11 +250,11 @@ export function until<T>(r: any): any {
       changed,
       changedTimes,
       get not() {
-        isNot = !isNot
-        return this
+        isNot = !isNot;
+        return this;
       },
-    }
+    };
 
-    return instance
+    return instance;
   }
 }

@@ -14,7 +14,7 @@
 ## 效果
 <ClientOnly>
 
-  <div v-ripple class="h-[100px] mx-auto w-[345px] bg-gray-200"></div>
+  <div v-ripple class="h-[100px] mx-auto w-[345px] bg-gray-200 text-2xl flex justify-center items-center text-blue-400 cursor-pointer">点击</div>
 
   <script setup>
     import vRipple from "../../../src/plugins/ripple.ts"

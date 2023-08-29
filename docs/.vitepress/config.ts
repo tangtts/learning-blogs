@@ -21,7 +21,7 @@ export default defineConfig({
   },
   title: "「🦆TSK的博客」",
   description: "tsk Blog",
-  head: [["link", { rel: "icon", href: "/vue.svg" }]],
+  head: [["link", { rel: "icon", href: "/B.Duck.svg" }]],
   themeConfig: {
     outline: "deep",
     nav: [
@@ -219,6 +219,7 @@ export default defineConfig({
                 { text: "clickOutSide", link: "/Vue/functions/clickOutSide" },
                 { text: "消息条", link: "/Vue/functions/snackBar" },
                 { text: "useStorage", link: "/Vue/functions/useStorage" },
+                { text: "useFetch", link: "/Vue/functions/useFetch" },
               ],
             },
             { text: "其他", link: "/Vue/other" },
