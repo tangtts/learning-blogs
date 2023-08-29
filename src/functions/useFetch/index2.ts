@@ -8,7 +8,7 @@ import {
   toRaw,
   watch,
 } from "vue";
-import createEventHook, { EventHookOn } from "utils/createEventHook";
+import { EventHookOn, createEventHook } from "utils/createEventHook";
 import {
   BeforeFetchContext,
   DataType,
@@ -16,7 +16,6 @@ import {
   HttpMethod,
   UseFetchOptions,
 } from "./types";
-import { UserConfig } from "vite";
 
 function containsProp(obj: object, ...props: string[]) {
   return props.some((k) => k in obj);
@@ -106,7 +105,7 @@ const payloadMapping: Record<string, string> = {
   text: "text/plain",
 };
 
-export default function useFetch<T>(
+export  function useFetch<T>(
   url: string,
   args?: Partial<UseFetchOptions>
 ): UseFetchReturn<T> & PromiseLike<UseFetchReturn<T>> {
@@ -209,7 +208,7 @@ export default function useFetch<T>(
     /** @type {json / text} 格式化后的真实数据 */
     let responseData: any = null;
 
-    console.log("abcd")
+    console.log("abcd");
     return new Promise<Response | null>((resolve, reject) => {
       fetch(context.url, {
         ...context.options,
@@ -332,6 +331,36 @@ export default function useFetch<T>(
     };
   }
 
+  function until(r: any) {
+    function toBe(v) {
+     return new Promise<void>((resolve) => {
+        watch(
+          r,
+          () => {
+            if (v == r.value) {
+              resolve();
+            }
+          },
+          {
+            immediate: true,
+          }
+        );
+      });
+    }
+    return {
+      toBe,
+    };
+  }
+
+  function waitUntilFinished() {
+    return new Promise<UseFetchReturn<T>>((resolve, reject) => {
+      until(isFinished)
+        .toBe(true)
+        .then(() => resolve(shell))
+        .catch((error: Error) => reject(error));
+    });
+  }
+
   function setType(type: DataType) {
     return () => {
       if (!isFetching.value) {
@@ -345,6 +374,7 @@ export default function useFetch<T>(
         return {
           ...shell,
           then(onFulfilled: any, onRejected: any) {
+            return waitUntilFinished().then(onFulfilled, onRejected);
             return Promise.resolve().then(onFulfilled, onRejected);
           },
         } as any;
@@ -352,15 +382,16 @@ export default function useFetch<T>(
       return {
         ...shell,
         then(onFulfilled: any, onRejected: any) {
+          return waitUntilFinished().then(onFulfilled, onRejected);
           return Promise.resolve().then(onFulfilled, onRejected);
         },
       } as any;
     };
   }
-  return ({
+  return {
     ...shell,
     then(onFulfilled, onRejected) {
-      return Promise.resolve().then(onFulfilled as any, onRejected);
+      return waitUntilFinished().then(onFulfilled, onRejected);
     },
-  });
+  };
 }

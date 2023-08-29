@@ -5,7 +5,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { useFetch } from "./index";
+import { useFetch } from "./index2";
 import { onMounted, ref, computed, reactive, watch, useAttrs } from "vue";
 
 // await 有点问题
@@ -19,31 +19,31 @@ const url = new URL('./a.json', import.meta.url).href;
 // }
 // fetch()
 
-function a() {
-  const { data: a, onFetchResponse } = useFetch(url, {
-    async beforeFetch({ url, options, cancel }) {
-      const myToken = "ccc"
+// function a() {
+//   const { data: a, onFetchResponse } = useFetch(url, {
+//     async beforeFetch({ url, options, cancel }) {
+//       const myToken = "ccc"
 
-      if (!myToken)
-        cancel()
+//       if (!myToken)
+//         cancel()
 
-      options.headers = {
-        ...options.headers,
-        Authorization: `Bearer ${myToken}`,
-      }
+//       options.headers = {
+//         ...options.headers,
+//         Authorization: `Bearer ${myToken}`,
+//       }
 
-      return {
-        options,
-      }
-    },
-  })
-  onFetchResponse((response) => {
-    console.log("🚀 ~ file: useFetch.vue:43 ~ onFetchResponse ~ response:", response);
-    // response.json().then(res => {
-    //   console.log(res)
-    // })
-  })
-}
+//       return {
+//         options,
+//       }
+//     },
+//   })
+//   onFetchResponse((response) => {
+//     console.log("🚀 ~ file: useFetch.vue:43 ~ onFetchResponse ~ response:", response);
+//     // response.json().then(res => {
+//     //   console.log(res)
+//     // })
+//   })
+// }
 
 function after() {
   const { data } = useFetch(url, {
@@ -76,7 +76,6 @@ function error() {
 
 
 setTimeout(async () => {
-  return
   const r = await useFetch(url)
   console.log("🚀 ~ file: useFetch.vue:82 ~ setTimeout ~ data:", r.data.value);
   // const { execute, abort } = useFetch(url, { immediate: false })
@@ -88,7 +87,6 @@ setTimeout(async () => {
 
 let a1 = ref(0)
 const executeClick = async () => {
-  console.log(6)
   const { data } = await useFetch(url, {
     afterFetch: (val) => {
       return val
