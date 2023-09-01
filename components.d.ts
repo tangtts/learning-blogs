@@ -16,6 +16,8 @@ declare module 'vue' {
     DirectiveLazy: typeof import('./src/components/DirectiveLazy.vue')['default']
     Drag: typeof import('./src/components/drag.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElTable: typeof import('element-plus/es')['ElTable']
+    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     Flip: typeof import('./src/components/flip/index.vue')['default']
     ImgPreview: typeof import('./src/components/imgPreview/index.vue')['default']
     InfiniteScroll: typeof import('./src/components/InfiniteScroll.vue')['default']

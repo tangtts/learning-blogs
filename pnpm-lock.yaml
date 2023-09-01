@@ -23,6 +23,9 @@ dependencies:
   mockjs:
     specifier: ^1.1.0
     version: 1.1.0
+  mockjs-fetch:
+    specifier: ^2.0.0
+    version: 2.0.0
   unplugin-icons:
     specifier: ^0.16.5
     version: 0.16.5
@@ -1821,6 +1824,10 @@ packages:
       pkg-types: 1.0.3
       ufo: 1.1.2
     dev: true
+
+  /mockjs-fetch@2.0.0:
+    resolution: {integrity: sha512-pi0hzikPYD49SXMDw7IP9Ns4h3lUj1hdOH3acN58QK+rbs2xNk2wowSEmjYXexIKhufSKjZ22eXX1TMcGpkxlQ==}
+    dev: false
 
   /mockjs@1.1.0:
     resolution: {integrity: sha512-eQsKcWzIaZzEZ07NuEyO4Nw65g0hdWAyurVol1IPl1gahRwY+svqzfgfey8U8dahLwG44d6/RwEzuK52rSa/JQ==}
