@@ -813,6 +813,9 @@ type PickKeysByValues<T extends object,U>={
 
 type C = PickKeysByValues<Person,string>
 ```
+
+
+
 ## 类型声明文件
 ### 声明对象
 ```ts
@@ -893,6 +896,32 @@ interface IMock {
 
 type x = 1 | 2 | 3;
 ``` 
+## 其他
+### Element / HTMLElement 的区别
+```ts
+let F:HTMLElement  = document.createElement("div"); 
+let F1:Element  = document.createElement("div"); 
+F1.style //[!code error]
+F.style
+```
+```ts
+interface HTMLElement extends Element, ElementCSSInlineStyle, ElementContentEditable, GlobalEventHandlers, HTMLOrSVGElement {
+   hidden: boolean;
+   readonly offsetHeight: number;
+   readonly offsetLeft: number;
+   click(): void;
+
+   addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+   
+   removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+}
+
+interface ElementCSSInlineStyle {
+    readonly attributeStyleMap: StylePropertyMap;
+    readonly style: CSSStyleDeclaration;
+}
+```
+所以 `HTMLElement` 是 `Element` 的子集
 
 ## 类型体操
 

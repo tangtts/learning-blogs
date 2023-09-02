@@ -116,6 +116,30 @@ Promise.race([]).then(res => {
 
 <p>Promise.race([])的结果是:{{race}}</p>
 
+### await
+[🔗await使用](../Vue/functions/useFetch.html#使用-await-同步请求数据)  
+
+**可以模拟,只需要返回一个 `then` 函数,函数中返回一个 `promise` 即可**
+```js
+  function a() {
+  return {
+    then(onFull) {
+      return new Promise(resolve => resolve(onFull(10)));
+    },
+  };
+}
+
+async function b() {
+  return await a();
+}
+
+b().then(
+  res => {
+    console.log(res);
+  }
+);
+```
+
 ## [URLSearchParams](https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams)
 
 返回一个`iterator`，可以有 `values`,`keys`,`entries`

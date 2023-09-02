@@ -55,6 +55,7 @@ export default defineConfig({
             activeMatch: "/backend/任务队列",
           },
           { text: "加密", link: "/backend/加密", activeMatch: "/backend/加密" },
+          { text: "mock", link: "/backend/mock",activeMatch: "/backend/mock"  },
         ],
       },
       {
@@ -237,6 +238,7 @@ export default defineConfig({
             { text: "Cookie/session/jwt", link: "/backend/jwt" },
             { text: "任务队列", link: "/backend/任务队列" },
             { text: "加密", link: "/backend/加密" },
+            { text: "mock", link: "/backend/mock" },
           ],
         },
       ],

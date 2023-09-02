@@ -7,5 +7,3 @@
 import { onMounted, ref, computed, reactive, watch } from "vue";
 
 </script>
-
-<style lang="scss" scoped></style>
