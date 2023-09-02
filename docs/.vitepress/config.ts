@@ -202,6 +202,7 @@ export default defineConfig({
                 { text: "剪裁图片", link: "/Vue/components/剪裁图片" },
                 { text: "上传图片", link: "/Vue/components/上传图片" },
                 { text: "放大镜", link: "/Vue/components/放大镜" },
+                { text: "日期选择器", link: "/Vue/components/日期选择器" },
               ],
             },
             {
