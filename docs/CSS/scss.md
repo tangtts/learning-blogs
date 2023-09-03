@@ -1,11 +1,71 @@
 # scss
 :::tip
-其中 $animal类似于变量var,使用变量#${xx},主要是为了区别普通值和变量值   
+其中 $animal 类似于变量 var,使用变量 #${xx},主要是为了区别普通值和变量值   
 如果只有变量，直接使用${xx}
 
 scss 尽可能的简洁
 :::
 
+## @import / @use
+### @import
+#### 运行时
+>只有在运行时才去导入文件
+```scss
+ @import url("xxx.scss")
+```
+它会原封不动的进行导入,不论这个文件时候存在
+#### 编译时
+> 会把导入的文件编译到当前文件  
+ 
+common.scss
+```scss
+  .a{
+    font-size:40px
+  }
+  $color:red
+```
+index.scss
+```scss
+@import "./common.scss";
+.b {
+    color: $color
+}
+```
+会被编译为
+```css
+  .a{
+      font-size:40px
+   }
+
+  .b {
+      color: red
+   }
+```
+相当于直接放到顶部位置
+##### 问题
+1. 容易混淆, css 也使用 import，但是他是运行时，但是 scss 是编译时
+2. 命名冲突,如果多个文件使用了同一变量,后者会覆盖前者
+3. 没有私有变量
+
+### @use
+自带命名空间,不论嵌套多深,都是 以最后文件名 开头
+```scss
+@use "common.scss";
+.b{
+  color:common.$color
+}
+```
+修改命名空间,可以使用 `*`
+```scss
+@use "common.scss" as a;
+.b{
+  color:a.$color
+}
+```
+内部变量,外部无法使用，加上 `_`
+```scss
+$_n:10
+```
 ## 变量
 ### $
 SCSS中变量名使用中划线或下划线都是指向同一变量的
@@ -15,7 +75,7 @@ SCSS中变量名使用中划线或下划线都是指向同一变量的
 
 ```scss
   $border-color:#aaa; //声明变量
-  $border_color:#ccc;
+$border_color:#ccc;
 
    //  .a {
    //    color: #ccc;
