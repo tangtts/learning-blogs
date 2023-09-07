@@ -156,6 +156,8 @@ export default defineConfig({
           items: [
             { text: "基础知识", link: "/CSS/基础" },
             { text: "scss", link: "/CSS/scss" },
+            { text: "canvas", link: "/CSS/canvas" },
+            { text: "svg", link: "/CSS/svg" },
           ],
         },
       ],
