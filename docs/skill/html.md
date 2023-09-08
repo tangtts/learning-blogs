@@ -1,6 +1,7 @@
-# HTML-技巧
+# 样式技巧
 
 ## 阻止 `input` 聚焦
+
 使用 `@mousedown.prevent` 阻止默认事件
 
 ```html
@@ -9,12 +10,14 @@
 ```
 
 ## 设置优先级
-importance = "high"
-如果是js文件使用 preload
+
+importance = "high" 如果是 js 文件使用 preload
+
 ```html
 <img src="/bigBg.png"width="400"height="500" importance="high" />
 ```
-也可以使用 [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority)  有效值 有 high low auto  
+
+也可以使用 [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) 有效值 有 high low auto
 
 fetchpriority 属性可以与 link、script、img 以及 iframe 标签一起使用，该属性允许我们在使用这些标签加载资源（例如：样式资源、字体资源、脚本资源、图像资源和 iframe）时指定优先级。
 
@@ -36,27 +39,24 @@ fetchpriority 属性可以与 link、script、img 以及 iframe 标签一起使�
 style="object-fit:contain"
 src="../assets/img/v2-71ece957daf24d53df8b57482c42cc0e_720w.webp"/>
 
-使用 width 如果文本过长会溢出
-<img 
+使用 width 如果文本过长会溢出 <img 
 style="object-fit:contain"
-src="../assets/img/v2-418c4d0a017b505130ebd1b25362cf6e_720w.webp"/>
-把 width 换成min-width 就不会出现这种现象了：
+src="../assets/img/v2-418c4d0a017b505130ebd1b25362cf6e_720w.webp"/> 把 width 换成 min-width 就不会出现这种现象了：
 
 ```css
 .button {
   min-width: 100px;
 }
 ```
-## 图片上的文字
-> 很多场景中，文字会出现在图片之上:  
->大多数的时候，开发者都会考虑在文本和图片之间增一个层，这个层可能是一个纯色层，也能是一渐变层，也可能是一个带有一定透明度的层，为增加文本的可读性
 
+## 图片上的文字
+
+> 很多场景中，文字会出现在图片之上:  
+> 大多数的时候，开发者都会考虑在文本和图片之间增一个层，这个层可能是一个纯色层，也能是一渐变层，也可能是一个带有一定透明度的层，为增加文本的可读性
 
 <img 
 style="object-fit:contain"
 src="../assets/img/v2-bfad4da6374434827e3543cf0043433c_720w.webp"/>
-
-
 
 <style scoped lang="scss" module="textOnPicContainer">
 
@@ -397,3 +397,324 @@ src="../assets/img/v2-bfad4da6374434827e3543cf0043433c_720w.webp"/>
     </div>
   </div>
 </div>
+
+## background
+
+### 渐变
+
+:::tip 
+  **渐变本质是一个图片,可以实现图片的效果** 
+:::
+
+### background-clip
+
+#### padding-box / border-box
+
+<img src="../../assets/img/background-clip.webp"/>
+实现一个红黄相间的边框  
+1. 利用 border-style: dashed 设置一个虚线边框；
+2. 利用 background-clip: border-box 让背景色从边框处开始绘制；
+3. 再设置第二重背景色，利用 background-clip: padding-box 让这重背景色从 padding 处开始即可。
+
+```css
+div {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(#fff, #fff), #e91e63;
+    background-clip: padding-box, border-box;
+    border: 5px dashed #ffeb3b;
+}
+```
+
+<div id="backgoundClip"></div>
+
+<style>
+#backgoundClip{
+    width: 100px;
+    height: 100px;
+    margin:0 auto;
+    background: linear-gradient(#fff, #fff), #e91e63;
+    background-clip: padding-box, border-box;
+    border: 5px dashed #ffeb3b;
+}
+</style>
+
+**技巧点在于使用 `padding-box` 填充 `linear-gradient` 因为 backgound 只可以使用一种颜色,但是 `linear-gradient` 是一个图片**
+
+#### background-clip: text
+
+以区块内的文字作为裁剪区域向外裁剪，文字的背景即为区块的背景，文字之外的区域都将被裁剪掉
+
+```css
+div {
+  color: transparent;
+  background-clip: text;
+}
+```
+
+但是 `linear-gradient` 也算是背景图片
+
+```css
+div {
+    font-size: 54px;
+    color: transparent;
+    background: linear-gradient(45deg, #ffeb3b, #009688, yellowgreen, pink, #03a9f4, #9c27b0, #8bc34a); // [!code fl]
+    background-clip: text;
+}
+```
+
+<div id="backgoundText"> background-clip: text</div>
+
+<style>
+#backgoundText{
+    font-size: 54px;
+    line-height:54px;
+    color: transparent;
+    background: linear-gradient(45deg, #ffeb3b, #009688, yellowgreen, pink, #03a9f4, #9c27b0, #8bc34a);
+    background-clip: text;
+}
+</style>
+
+### background 与 display: inline
+
+那就是 background 在 display: inline 和 display: block 下的不同表现。
+
+```html
+<style>
+p, a {
+  background: linear-gradient(90deg, blue, green);
+}
+</style>
+<p>Lorem .....</p>
+<a>Lorem .....</a>
+```
+
+<img src="../../assets/img/background-display.webp"/>
+加上动画
+
+```css
+p, a {
+    color: #000;
+    background: linear-gradient(90deg, blue, green);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    transition: all 1s linear;
+}
+
+p:hover ,
+a:hover {
+    background-size: 0 100%;
+}
+```
+
+<img src="../../assets/img/background-display2.webp"/>
+
+#### 多行文本的渐隐消失
+
+```html
+<p>
+  <a>Mollitia nostrum placeat consequatur deserunt velit ducimus possimus commodi temporibus debitis quam
+  </a>
+</p>
+```
+
+```scss
+p {
+    position: relative;
+    width: 400px;
+}
+a {
+    background: linear-gradient(90deg, transparent, transparent 70%, #fff);
+    background-repeat: no-repeat;
+    cursor: pointer;
+    color: transparent;
+
+    &::before {
+        content: "Mollitia nostrum placeat consequatur deserunt velit ducimus possimus commodi temporibus debitis quam";
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: #000;
+        z-index: -1;
+    }
+}
+```
+
+<style lang="scss" module="backgroundDisplay" scoped>
+.p {
+    position: relative;
+    width: 400px;
+}
+.a {
+    background: linear-gradient(90deg, transparent, transparent 70%, #fff);
+    background-repeat: no-repeat;
+    color: transparent;
+    
+    &::before {
+        content: "Mollitia nostrum placeat consequatur deserunt velit ducimus possimus commodi temporibus debitis quamMollitia nostrum placeat consequatur deserunt velit ducimus possimus commodi temporibus debitis quamMollitia nost 456478";
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: #000;
+        z-index: -1;
+    }
+}
+ </style>
+
+<p :class="backgroundDisplay.p">
+  <a :class="backgroundDisplay.a">
+  Mollitia nostrum placeat consequatur deserunt velit ducimus possimus commodi temporibus debitis quamMollitia nostrum placeat consequatur deserunt velit ducimus possimus commodi temporibus debitis quamMollitia nost 456478
+  </a>
+</p>
+
+#### 文字 hover 动效
+
+```html
+<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <a>Mollitia nostrum placeat consequatur deserunt velit ducimus possimus commodi temporibus debitis quam</a>, molestiae laboriosam sit repellendus sed sapiente quidem quod accusantium vero.</p>
+```
+```css
+a {
+    background: linear-gradient(90deg, #ff3c41, #fc0, #0ebeff);
+    background-size: 0 3px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: 1s all;
+    color: #0cc;
+}
+a:hover {
+    background-size: 100% 3px;
+    color: #000;
+}
+```
+
+我们虽然设定了 background: linear-gradient(90deg, #ff3c41, #fc0, #0ebeff)，但是一开始默认它的 **background-size: 0 3px, 也就是一开始是看不到下划线的**，当 hover 的时候，改变 **background-size: 100% 3px**，这个时候，就会有一个 0 3px 到 100% 3px 的变换，也就是一个从无到有的伸展效果
+
+<style module="backgroundHover" scoped>
+.a {
+    background: linear-gradient(90deg, #ff3c41, #fc0, #0ebeff);
+    background-size: 0 3px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: 1s all;
+    line-height: 40px;
+    color: #0cc;
+    cursor:pointer;
+}
+.a:hover {
+    background-size: 100% 3px;
+    color: #000;
+}
+</style>  
+
+<p :class="backgroundHover.p">
+ <a :class="backgroundHover.a">Mollitia nostrum placeat consequatur deserunt velit ducimus possimus commodi temporibus debitis quam</a>, molestiae laboriosam sit repellendus sed sapiente quidem quod accusantium vero.</p>
+
+ #### background-attachment
+ scroll 与 fixed，一个是相对元素本身固定，一个是相对视口固定，有点类似 position 定位的 absolute 和 fixed
+
+<img src="../../assets/img/attachment-scrollfixed.webp"/>
+
+##### 视差滚动
+
+<style lang="scss" scoped module="attachment">
+$height:300px;
+.section {
+    height: $height;
+    background: rgba(0, 0, 0, .7);
+    color: #fff;
+    line-height: $height;
+    text-align: center;
+    font-size: 20px;
+    box-sizing: border-box;
+    overflow:scroll
+}
+
+.gImg1 {
+    background-image: url(https://picsum.photos/1200/1000?random=1);
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+     height: $height;
+}
+
+.gImg2 {
+    background-image: url('https://picsum.photos/1200/1000?random=5');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+     height: $height;
+}
+
+.gImg3 {
+    background-image: url('https://picsum.photos/1200/1000?random=10');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+     height: $height;
+}
+</style>
+<div :class="attachment.section">
+  <section :class="attachment.gImg1">区域1</section>
+  <section :class="attachment.gImg2">区域2</section>
+  <section :class="attachment.gImg3">区域3</section>
+</div>
+
+#### 滚动阴影
+结合 srcoll 与 local，实现一种伪滚动阴影
+
+<img src="../../assets/img/scrollLocale.webp"/>
+
+
+**初始没有滚动的时候是没有阴影展现的，只有当开始滚动，阴影才会出现。**
+
+:::tip
+在滚动初始的时候，利用两层背景叠加在一起隐藏阴影背景，真正滚动的时候，将叠加的部分移走，只漏出阴影部分即可 
+
+在开始的时候,使用 `attachment:locale` 挡下阴影部分，在滚动的时候，`attachment:locale` 会自己移开,使用 `attachment:scroll`暴露出阴影
+:::
+<style scoped module="scrollFixed" lang="scss">
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    ul {
+      position: relative;
+      margin: auto;
+      overflow: auto;
+      height: 8em;
+      padding: .3em .5em;
+      border: 1px solid silver;
+      li {
+          line-height: 24px;
+      }
+    }
+}
+
+.final {
+    background: 
+        linear-gradient(#fff, transparent 100%),
+        linear-gradient(rgba(0, 0, 0, .5), transparent 100%);
+    background-size: 100% 50px, 100% 10px;
+    background-repeat: no-repeat;
+    background-attachment: local, scroll;
+}
+</style>  
+
+
+<div :class="scrollFixed.container">
+  <ul :class="scrollFixed.final">
+          <li>AAAAAAAA AAAA</li>
+          <li>BBBBBBBB CCCC</li>
+          <li>DDDDDDDD DDDD</li>
+          <li>AAAAAAAA AAAA</li>
+          <li>BBBBBBBB CCCC</li>
+          <li>DDDDDDDD DDDD</li>
+          <li>AAAAAAAA AAAA</li>
+          <li>BBBBBBBB CCCC</li>
+          <li>DDDDDDDD DDDD</li>
+          <li>AAAAAAAA AAAA</li>
+          <li>BBBBBBBB CCCC</li>
+          <li>DDDDDDDD DDDD</li>
+  </ul>
+</div>
+
