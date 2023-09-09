@@ -55,7 +55,7 @@ export default defineConfig({
             activeMatch: "/backend/任务队列",
           },
           { text: "加密", link: "/backend/加密", activeMatch: "/backend/加密" },
-          { text: "mock", link: "/backend/mock",activeMatch: "/backend/mock"  },
+          { text: "mock", link: "/backend/mock", activeMatch: "/backend/mock" },
         ],
       },
       {
@@ -91,9 +91,9 @@ export default defineConfig({
             text: "",
             items: [
               {
-                text: "uview源码",
-                link: "/source/uview/index",
-                activeMatch: "/source/uview/index",
+                text: "vue源码",
+                link: "/source/vue/reactive原理",
+                activeMatch: "/source/vue/reactive原理",
               },
             ],
           },
