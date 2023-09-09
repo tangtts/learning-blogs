@@ -166,3 +166,41 @@ git stash apply
 # 删除分支
 git stash drop
 ```
+## gitignore
+
+``` 
+├─ dist
+│	 ├─ 1.md
+├─ a
+│  ├─ dist.md
+│  ├─ a1.jpg
+│  └─ a2.md
+└─ b
+   ├─ dist
+	 │  ├─ b1.jpg
+   ├─ b2.jpg
+   └─ b21.jpg
+```	 
+### 单独文字
+如果只写一个 `dist`, **不管嵌套多深,不论是文件还是文件夹** 都会被排除,
+会排除`dist`,`a/dist`,和 `b/dist`
+
+### 斜杠
+1. 斜杠在前面
+   > 他是以 `.gitignore` 为基础出发, `/dist` 会排除 `dist` 文件或者是 `dist` 文件夹
+2. 斜杠在中间
+  > `a/dist`,以 `.gitignore`,找 `a` 下面的 `dist` 的文件或者文件夹
+3. 斜杠在后面
+  > `dist/` 表示只匹配文件夹,不匹配文件，也就是 `dist`,`b/dist` 会被排除,`a/dist`	不会排除 
+### *
+`*.jpg` 会匹配 `a1.jpg` 和 `b1.jpg`和`b2.jpg`  
+使用 `b/*.jpg` 无法匹配 `b/dist/b0.jpg`,需要使用 `b/**/*.jpg`,这里的 `**` 表示多重层级
+
+### ?
+ 星号表示多个字符,问号表示一个字符  
+ 所以 `b/**/?.jpg` 无法匹配 `b/b21.jpg`
+
+### !
+表示 非  
+`upload/**/*.*` 忽略 `upload` 下的所有文件,这样的话 `upload` 目录不会存在  
+`!upload/1.txt` 不忽略 `upload/1.txt`,这样的话 `upload` 目录会存在
