@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      width: 80px;
+      overflow-x: scroll;
+      margin: 0 auto;
+    }
+
+    .box {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      /* 水平居中 */
+      margin: 0 auto;
+      padding: 10px;
+      border: solid 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="box">
+
+    </div>
+  </div>
+  <div style="width: 100px;margin:auto">
+
+    <p style="color:red;font-size:24px">offsetWidth:<span id="offsetWidth"></span></p>
+    <p style="color:red;font-size:24px">clientWidth:<span id="clientWidth"></span></p>
+    <p style="color:red;font-size:24px">scrollWidth:<span id="scrollWidth"></span></p>
+  </div>
+</body>
+<script>
+  let box = document.querySelector('.box');
+  let offsetWidthEl = document.querySelector('#offsetWidth');
+  let clientWidthEl = document.querySelector('#clientWidth');
+  let scrollWidthEl = document.querySelector('#scrollWidth');
+
+
+  let offsetWidth = box.offsetWidth;
+  let clientWidth = box.clientWidth;
+  let scrollWidth = box.scrollWidth;
+  let x = box.getBoundingClientRect().width;
+  offsetWidthEl.innerHTML = offsetWidth
+  clientWidthEl.innerHTML = clientWidth
+  scrollWidthEl.innerHTML = scrollWidth
+  console.log(offsetWidth, clientWidth, scrollWidth, x);
+</script>
+
+</html>
