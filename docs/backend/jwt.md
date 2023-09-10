@@ -51,7 +51,7 @@ httpOnly 代表只能通过 http修改，无法通过 document.cookie  修改，
 
 comment 该Cookie的用处说明，浏览器显示Cookie信息的时候显示该说明。
 
-<img src="../assets/img/cookie.png"/>
+<img src="img/cookie.png"/>
 
 ## Session
 Session 的会话管理

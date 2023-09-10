@@ -25,7 +25,7 @@ fetchpriority 属性可以与 link、script、img 以及 iframe 标签一起使�
 
 <img
  style="object-fit:contain"
- src="../assets/img/v2-b28a6ca67d085829cff6050472a688f8_720w.webp"/>
+ src="img/v2-b28a6ca67d085829cff6050472a688f8_720w.webp"/>
 
 为了避免内容超出容器，我们需要使用 min-height 来替代 height：
 
@@ -37,11 +37,11 @@ fetchpriority 属性可以与 link、script、img 以及 iframe 标签一起使�
 
 <img 
 style="object-fit:contain"
-src="../assets/img/v2-71ece957daf24d53df8b57482c42cc0e_720w.webp"/>
+src="img/v2-71ece957daf24d53df8b57482c42cc0e_720w.webp"/>
 
 使用 width 如果文本过长会溢出 <img 
 style="object-fit:contain"
-src="../assets/img/v2-418c4d0a017b505130ebd1b25362cf6e_720w.webp"/> 把 width 换成 min-width 就不会出现这种现象了：
+src="img/v2-418c4d0a017b505130ebd1b25362cf6e_720w.webp"/> 把 width 换成 min-width 就不会出现这种现象了：
 
 ```css
 .button {
@@ -56,7 +56,7 @@ src="../assets/img/v2-418c4d0a017b505130ebd1b25362cf6e_720w.webp"/> 把 width �
 
 <img 
 style="object-fit:contain"
-src="../assets/img/v2-bfad4da6374434827e3543cf0043433c_720w.webp"/>
+src="img/v2-bfad4da6374434827e3543cf0043433c_720w.webp"/>
 
 <style scoped lang="scss" module="textOnPicContainer">
 
@@ -410,7 +410,7 @@ src="../assets/img/v2-bfad4da6374434827e3543cf0043433c_720w.webp"/>
 
 #### padding-box / border-box
 
-<img src="../../assets/img/background-clip.webp"/>
+<img src="img/background-clip.webp"/>
 实现一个红黄相间的边框  
 1. 利用 border-style: dashed 设置一个虚线边框；
 2. 利用 background-clip: border-box 让背景色从边框处开始绘制；
@@ -489,7 +489,7 @@ p, a {
 <a>Lorem .....</a>
 ```
 
-<img src="../../assets/img/background-display.webp"/>
+<img src="img/background-display.webp"/>
 加上动画
 
 ```css
@@ -507,7 +507,7 @@ a:hover {
 }
 ```
 
-<img src="../../assets/img/background-display2.webp"/>
+<img src="img/background-display2.webp"/>
 
 #### 多行文本的渐隐消失
 
@@ -612,7 +612,7 @@ a:hover {
  ### background-attachment
  scroll 与 fixed，一个是相对元素本身固定，一个是相对视口固定，有点类似 position 定位的 absolute 和 fixed
 
-<img src="../../assets/img/attachment-scrollfixed.webp"/>
+<img src="img/attachment-scrollfixed.webp"/>
 
 #### 视差滚动
 
@@ -662,7 +662,7 @@ $height:300px;
 #### 滚动阴影
 结合 srcoll 与 local，实现一种伪滚动阴影
 
-<img src="../../assets/img/scrollLocale.webp"/>
+<img src="img/scrollLocale.webp"/>
 
 
 **初始没有滚动的时候是没有阴影展现的，只有当开始滚动，阴影才会出现。**

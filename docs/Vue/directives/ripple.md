@@ -44,12 +44,12 @@
 2. 确定初始位置/移动位置  
   >  确定`width/height`之后,新元素移动到点击位置,然后移动到父元素中心位置,可以采用`translate`或者`translateX`
   - 移动到点击位置
-    <img src="../assets/img/../../../assets/img/rippleMoveCenter.png" />
+    <img src="img/rippleMoveCenter.png" />
 
     使用 `scale3d 缩放元素`  
     **ripple.style.transform = `translate(${x}px, ${y}px) scale3d(.3,.3,.3)`;**
   - 移动到父元素的中心位置
-     <img src="../assets/img/../../../assets/img/rippleMoveCenter2.png" />
+     <img src="img/rippleMoveCenter2.png" />
      然后扩大元素  
      **ripple.style.transform = `translate(${centerX}px, ${centerY}px) scale3d(1, 1, 1)`;**
 

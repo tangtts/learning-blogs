@@ -9,7 +9,7 @@ defer 和 async 都是异步加载
 defer 具有推迟的意思,就是说当 Dom 树加载完毕之后执行，可以获取真实的 dom
 async 是只自己加载完毕，就立即执行，会阻塞 dom 的渲染
 
-<img src="./../assets/img/test.3ca4a381.png"/>
+<img src="img/test.3ca4a381.png"/>
 
 ```js
 <script async src="js/vendor/jquery.js"></script>
@@ -61,7 +61,7 @@ jquery.js 可能在 script2 和 script3 之前或之后调用，如果这样，�
 <link rel="preload" as="font" href="https://at.alicdn.com/t/font_zck90zmlh7hf47vi.woff">
 ```
 然而我发现这个文件加载了两次：
-<img src="../assets/img/v2-49ecba5aac6bbbd1fac6fd4789905f2b_720w.png"/>
+<img src="img/v2-49ecba5aac6bbbd1fac6fd4789905f2b_720w.png"/>
 
 原因是对跨域的文件进行 preload 的时候，我们必须加上 crossorigin 属性：
 ```html
@@ -70,7 +70,7 @@ jquery.js 可能在 script2 和 script3 之前或之后调用，如果这样，�
 
 ####  Dns-prefetch(dns预获取) 
 是尝试在请求资源之前解析域名。 仅对跨域域上的 DNS 查找有效
-<img src="../assets/img/image.png"/>
+<img src="img/image.png"/>
 
 ## Promise
 
@@ -576,7 +576,7 @@ let s = new URL(
   "http://zs:123456@localhost:8080/directorPerformance/todo?id=1#name=zs#age=5");
   console.log(s)
 
-<img src="../../assets/img/url.png"/>
+<img src="img/url.png"/>
 
 
 <iframe

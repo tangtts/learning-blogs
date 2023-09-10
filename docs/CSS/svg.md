@@ -130,7 +130,7 @@ svg {
   stroke-dasharray: 50 20;
 }
 ```
-<style>
+<style scoped>
 svg {
   width: 250px;
   height: 50px;
@@ -164,24 +164,22 @@ svg {
   <rect class="rect0 rect3"/>
 </svg>
 
-<img src="../../assets/img/stroke-dasharray.webp"/>
-
-
+<img src="img/stroke-dasharray.webp"/>
 
 ### stroke-dashoffset
 > 边框线的偏移量
  
-<img src="../../assets/img/stroke-dashoffset.webp"/>
+<img src="img/stroke-dashoffset.webp"/>
 
 仔细看 3 个图形，边框形状是一致的，就是边框的起点不一样，而这，就是 stroke-dashoffset 的作用：
 **负数是往右移动，正数往左移动**
-<img src="../../assets/img/stroke-dashoffset2.webp"/>
+<img src="img/stroke-dashoffset2.webp"/>
 
 ## 动画
 ### hover
 ```html
 <style lang="scss">
-  .container {
+.container {
   position: relative;
   width: 250px;
   height: 50px;
@@ -319,7 +317,7 @@ svg {
 ----
 
 stroke-dasharray: 89, 200 表示
-<img src="../../assets/img/stroke-dasharray2.webp"/>
+<img src="img/stroke-dasharray2.webp"/>
 
 通过 animation，让线段在这两种状态之间不断循环变换。而 stroke-dashoffset 的作用则是将线段向前推移，配合父容器的 `transform: rotate()` 旋转动画，使得视觉效果上线段是一直在向一个方向旋转
 
