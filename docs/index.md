@@ -31,20 +31,3 @@ features:
     link: /skill/html
     details:  设计模式，代码规范，函数编程...
 ---
-
-<style>
-:root {
-  --activeColor:#5672cd;
-  --vp-c-green:var(--activeColor);
-  --vp-button-brand-active-bg:var(--activeColor);
-  --vp-button-brand-hover-bg:var(--activeColor);
-  --vp-custom-block-tip-text:var(--activeColor);
-  --vp-c-green:var(--activeColor);
-  --vp-c-green-lighter:var(--activeColor);
-  --vp-button-brand-bg:var(--activeColor);
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, var(--activeColor) 30%, #ccc);
-  --vp-home-hero-image-background-image: linear-gradient(to top, #fee023 30%, #ebe9e07d 50%);
-  --vp-home-hero-image-filter: blur(60px);
-}
-</style>

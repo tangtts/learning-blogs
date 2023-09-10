@@ -87,16 +87,6 @@ export default defineConfig({
               { text: "英语", link: "/skill/英语", activeMatch: "/skill/英语" },
             ],
           },
-          {
-            text: "",
-            items: [
-              {
-                text: "vue源码",
-                link: "/source/vue/reactive原理",
-                activeMatch: "/source/vue/reactive原理",
-              },
-            ],
-          },
         ],
       },
       {
@@ -131,6 +121,16 @@ export default defineConfig({
             text: "链表",
             link: "/algorithm/链表",
             activeMatch: "/algorithm/链表",
+          },
+        ],
+      },
+      {
+        text: "源码",
+        items: [
+          {
+            text: "vue源码",
+            link: "/source/vue/reactive",
+            activeMatch: "/source/vue",
           },
         ],
       },
@@ -261,15 +261,15 @@ export default defineConfig({
           ],
         },
       ],
-      "source/uview": [
+      "source/vue": [
         {
-          text: "源码",
+          text: "vue",
           collapsed: true,
           items: [
-            {
-              text: "uview",
-              items: [{ text: "起步", link: "/source/uview/index" }],
-            },
+            { text: "reactive原理", link: "/source/vue/reactive" },
+            { text: "ref原理", link: "/source/vue/ref" },
+            { text: "computed原理", link: "/source/vue/computed" },
+            { text: "watch原理", link: "/source/vue/watch" },
           ],
         },
       ],

@@ -4,19 +4,23 @@ import "@vitepress-demo-preview/component/dist/style.css";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import "./tailwind.postcss";
+import "./index.css";
 import { h } from "vue";
-// 使用这个让 动态 color 生效
-import { twMerge } from "tailwind-merge";
 type Color = "red" | "blue" | "green";
 const baseColorCompant = (color: Color) => {
-  let classes = twMerge(`text-${color}-500`, "font-bold", "mx-2");
+  let classes = ["font-bold", "mx-2"];
+  if (color == "red") {
+    classes.push("text-red-500");
+  } else if (color == "green") {
+    classes.push("text-green-500");
+  } else {
+    classes.push("text-blue-500");
+  }
   return {
-    render() {
-      return h(
-        "span",
-        { class: classes },
-        this.$slots.default && this.$slots.default()
-      );
+    setup(_, { slots }) {
+      return () => {
+        return h("span", { class: classes }, slots.default());
+      };
     },
   };
 };

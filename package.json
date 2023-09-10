@@ -19,7 +19,6 @@
     "element-plus": "^2.3.9",
     "mockjs": "^1.1.0",
     "mockjs-fetch": "^2.0.0",
-    "tailwind-merge": "^1.14.0",
     "unplugin-icons": "^0.16.5",
     "vue": "^3.3.4"
   },
