@@ -55,7 +55,7 @@ export default defineConfig({
             activeMatch: "/backend/任务队列",
           },
           { text: "加密", link: "/backend/加密", activeMatch: "/backend/加密" },
-          { text: "mock", link: "/backend/mock",activeMatch: "/backend/mock"  },
+          { text: "mock", link: "/backend/mock", activeMatch: "/backend/mock" },
         ],
       },
       {
@@ -85,16 +85,6 @@ export default defineConfig({
             text: "",
             items: [
               { text: "英语", link: "/skill/英语", activeMatch: "/skill/英语" },
-            ],
-          },
-          {
-            text: "",
-            items: [
-              {
-                text: "uview源码",
-                link: "/source/uview/index",
-                activeMatch: "/source/uview/index",
-              },
             ],
           },
         ],
@@ -131,6 +121,16 @@ export default defineConfig({
             text: "链表",
             link: "/algorithm/链表",
             activeMatch: "/algorithm/链表",
+          },
+        ],
+      },
+      {
+        text: "源码",
+        items: [
+          {
+            text: "vue源码",
+            link: "/source/vue/reactive",
+            activeMatch: "/source/vue",
           },
         ],
       },
@@ -261,15 +261,15 @@ export default defineConfig({
           ],
         },
       ],
-      "source/uview": [
+      "source/vue": [
         {
-          text: "源码",
+          text: "vue",
           collapsed: true,
           items: [
-            {
-              text: "uview",
-              items: [{ text: "起步", link: "/source/uview/index" }],
-            },
+            { text: "reactive原理", link: "/source/vue/reactive" },
+            { text: "ref原理", link: "/source/vue/ref" },
+            { text: "computed原理", link: "/source/vue/computed" },
+            { text: "watch原理", link: "/source/vue/watch" },
           ],
         },
       ],

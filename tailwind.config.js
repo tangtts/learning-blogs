@@ -3,14 +3,20 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
-    './docs/.vitepress/**/*.{js,ts,vue}',
-		'./docs/**/*.md',
+    "./docs/.vitepress/**/*.{js,ts,vue}",
+    "./docs/**/*.md",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        blue: {
+          500: "#5672cd",
+        },
+      },
+    },
   },
   corePlugins: {
     preflight: false,
   },
   plugins: [],
-}
+};

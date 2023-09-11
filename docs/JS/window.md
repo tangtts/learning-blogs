@@ -647,5 +647,33 @@ boxElList.forEach((el) => {
 });
 
 ```
-
-
+## == 比较规则
+1. 两端类型相同,比较值
+2. 只要存在`NaN`,返回`false`
+3. undefined 和 null只有与自身比较，或者互相比较，返回true
+4. 两端都是原始类型，转化为数字
+   ```js
+    var a = "a"
+    console.log(a == 1) // false
+    //a 转化为数字是 NaN, NaN 比较任何值都是false
+   ``` 
+5. 一端是原始类型，一端是对象类型，把对象转换成原始类型后进行第一步
+   :::tip 对象转原始类型
+    1. 先使用 `[Symbol.toPrimitive]` 方法,判断是否可以获取到原始值
+    2. 调用 `valueOf` 方法,是否可以获取原始值
+    3. 调用 `toString` 方法,是否可以获取原始值
+   ::: 
+  ```js
+   var a = {
+    [Symbol.toPrimitive](){
+      return 2
+    },
+    valueOf() {
+      return 1;
+    },
+    toString(){
+      return 1
+    }
+   }
+   console.log(a == 1)
+  ```

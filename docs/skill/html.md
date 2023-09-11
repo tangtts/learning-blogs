@@ -609,12 +609,12 @@ a:hover {
 <p :class="backgroundHover.p">
  <a :class="backgroundHover.a">Mollitia nostrum placeat consequatur deserunt velit ducimus possimus commodi temporibus debitis quam</a>, molestiae laboriosam sit repellendus sed sapiente quidem quod accusantium vero.</p>
 
- #### background-attachment
+ ### background-attachment
  scroll 与 fixed，一个是相对元素本身固定，一个是相对视口固定，有点类似 position 定位的 absolute 和 fixed
 
 <img src="../../assets/img/attachment-scrollfixed.webp"/>
 
-##### 视差滚动
+#### 视差滚动
 
 <style lang="scss" scoped module="attachment">
 $height:300px;

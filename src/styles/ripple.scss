@@ -1,7 +1,8 @@
 .var-ripple {
-  transition: transform 0.2s cubic-bezier(0.68, 0.01, 0.62, 0.6), opacity 0.14s linear;
+  transition: transform 0.2s cubic-bezier(0.68, 0.01, 0.62, 0.6),
+    opacity 0.14s linear;
   opacity: 0;
-  background-color:currentColor;
+  background-color: currentColor;
   will-change: transform, opacity;
-  @apply absolute inset-0 bg-red-600 transition-all rounded-full;
+  @apply absolute inset-0 transition-all rounded-full bg-red-500;
 }
