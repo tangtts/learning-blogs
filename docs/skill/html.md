@@ -718,3 +718,396 @@ $height:300px;
   </ul>
 </div>
 
+## clip-path
+该属性使用裁剪方式创建元素的可显示区域。区域内的部分显示，区域外的隐藏。
+
+### 语法
+```css
+.div{
+
+  clip-path: url(resources.svg#c1);
+
+  clip-path: inset(100px 50px);
+
+  clip-path: circle(50px at 0 100px);
+
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+
+  clip-path: path('M0.5,1 C0.5,1,0,0.7,0,0.3 A0.25,0.25,1,1,1,0.5,0.3 A0.25,0.25,1,1,1,1,0.3 C1,0.7,0.5,1,0.5,1 Z');
+}
+```
+[`clip-path 工具`](https://bennettfeely.com/clippy/)
+
+### clip-path 的局限性
+
+<style scoped module="clipPath">
+.div {
+    width: 200px;
+    height: 100px;
+    clip-path: polygon(40% 0%, 40% 20%, 100% 20%, 100% 80%, 40% 80%, 40% 100%, 0% 50%);
+    background: #ff5722;
+    border: 2px solid #000;
+    margin:auto
+}
+</style> 
+
+<div :class="clipPath.div"></div>
+
+只有图形的最右侧展示了边框。这是因为，clip-path 其实是切割图形，边框其实是作用在原本的整个 div 之上的
+
+<img src="../../assets/img/clipPathArrow.webp"/>
+
+使用 `filter: drop-shadow()` 创建阴影
+
+<blue><code>box-shadow</code> 盒阴影的作用是在整个元素的后方创建阴影，而 <code>drop-shadow()</code> 滤镜则是创建一个符合元素本身形状（alpha 通道）的阴影。</blue>
+
+使用多层阴影  
+
+```html
+<style>
+   .father {
+       height: 100px;
+       width: 200px;
+       margin: auto;
+       filter:drop-shadow(0 0 .5px #000)
+           drop-shadow(0 0 .5px #000)
+           drop-shadow(0 0 .5px #000)
+           drop-shadow(0 0 .5px #000)
+           drop-shadow(0 0 .5px #000)
+           drop-shadow(0 0 .5px #000)
+           drop-shadow(0 0 .5px #000);;
+   }
+   .children {
+       height: 100%;
+       clip-path: polygon(40% 0%, 40% 20%, 100% 20%, 100% 80%, 40% 80%, 40% 100%, 0% 50%);
+       background: #ff5722;
+   }
+</style>  
+
+<div :class="clipPath.father">
+    <div :class="clipPath.children"></div>
+</div>
+```
+
+<style scoped module="clipPath" >
+.father {
+    margin: auto;
+    height: 100px;
+    width: 200px;
+    filter:drop-shadow(0 0 .5px #000)
+        drop-shadow(0 0 .5px #000)
+        drop-shadow(0 0 .5px #000)
+        drop-shadow(0 0 .5px #000)
+        drop-shadow(0 0 .5px #000)
+        drop-shadow(0 0 .5px #000)
+        drop-shadow(0 0 .5px #000);;
+}
+.children {
+    height:100%;
+    clip-path: polygon(40% 0%, 40% 20%, 100% 20%, 100% 80%, 40% 80%, 40% 100%, 0% 50%);
+    background: #ff5722;
+}
+</style>  
+
+<div :class="clipPath.father">
+    <div :class="clipPath.children"></div>
+</div>
+
+### 利用 clip-path 实现指定区域的 overflow:hidden
+使用 clip-path，可以实现任意方向上的空间裁剪！其控制内容的溢出裁剪的能力比 overflow: hidden 还要强大
+
+```css
+div{
+    // 只允许右侧可以溢出的容器
+    clip-path: polygon(0 0 ,1000% 0, 1000% 100%, 0 100%);
+
+   // 裁剪出左边、上边、右边都 overflow:hidden，下边不 overflow: hidden 的区域
+    clip-path: polygon(100% 0，100% 1000%, 0 1000%, 0 0);
+}
+```
+<img src="../assets/img/clipPathHidden.webp"/>
+
+### 基于 clip-path 的边框动画
+<blue><code>clip-path</code> 可以设置 <code>border-radius</code></blue>
+
+```css
+div {
+    position: relative;
+}
+div::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid gold;
+    border-radius: 5px; //[!code hl]
+    animation: clippath 3s infinite linear; //[!code hl]
+}
+@keyframes clippath {
+    0%,
+    100% {
+        clip-path: inset(0 0 95% 0);
+    }
+    25% {
+        clip-path: inset(0 95% 0 0);
+    }
+    50% {
+        clip-path: inset(95% 0 0 0);
+    }
+    75% {
+        clip-path: inset(0 0 0 95%);
+    }
+}
+
+```
+
+<style lang="scss" scoped module="clipPathBorder">
+
+.div {
+    position: relative;
+    margin: auto;
+    width: 160px;
+    line-height: 160px;
+    text-align: center;
+    font-size: 24px;
+    
+    &::before {
+        content: "";
+        border-radius: 5px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px solid gold;
+        transition: all .5s;
+        animation: clippath 3s infinite linear;
+    }
+}
+
+@keyframes clippath {
+    0%,
+    100% {
+        clip-path: inset(0 0 95% 0);
+    }
+    
+    25% {
+        clip-path: inset(0 95% 0 0);
+    }
+    50% {
+        clip-path: inset(95% 0 0 0);
+    }
+    75% {
+        clip-path: inset(0 0 0 95%);
+    }
+}
+
+.bg::before {
+    background: rgba(255, 215, 0, .5);
+}
+</style>  
+
+<div :class="clipPathBorder.div">Hello</div>
+<div :class="[clipPathBorder.div,clipPathBorder.bg]">示意图</div>
+
+
+
+```html
+<style lang="scss" scoped module="clipPathBorder2">
+  .div1 {
+    position: relative;
+    margin: auto;
+    width: 120px;
+    line-height: 64px;
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+    border: 2px solid gold;
+    background: gold;
+    transition: all .3s;
+    cursor: pointer;
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        border: 2px solid gold;
+        transition: all .5s;
+        animation: clippath 3s infinite linear;
+        border-radius: 10px;
+    }
+    
+    &::after {
+        animation: clippath 3s infinite -1.5s linear;
+    }
+}
+
+@keyframes clippath {
+    0%,
+    100% {
+        clip-path: inset(0 0 98% 0);
+    }
+    
+    25% {
+        clip-path: inset(0 98% 0 0);
+    }
+    50% {
+        clip-path: inset(98% 0 0 0);
+    }
+    75% {
+        clip-path: inset(0 0 0 98%);
+    }
+}
+</style>  
+
+<div :class="clipPathBorder2.div1">Hello</div>
+```
+
+
+
+<style lang="scss" scoped module="clipPathBorder2">
+  .div1 {
+    position: relative;
+    margin: auto;
+    width: 120px;
+    line-height: 64px;
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+    border: 2px solid gold;
+    background: gold;
+    transition: all .3s;
+    cursor: pointer;
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        border: 2px solid gold;
+        transition: all .5s;
+        animation: clippath 3s infinite linear;
+        border-radius: 10px;
+    }
+    
+    &::after {
+        animation: clippath 3s infinite -1.5s linear;
+    }
+}
+
+@keyframes clippath {
+    0%,
+    100% {
+        clip-path: inset(0 0 98% 0);
+    }
+    
+    25% {
+        clip-path: inset(0 98% 0 0);
+    }
+    50% {
+        clip-path: inset(98% 0 0 0);
+    }
+    75% {
+        clip-path: inset(0 0 0 98%);
+    }
+}
+</style>  
+
+<div :class="clipPathBorder2.div1">Hello</div>
+
+### 基于 clip-path 的动态区域裁剪动画
+通过改变 `clip-path` 来动态改变显示区域
+
+```html
+<style lang="scss" scoped module="clipPathBorder2">
+.container {
+    position: relative;
+    width: 400px;
+    height: 300px;
+    margin: auto;
+    overflow: hidden;
+    cursor: pointer;
+    transition: clip-path .3s linear;
+    clip-path: circle(20px at 44px 44px); //[!code hl]
+    @apply bg-green-300;
+    
+    &:hover {
+        clip-path: circle(460px at 44px 44px);  //[!code hl]
+    }
+}
+
+ul {
+    position: absolute;
+    line-height: 32px;
+    top:50px;
+    padding-left: 50px;
+    font-size: 18px;
+    list-style: none;
+    
+    li:hover {
+        color: deeppink;
+    }
+}
+</style>  
+
+<div :class="clipPathBorder3.container">
+    <ul>
+        <li>11111</li>
+        <li>22222</li>
+        <li>33333</li>
+        <li>44444</li>
+    </ul>
+</div>
+```
+
+
+
+<style lang="scss" scoped module="clipPathBorder3">
+.container {
+    position: relative;
+    width: 400px;
+    height: 300px;
+    margin: auto;
+    overflow: hidden;
+    cursor: pointer;
+    transition: clip-path .3s linear;
+    clip-path: circle(20px at 44px 44px); //[!code hl]
+    @apply bg-green-300;
+    
+    &:hover {
+        clip-path: circle(460px at 44px 44px);  //[!code hl]
+    }
+}
+
+ul {
+    position: absolute;
+    line-height: 32px;
+    top:50px;
+    padding-left: 50px;
+    font-size: 18px;
+    list-style: none;
+    
+    li:hover {
+        color: deeppink;
+    }
+}
+</style>  
+
+<div :class="clipPathBorder3.container">
+    <ul>
+        <li>11111</li>
+        <li>22222</li>
+        <li>33333</li>
+        <li>44444</li>
+    </ul>
+</div>
+
+
+
