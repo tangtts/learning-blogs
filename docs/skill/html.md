@@ -25,7 +25,7 @@ fetchpriority 属性可以与 link、script、img 以及 iframe 标签一起使�
 
 <img
  style="object-fit:contain"
- src="img/v2-b28a6ca67d085829cff6050472a688f8_720w.webp"/>
+ src="@img/v2-b28a6ca67d085829cff6050472a688f8_720w.webp"/>
 
 为了避免内容超出容器，我们需要使用 min-height 来替代 height：
 
@@ -37,11 +37,12 @@ fetchpriority 属性可以与 link、script、img 以及 iframe 标签一起使�
 
 <img 
 style="object-fit:contain"
-src="img/v2-71ece957daf24d53df8b57482c42cc0e_720w.webp"/>
+src="@img/v2-71ece957daf24d53df8b57482c42cc0e_720w.webp"/>
 
-使用 width 如果文本过长会溢出 <img 
+使用 width 如果文本过长会溢出 
+<img 
 style="object-fit:contain"
-src="img/v2-418c4d0a017b505130ebd1b25362cf6e_720w.webp"/> 把 width 换成 min-width 就不会出现这种现象了：
+src="@img/v2-418c4d0a017b505130ebd1b25362cf6e_720w.webp"/> 把 width 换成 min-width 就不会出现这种现象了：
 
 ```css
 .button {
@@ -56,7 +57,7 @@ src="img/v2-418c4d0a017b505130ebd1b25362cf6e_720w.webp"/> 把 width 换成 min-w
 
 <img 
 style="object-fit:contain"
-src="img/v2-bfad4da6374434827e3543cf0043433c_720w.webp"/>
+src="@img/v2-bfad4da6374434827e3543cf0043433c_720w.webp"/>
 
 <style scoped lang="scss" module="textOnPicContainer">
 
@@ -410,7 +411,7 @@ src="img/v2-bfad4da6374434827e3543cf0043433c_720w.webp"/>
 
 #### padding-box / border-box
 
-<img src="img/background-clip.webp"/>
+<img src="@img/background-clip.webp"/>
 实现一个红黄相间的边框  
 1. 利用 border-style: dashed 设置一个虚线边框；
 2. 利用 background-clip: border-box 让背景色从边框处开始绘制；
@@ -489,7 +490,7 @@ p, a {
 <a>Lorem .....</a>
 ```
 
-<img src="img/background-display.webp"/>
+<img src="@img/background-display.webp"/>
 加上动画
 
 ```css
@@ -507,7 +508,7 @@ a:hover {
 }
 ```
 
-<img src="img/background-display2.webp"/>
+<img src="@img/background-display2.webp"/>
 
 #### 多行文本的渐隐消失
 
@@ -612,7 +613,7 @@ a:hover {
  ### background-attachment
  scroll 与 fixed，一个是相对元素本身固定，一个是相对视口固定，有点类似 position 定位的 absolute 和 fixed
 
-<img src="img/attachment-scrollfixed.webp"/>
+<img src="@img/attachment-scrollfixed.webp"/>
 
 #### 视差滚动
 
@@ -662,7 +663,7 @@ $height:300px;
 #### 滚动阴影
 结合 srcoll 与 local，实现一种伪滚动阴影
 
-<img src="img/scrollLocale.webp"/>
+<img src="@img/scrollLocale.webp"/>
 
 
 **初始没有滚动的时候是没有阴影展现的，只有当开始滚动，阴影才会出现。**
@@ -755,7 +756,7 @@ $height:300px;
 
 只有图形的最右侧展示了边框。这是因为，clip-path 其实是切割图形，边框其实是作用在原本的整个 div 之上的
 
-<img src="../../assets/img/clipPathArrow.webp"/>
+<img src="@img/clipPathArrow.webp"/>
 
 使用 `filter: drop-shadow()` 创建阴影
 
@@ -1108,6 +1109,250 @@ ul {
         <li>44444</li>
     </ul>
 </div>
+
+## box-shadow
+### 立体阴影
+
+立体投影的关键点在于利于伪元素生成一个大小与父元素相近的元素，然后对其进行 rotate 以及定位到合适位置，再赋于阴影操作  
+
+颜色的运用也很重要，阴影的颜色通常比本身颜色要更深，这里使用 hsl 表示颜色更容易操作，l 控制颜色的明暗度
+
+```html
+<style scoped module="shadow">
+.div {
+    position: relative;
+    width: 600px;
+    height: 100px;
+    margin: 5vmin auto 15vmin;
+    background: hsl(48, 100%, 50%);
+    border-radius: 20px;
+    box-shadow: 0 0 5px 2px hsl(48, 100%, 45%); // [!code hl]
+}
+
+.div::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    right: 5%;
+    bottom: 0;
+    border-radius: 10px;
+    background: hsl(48, 100%, 20%);
+    transform: translate(0, -15%) rotate(-4deg);// [!code hl]
+    transform-origin: center center;
+    box-shadow: 0 0 20px 15px hsl(48, 100%, 20%); // [!code hl]
+    z-index: -1;
+}
+</style> 
+
+<div :class="shadow.div"></div>
+```
+
+
+<style scoped module="shadow">
+.div {
+    position: relative;
+    width: 600px;
+    height: 100px;
+    margin: 5vmin auto 15vmin;
+    background: hsl(48, 100%, 50%);
+    border-radius: 20px;
+    box-shadow: 0 0 5px 2px hsl(48, 100%, 45%);
+}
+
+.div::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    right: 5%;
+    bottom: 0;
+    border-radius: 10px;
+    background: hsl(48, 100%, 20%);
+    transform: translate(0, -15%) rotate(-4deg);
+    transform-origin: center center;
+    box-shadow: 0 0 20px 15px hsl(48, 100%, 20%);
+    z-index: -1;
+}
+</style> 
+
+<div :class="shadow.div"></div>
+
+### 新拟态风格阴影
+
+```html
+<style lang="scss">
+  .div {
+    box-shadow:
+        7px 7px 12px rgba(0, 0, 0, .4),
+        -7px -7px 12px rgba(255, 255, 255, .9);
+}
+
+.div:nth-child(2) {
+    box-shadow:
+        inset -7px -7px 12px rgba(255, 255, 255, .9),
+        inset 7px 7px 12px rgba(0, 0, 0, .4);
+}
+
+.div:nth-child(3) {
+    transition: .2s all;
+    box-shadow:
+        7px 7px 12px rgba(0, 0, 0, .4),
+        -7px -7px 12px rgba(255, 255, 255, .9),
+        inset 0 0 0x rgba(255, 255, 255, .9),
+        inset 0 0 0 rgba(0, 0, 0, .4);
+    
+    &:active {
+        box-shadow:
+            0 0 0 rgba(0, 0, 0, .4),
+            0 0 0 rgba(255, 255, 255, .9),
+            inset -7px -7px 12px rgba(255, 255, 255, .9),
+            inset 7px 7px 12px rgba(0, 0, 0, .4);
+    }
+}
+</style> 
+
+<div class="flex gap-4">
+  <div :class="boxShadow1.div">浮雕阴影</div>
+  <div :class="boxShadow1.div">浮雕阴影</div>
+  <div :class="boxShadow1.div">浮雕阴影</div>
+</div>
+```
+
+<style module="boxShadow1" scoped lang="scss">
+  .div {
+    width: 120px;
+    height: 120px;
+    margin: auto;
+    line-height: 120px;
+    text-align: center;
+    background: #e9ecef;
+    border-radius: 20px;
+    font-size: 20px;
+    color: #333;
+    box-shadow:
+        7px 7px 12px rgba(0, 0, 0, .4),
+        -7px -7px 12px rgba(255, 255, 255, .9);
+    cursor: pointer;
+    user-select: none;
+}
+
+.div:nth-child(2) {
+    box-shadow:
+        inset -7px -7px 12px rgba(255, 255, 255, .9),
+        inset 7px 7px 12px rgba(0, 0, 0, .4);
+}
+
+.div:nth-child(3) {
+    transition: .2s all;
+    box-shadow:
+        7px 7px 12px rgba(0, 0, 0, .4),
+        -7px -7px 12px rgba(255, 255, 255, .9),
+        inset 0 0 0x rgba(255, 255, 255, .9),
+        inset 0 0 0 rgba(0, 0, 0, .4);
+    
+    &:active {
+        box-shadow:
+            0 0 0 rgba(0, 0, 0, .4),
+            0 0 0 rgba(255, 255, 255, .9),
+            inset -7px -7px 12px rgba(255, 255, 255, .9),
+            inset 7px 7px 12px rgba(0, 0, 0, .4);
+    }
+}
+</style> 
+
+<div class="flex gap-4">
+  <div :class="boxShadow1.div">浮雕阴影</div>
+  <div :class="boxShadow1.div">浮雕阴影</div>
+  <div :class="boxShadow1.div">浮雕阴影</div>
+</div>
+
+### 彩色阴影 / 渐变阴影
+
+
+<style module="boxShadow2" scoped lang="scss">
+.avator {
+    width:100px;
+    height:100px;
+    margin:0 auto;
+    position: relative;
+    background: url(https://avatars.githubusercontent.com/u/8554143?v=4) no-repeat center center;
+    background-size: 100% 100%;
+    
+    &::after {
+        content: "";
+        position: absolute;
+        top: 10%;
+        width: 100%;
+        height: 100%;
+        background: inherit;
+        background-size: 100% 100%;
+        filter: blur(10px) brightness(80%) opacity(.8);
+        z-index: -1;
+    }
+}
+ </style> 
+ <div :class="boxShadow2.avator"/>
+ 
+ ### 利用阴影模拟多层边框
+ 利用阴影可以复制自身的能力
+<blue>最先定义的阴影优先级最高，然后依次递减。</blue>
+
+```css
+  .div {
+    margin: 50px auto;
+    width: 200px;
+    height: 100px;
+    background: deeppink;
+    box-shadow: 
+      inset 0 0 0 6px #fff, 
+      0 0 0 10px green, 
+      0 0 0 15px orange, 
+      0 2px 5px 15px yellow
+  }
+
+  .div2 {
+    width: 200px;
+    height: 64px;
+    margin:auto;
+    background: #fc0;
+    border-radius: 20px;
+    box-shadow: 
+       inset 0 -5px 0 #aaa,
+       inset 0 -10px 0 #000;
+  }
+```
+
+<style module="boxShadow3" scoped lang="scss">
+  .div {
+    margin: 50px auto;
+    width: 200px;
+    height: 100px;
+    background: deeppink;
+    box-shadow: 
+      inset 0 0 0 6px #fff, 
+      0 0 0 10px green, 
+      0 0 0 15px orange, 
+      0 2px 5px 15px yellow;
+  }
+
+   .div2 {
+    width: 200px;
+    height: 64px;
+    margin:auto;
+    background: #fc0;
+    border-radius: 20px;
+    box-shadow: 
+       inset 0 -5px 0 #aaa,
+       inset 0 -10px 0 #000;
+}
+</style>
+
+<div :class="boxShadow3.div" />
+<div :class="boxShadow3.div2" />
+
+<img src="@img/boxShadowButton.webp" />
+
 
 
 

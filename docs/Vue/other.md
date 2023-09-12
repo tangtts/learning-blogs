@@ -238,8 +238,8 @@ function mount(component: Component): MountInstance {
     
 ## [静态文件的动态访问](https://www.douyin.com/user/self?modal_id=7269754701720112444)
 
-<img src="img/动态访问普通写法.png"/>
-<img src="img/原始动态访问结果.png"/>
+<img src="@img/动态访问普通写法.png"/>
+<img src="@img/原始动态访问结果.png"/>
 
 **原因是打包之后路径发生变化**
 ### vite 自动转换路径
@@ -249,12 +249,12 @@ function mount(component: Component): MountInstance {
 ### 解决办法
 1. 直接当做一个模块引用
    返回的是打包之后的路径 
-  <img src="img/动态访问办法1.png"/>
+  <img src="@img/动态访问办法1.png"/>
 1. 使用 `import` 语句, 打包之后会附带一个js文件
-  <img src="img/动态访问办法2.png"/>
+  <img src="@img/动态访问办法2.png"/>
 1. 使用 `URL`
   > 其中 `import.meta.url` 代表了当前模块  
   > `new URL('./xxx.jpg', import.meta.url)` 代表当前模块的相对路径
 
-  <img src="img/动态访问办法3.png"/>
+  <img src="@img/动态访问办法3.png"/>
      

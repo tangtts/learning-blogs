@@ -32,7 +32,7 @@ cxt.arcTo(150,20,150,70,50); // 创建弧
 cxt.lineTo(150,120);         // 创建垂直线
 cxt.stroke();
 ```
-<img src="img/arcTo.webp"/>
+<img src="@img/arcTo.webp"/>
 
 
 

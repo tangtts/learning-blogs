@@ -41,10 +41,10 @@
 ### 触底状态
 滚动元素的内容高度 = 可视区域的高度 + 滚动元素距离顶部的高度
 - [scrollHeight](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollHeight)
-<img src="img/scrollheight.png"/>
+<img src="@img/scrollheight.png"/>
 
 - [clientHeight](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/clientHeight)
-<img src="img/dimensions-client.png">
+<img src="@img/dimensions-client.png">
 
 - [scrollTop](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollTop)  
 Element.scrollTop 属性可以获取或设置一个元素的内容垂直滚动的像素数。  
@@ -54,7 +54,7 @@ Element.scrollTop 属性可以获取或设置一个元素的内容垂直滚动�
 ---
 
 **所以，`el.scrollHeight = el.clientHeight + el.scrollTop` 即可以判定已经到达底部**
-<img src="img/reachBottom.png">
+<img src="@img/reachBottom.png">
 
 ### 填充父元素
 可以设置 `immediate`属性 ,立即加载数据直到触底为止

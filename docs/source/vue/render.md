@@ -151,7 +151,7 @@ const patchElement = (n1, n2, container) => {
 ## diff 算法
 ### sync from start
 
-<img src="../../assets/img/diff-1.png"/>
+<img src="@img/diff-1.png"/>
 
 ```js
  h('div',[
@@ -188,7 +188,7 @@ const patchKeydChildren = (c1, c2, container) => {
 }
 ```
 ### sync from end
-<img src="../../assets/img/diff-2.png"/>
+<img src="@img/diff-2.png"/>
 
 ```js
 // 2. sync from end
@@ -207,8 +207,8 @@ while (i <= e1 && i <= e2) {
 }
 ```
 ### common sequence + mount
-<img src="../../assets/img/diff-3.png"/>
-<img src="../../assets/img/diff-4.png"/>
+<img src="@img/diff-3.png"/>
+<img src="@img/diff-4.png"/>
 
 ```js
 // 3. common sequence + mount
@@ -232,8 +232,8 @@ if (i > e1) { // 说明有新增
 ```
 ### common sequence + unmount
 
-<img src="../../assets/img/diff-5.png"/>
-<img src="../../assets/img/diff-6.png"/>
+<img src="@img/diff-5.png"/>
+<img src="@img/diff-6.png"/>
 
 
 ```js
@@ -253,7 +253,7 @@ else if (i > e2) {
 ```
 ### unknown sequence
 <blue>build key:index map for newChildren</blue>
-<img src="../../assets/img/diff-7.png"/>
+<img src="@img/diff-7.png"/>
 
 ```js
 // 5. unknown sequence
@@ -285,7 +285,7 @@ for (let i = s1; i <= e1; i++) {
 ```
 
 ### move and mount
-<img src="../../assets/img/diff-8.png"/>
+<img src="@img/diff-8.png"/>
 
 ```js
 for (let i = toBePatched - 1; i >= 0; i--) {

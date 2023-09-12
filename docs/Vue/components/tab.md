@@ -16,7 +16,7 @@ import Tab from '../../../src/components/tab.vue'
    核心代码:  
    `const left: number = tab.offsetLeft + tab.offsetWidth / 2 - scroller.value.offsetWidth / 2;`
 
-<img src="img/tab.png" />
+<img src="@img/tab.png" />
 
 1. 底部滚动条
    底部滚动条是绝对定位的，所以需要计算出当前的 `tabItem` 的 `offsetLeft`，然后设置 `滚动条` 的 `transformX` 值,造成跟随现象

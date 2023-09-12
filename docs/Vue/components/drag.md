@@ -30,7 +30,7 @@ import Drag from '../../../src/components/drag.vue'
 当`dragend`的时候计算位置
 
 1. 获取 父元素和当前元素 的位置信息及尺寸使用 `getBoundingClientRect` 获取元素大小及相对于视口的位置
-2. 根据上一步的结果获取 边界位置 <img src="img/drag1.png" />
+2. 根据上一步的结果获取 边界位置 <img src="@img/drag1.png" />
 
 边界位置即 `parentWidth - width / parentHeight - height`不能比这个更大,不能比 `0` 更小 
 :::details 偏移量
