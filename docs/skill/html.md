@@ -1085,20 +1085,21 @@ ul {
     &:hover {
         clip-path: circle(460px at 44px 44px);  //[!code hl]
     }
-}
-
-ul {
-    position: absolute;
-    line-height: 32px;
-    top:50px;
-    padding-left: 50px;
-    font-size: 18px;
-    list-style: none;
-    
-    li:hover {
-        color: deeppink;
+   ul {
+      position: absolute;
+      line-height: 32px;
+      top:50px;
+      padding-left: 50px;
+      font-size: 18px;
+      list-style: none;
+      
+      li:hover {
+          color: deeppink;
+      }
     }
 }
+
+
 </style>  
 
 <div :class="clipPathBorder3.container">
@@ -1353,6 +1354,147 @@ ul {
 
 <img src="@img/boxShadowButton.webp" />
 
+## backdrop-filter
+ - filter：模糊滤镜的作用是将模糊或颜色偏移等图形效果作用于元素之上。
+ - backdrop-filter：该属性可以在元素后方区域，添加上模糊或颜色偏移等图形效果。backdrop-filter 的生效范围是元素背后的所有内容，因此，为了能够看到效果，元素或其背景至少要保持部分透明。
+  
+### 图片的蒙版 Hover 效果
 
+<style module="backdrop" scoped>
+  .div {
+    height: 220px;
+    width:220px;
+    overflow:hidden;
+    margin:auto;
+    position: relative;
+    display: inline-block;
+    background-size: cover;
+    background: url(@img/boxShadowAvator.webp) no-repeat center center;
+}
+
+.div::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    backdrop-filter: grayscale(100%);
+    transition: .3s transform;
+}
+
+.div:hover::before {
+  transform: translate(100%, 0);
+}
+ </style> 
+
+<div :class="backdrop.div"></div>
+
+## filter
+### 利用模糊滤镜提取图片主题色
+利用模糊滤镜提取图片主题色
+
+```css
+.filter{
+  position: relative;
+  width: 320px;
+  height: 200px;
+  margin: auto;
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("../assets/img/blurBackground.png");// [!code hl]
+    background-size: cover;
+    filter: blur(50px); // [!code hl]
+    transform: scale(3); //[!code hl]
+  }
+}
+```
+
+<style module="filter" scoped lang="scss">
+.filter{
+  position: relative;
+  width: 320px;
+  height: 200px;
+  margin: auto;
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("../assets/img/blurBackground.png");
+    background-size: cover;
+    filter: blur(50px);
+    transform: scale(3);
+  }
+}
+</style> 
+<img src="@img/blurBackground.png" class="w-[320px] mx-auto"/>
+<div :class="filter.filter"></div>
+
+### 直角变成圆角
+
+嘴角的弧度是通过 border-bottom 的 border-radius 实现的  
+然后通过 `filter: contrast(20)` 对嘴角进行弧度处理
+```css
+.filter {
+    position: relative;
+    margin: auto;
+    width: 250px;
+    height: 250px;
+    filter: contrast(20); //[!code ++]
+    background-color: #fff;
+    overflow: hidden;
+    
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        filter: blur(7px);  //[!code hl]
+        border: 25px solid transparent;//[!code hl]
+        border-bottom: 25px solid #000;//[!code hl]
+        border-radius: 50%;//[!code hl]
+    }
+}
+```
+
+<style module="blurFilter" scoped lang="scss">
+.filter {
+    position: relative;
+    margin: auto;
+    width: 250px;
+    height: 250px;
+    filter: contrast(20);
+    background-color: #fff;
+    overflow: hidden;
+    
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        filter: blur(7px);
+        border: 25px solid transparent;
+        border-bottom: 25px solid #000;
+        border-radius: 50%;
+    }
+}
+</style>  
+
+<div :class="blurFilter.filter">
+</div>
 
 
