@@ -192,3 +192,88 @@ switch (true) {
 		break;
 }
 ```
+
+## 强制重排
+使用 `el.offsetHeight` 触发重排,获取最新的 dom 结构    
+或者使用 `requestAnimationFrame` 获取下一帧动画  
+
+
+<script setup lang="ts">
+	import { onMounted, ref, computed, reactive, watch } from "vue";
+	const c = ref<HTMLElement | null>(null)
+	const isShow = ref(false);
+	watch(isShow, (val) => {
+		if (val) {
+			openPanel()
+		} else {
+			closePanel()
+		}
+	})
+	const openPanel = () => {
+		const el = c.value as HTMLElement;
+		el.style.height = 'auto';
+		let h = el.offsetHeight;
+		el.style.height = '0px';
+		el.offsetHeight // [!code ++]
+		requestAnimationFrame(() => {  // [!code ++]
+			el.style.height = h + 'px'
+		})
+	}
+	const closePanel = () => {
+		const el = c.value as HTMLElement;
+		el.style.height = '0px'
+	}
+	const toggleHeight = () => {
+		isShow.value = !isShow.value;
+	}
+</script>
+<ClientOnly>
+	<div>
+			<el-button type="primary" @click="toggleHeight">切换高度</el-button>
+			<div class="rounded-md overflow-hidden transition-all duration-1000 h-0" ref="c">
+				<div class="bg-red-100 h-[60px] py-2 border border-solid" v-for="item in 10" :key="item">
+				</div>
+			</div>
+	</div>
+</ClientOnly>
+
+```vue
+<template>
+  <div>
+    <el-button @click="toggleHeight">切换高度{{ isShow }}</el-button>
+    <div class="rounded-md overflow-hidden transition-all duration-1000 h-0" ref="c">
+      <div class="bg-red-100 h-[60px] py-2 border border-solid" v-for="item in 10" :key="item">
+      </div>
+    </div>
+  </div>
+</template>
+<script lang="ts" setup>
+import { onMounted, ref, computed, reactive, watch } from "vue";
+const c = ref<HTMLElement | null>(null)
+const isShow = ref(false);
+watch(isShow, (val) => {
+  if (val) {
+    openPanel()
+  } else {
+    closePanel()
+  }
+})
+const openPanel = () => {
+  const el = c.value as HTMLElement;
+  el.style.height = 'auto';
+  let h = el.offsetHeight;
+  el.style.height = '0px';
+	// el.offsetHeight // [!code ++]
+  requestAnimationFrame(() => {  // [!code ++]
+    el.style.height = h + 'px'
+  })
+}
+const closePanel = () => {
+  const el = c.value as HTMLElement;
+  el.style.height = '0px'
+}
+const toggleHeight = () => {
+  isShow.value = !isShow.value;
+}
+</script>
+```

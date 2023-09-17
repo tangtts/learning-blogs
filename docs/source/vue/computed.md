@@ -1,7 +1,7 @@
 # computed
-**本质是一个 `effect`,让 `getter` 函数属性收集`effect`**
+**本质是一个 `effect`,让 `getter` 函数属性收集 `effect`**
 
-<blue>多次获取 <code>computed</code> 的值,<code>get方法</code> 只会执行一次</blue>
+<blue>特点：多次获取 <code>computed</code> 的值,<code>get方法</code> 只会执行一次,即懒执行,除非依赖的属性发生了变化</blue>
 
 ```js
 const state = reactive({ firstname: 'j', lastname: 'w', age: 30 });
@@ -15,7 +15,7 @@ const fullname = computed({
         console.log(val); 
     }
  })
- // 计算属性也是一个effect， 依赖的状态会收集计算属性的effect
+// 计算属性也是一个effect， 依赖的状态会收集计算属性的effect
 // 计算属性会触发他收集的effect
 effect(() => { // 计算属性也可以收集effect
   console.log(fullname.value, 'effect')
@@ -28,11 +28,10 @@ setTimeout(()=>{
   fullname.value = 'jerry'
 },1000)
 ```
-只有当依赖的状态发生变化时，计算属性才会重新计算,默认会执行一次
 
 ## 解析
 
-由于 `computed` 可以接收`函数/对象`,要执行参数归一化
+由于 `computed` 可以接收`函数/对象`,所以要执行参数归一化
 ```js
   function computed(getterOrOptions) {
   const isGetter = isFunction(getterOrOptions);
@@ -88,23 +87,41 @@ class ComputedRefImpl {
 
 底层使用的 `ReactiveEffect`,`ReactiveEffect`接收一个函数`fn` 即 `getter`, 
 
-收集的这个`ReactiveEffect` 是带有 `scheduler` 方法的
+收集的这个`ReactiveEffect` 是带有 `scheduler` 方法的,所以要对 [`🔗ReactiveEffect`](./reactive.md#effect) 进行修改
 
 ```js
   class ReactiveEffect{
-    constructor(public fn, public scheduler?) {}
+    deps = []; 
+    constructor(public fn, public scheduler?) {} //[!code ++]
+    run(){
+        // ...
+       activeEffect = this; 
+       return this.fn();
+    }
  } 
 ```
+----
 
-当使用`.value` 的时候,会执行`effect.run`,所以`getter`中的 `reactive/ref` 属性会自动收集此 `ReactiveEffect`   
-并把当前使用 `computed` 的 `effect` 收集到 `ComputedRefImpl` 的 `dep` 中   
+**当使用`.value` 的时候,会执行 `effect.run`,所以`getter`中的 `reactive/ref` 属性会自动收集此 `ReactiveEffect`** 
 
-<blue>也就是 <code>ref/reactive</code> 收集computed, <code>computed</code> 收集 <code>effect</code> </blue>
+### trackEffects
+当使用 `.value` 时候,会触发 `trackEffects` 方法 
 
----
- 
+当前使用 `computed` 的 `effect` 收集 `ComputedRefImpl` 的 `dep`,因为 `computed` 发生了改变,对应的 `effect` 也要发生变化   
+
+<blue>也就是 <code>ref/reactive</code> 收集 computed, <code>computed</code> 收集 <code>effect</code> </blue>
+
+```js
+function trackEffects(dep) {
+  let shouldTrack = !dep.has(activeEffect);
+  if (shouldTrack) {
+    dep.add(activeEffect);
+    activeEffect.deps.push(dep);
+  }
+}
+```
+### triggerEffects
 当 `reactive/ref` 发生变化时,由于会触发 `triggerEffects` 方法,在 `triggerEffects` 执行 `scheduler` 中的函数
-
 ```js
 function triggerEffects(effects) {
       effects = [...effects]; // vue2中的是数组，先拷贝在魂环
@@ -130,7 +147,7 @@ new ReactiveEffect(getter, () => {
 ## 懒执行
 由于需要判断执行时机,所以使用变量 `_dirty` 判断是否需要执行对应的 `effect`  
 
-`computed`默认执行一次,所以在获取的时候执行一次,然后赋值为 `false`，**后面再次获取不用每次执行**
+`computed`默认执行一次,所以在获取的时候执行一次,然后赋值为 `false`，**后面如果属性不发生变化则不用每次执行**
 ```js
 get value(){
    if (this._dirty) {
@@ -147,6 +164,17 @@ get value(){
     triggerEffects(this.dep);
  }
 ```
+## 总结
+在 `computed` 使用的 `ref/reactive` 会记录带有 `scheduler` 的 `activeEffect`  
+
+在使用 `computed`, 即 `computed.value` 的时候,触发了 `get` 方法中的 `trackEffects(this.dep);`,把 对应的 `effect` 收集到了 `dep` 中,是不带`scheduler`的 `activeEffect`  
+
+----
+
+当 `computed` 里面的属性发生变化的时候,会触发 `scheduler` 函数,此时会触发 `triggerEffects` 方法, `computed` 对应的 `effect` 要执行 `effect.run` 方法,此时 `effect` 的回调函数又会重新执行,再次获取最新的 `computed` 值
+
+
+
 
 
 

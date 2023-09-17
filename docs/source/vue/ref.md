@@ -1,6 +1,6 @@
 # ref 原理
 
-本质和 `reactive` 一样,把当前 `dep`  与 `activeEffect` 绑定,当触发 `get/set` 时,追踪触发 `activeEffect`
+本质和 [`🔗reactive`](./reactive.md) 一样,把当前 `dep` 与 `activeEffect` 绑定,当触发 `get/set` 时,追踪/触发 `activeEffect`
 
 **一个 `ref` 可能会被多个 `effect` 使用,`ref` 不仅接收`原始值`,还可以接收 `引用值`**
 ```js
@@ -20,7 +20,7 @@ x.value = 1
 ## 解析
 使用工厂模式创建类 - `RefImpl`  
 
-由于 `ref` 可能会被多个 `effect` 使用,所以使用 `Set`  存储`activeEffect`, 当 `ref` 变化时,触发多个 `activeEffect` 重新执行
+由于 `ref` 可能会被多个 `effect` 使用,所以使用 `Set` 记录 `activeEffect`, 当 `ref` 变化时,触发多个 `activeEffect` 重新执行
 
 ```js
 function ref(value) {
@@ -31,10 +31,11 @@ class RefImpl {
   _value;
   dep = new Set();
   constructor(public rawValue) {
-    this._value = toReactive(rawValue);
+    this._value = toReactive(rawValue);  //[!code hl]
   }
   get value() {
      if (activeEffect) {
+      // 追踪依赖
       trackEffects(this.dep); //[!code hl]
     }
     return this._value;
@@ -43,6 +44,7 @@ class RefImpl {
     if (newVal !== this.rawValue) {
       this.rawValue = newVal;
       this._value = toReactive(newVal);
+      // 触发依赖
       triggerEffects(this.dep); //[!code hl]
     }
   }
@@ -56,8 +58,10 @@ function toReactive(source) {
   return isObject(source) ? reactive(source) : source;
 }
 ```
-在 `effect` 回调函数内部,只要使用 `.value`，会触发 `get` 方法,从而执行`trackEffects` 函数
+### trackEffects
+在 `effect` 回调函数内部,只要使用 `.value`，会触发 `get` 方法,从而执行`trackEffects` 函数 
 
+当前 `RefImpl` 的 `dep` 记录了 `activeEffect`,同时 `effect` 把 `RefImpl.dep` 添加到自己的`deps` 中
 ```js
 function trackEffects(dep) {
   let shouldTrack = !dep.has(activeEffect);
@@ -67,7 +71,8 @@ function trackEffects(dep) {
   }
 }
 ```
-当修改 `.value`时触发 `set` 方法时,会执行 `triggerEffects` 函数
+### triggerEffects
+当修改 `.value`时触发 `set` 方法时,会执行 `triggerEffects` 函数,执行[`🔗effect.run`](./reactive.md#effect)
 
 ```js
 function triggerEffects(effects) {
@@ -82,8 +87,8 @@ function triggerEffects(effects) {
   }
 }
 ```
-
-## 为何要对对象使用 `reactive` 包裹
+## 问题
+### 为何要对对象使用 `reactive` 包裹
 ```js
 const a = ref({name:"zs"})
 effect(() => {
@@ -93,8 +98,9 @@ setTimeout(() => {
   a.value.name = 'xxx'
 }, 1000)
 ```
-其实只触发了`ref` 的 `get` 方法,只是对象的属性发生了变化,而不是引用发生了变化,所以需要使用 `reactive` 包裹对象,从而触发 `effect`
-## 为何 `ref` 可以更改引用地址,还能保留响应式
+**其实只触发了`ref` 的 `get` 方法,只是对象的属性发生了变化,而不是引用发生了变化,所以需要使用 `reactive` 包裹对象,从而触发 `effect`**
+
+### 为何 `ref` 可以更改引用地址,还能保留响应式
 ```js
 const a = ref({name:"zs"})
 a.value = {age:18}
@@ -106,8 +112,8 @@ setTimeout(() => {
 },1000)
 ```
 **因为 `ref` 并不是使用的 `porxy` 监控属性变化**   
- 当 `a.value` 引用地址发生改变时即 `a.value = {age:18}`, 触发 `set` 方法,执行`this._value = toReactive(newVal)`  
- 当使用 `a.value.age` 时,返回`this._value`, 同时 `dep` 开始追踪 `a` 对应的 `activeEffect` 实例,整个过程和引用地址修改无关
+ 不论怎么修改,只要使用 `.value` 就会触发 `get/set` 访问器方法  
+ **整个过程和引用地址修改无关**
 
  ## toRef / toRefs
 

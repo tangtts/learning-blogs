@@ -534,6 +534,18 @@ window.requestAnimationFrame(step);
 ```
 
 **下次重绘之前继续更新下一帧动画**
+
+:::tip  requestAnimationFrame 嵌套
+使用两个嵌套的 `requestAnimationFrame` 是为了确保回调函数 cb 在下一帧渲染之前执行。这样做的目的是为了优化性能和动画的流畅度。
+
+如果只使用一个 `requestAnimationFrame`，那么回调函数 cb 将会在下一帧渲染时执行。但是，由于 JavaScript 是单线程的，如果在同一帧中执行的任务过多，可能会导致页面卡顿或动画不流畅。
+
+通过嵌套两个 `requestAnimationFrame`，可以将回调函数的执行时间分散到两个连续的帧中。第一个 `requestAnimationFrame` 会在当前帧结束时调用，而第二个 `requestAnimationFrame` 会在下一帧开始时调用。这样可以确保回调函数 cb 在下一帧渲染之前执行，从而提高性能和动画的流畅度。
+
+因此，使用两个嵌套的 `requestAnimationFrame` 是为了确保回调函数在下一帧渲染之前执行，以优化性能和动画的流畅度。
+:::
+
+
 ```ts
 function nextTickFrame(fn: FrameRequestCallback) {
   requestAnimationFrame(() => {
@@ -677,3 +689,15 @@ boxElList.forEach((el) => {
    }
    console.log(a == 1)
   ```
+## + 相加规则
+
+###  `[1,2] + {n:1}`
+ ```js
+   [1,2].valueOf = [1,2] //  非原始值
+   [1,2].toString = "1,2" // 原始值
+   ({n:1}).valueOf() = {n:1} //非原始值
+   ({n:1}).toString() = "[object Object]" // 原始值
+   "1,2[object Object]" // [!code hl]
+ ``` 
+
+<img src="@img/相加效果.png"/>

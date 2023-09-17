@@ -25,7 +25,7 @@ setTimeout(() => {
   render(null, app);
 }, 2000)
 ```
-`render` 接收 `null` 或者是 `虚拟dom` , null 是卸载组件
+`render` 接收 `null` 或者是 `虚拟dom` , 如果是 null, 则是卸载组件
 
 ## render
 ### null 卸载组件
@@ -39,22 +39,25 @@ render(vnode,container){
 }
 ```
 调用 `unmount` 即调用 `removeChild`方法
+
 ```js
 unmount = (vnode) => {
   remove(vnode.el);
 };
+
 remove(el) {
-    const parent = el.parentNode;
-    if (parent) {
-      return parent.removeChild(el);
-    }
+  const parent = el.parentNode;
+  if (parent) {
+    return parent.removeChild(el);
+  }
 },
 ```
 ### 挂载元素
+把生成的 `vnode`  放入到 `container._vnode` 属性上
 ```js
 render(vnode,container){
   if (vnode == null){
-   // ...
+   // ...unmount
   }else {
     // 上一次没有挂载的虚拟节点
     const prevVnode = container._vnode || null;
@@ -65,7 +68,8 @@ render(vnode,container){
 }
 ```
 核心方法 `patch`
-#### patch
+### 🚀patch
+如果不是相同节点，直接删除，然后重新生成虚拟dom
 ```js
 function isSameVnode(n1, n2) {
   return n1.type === n2.type && n1.key === n2.key;
@@ -87,7 +91,7 @@ const patch = (n1, n2, container, anchor = null) => {
   }
 };
 ```
-#### mountElement
+#### mountElement 初始化逻辑
 挂载元素,元素可能是数组/文本,<blue>把挂载之后的真实dom 绑定到 vnode.el 上</blue>
 ```js
 const mountElement = (vnode, container, anchor) => {
@@ -112,7 +116,8 @@ const mountElement = (vnode, container, anchor) => {
   hostInsert(el, container, anchor); // 将元素插入到父级中
 };
 ```
-container 变为父元素,递归调用patch方法,因为 数组里面有可能是嵌套数组/文本
+
+数组节点执行 `mountChildren` , `container` 变为父元素,递归调用 `patch` 方法,因为数组里面有可能是嵌套 「数组/文本」 
 ```js
    const mountChildren = (children, container) => {
     for (let i = 0; i < children.length; i++) {
@@ -121,11 +126,11 @@ container 变为父元素,递归调用patch方法,因为 数组里面有可能�
     }
   };
 ```
-#### patchElement
+#### 🔥 patchElement
 
-<blue>说明是相同节点相同的key值,进入更新环节</blue>  
+<blue>说明是相同节点或者是相同的key值,进入更新环节</blue>  
 
-由于 vnode.el 已经存在,所以n2直接复用真实dom,[patchProps可以查看这里](./renderer.md#patchprop)
+由于 vnode.el 已经存在,所以 n2 直接复用真实dom,[🔗patchProps](./renderer.md#patchprop)
 ```js
 const patchElement = (n1, n2, container) => {
     // 更新逻辑
@@ -134,7 +139,7 @@ const patchElement = (n1, n2, container) => {
     patchChildren(n1, n2, el);
 };
 ```
-#### 核心重点 patchChildren
+**核心重点 `patchChildren`, `children` 前后有以下情况**
 
 | 新儿子 | 旧儿子 |         操作方式          |
 | :----: | :----: | :-----------------------: |
@@ -148,9 +153,10 @@ const patchElement = (n1, n2, container) => {
 |   空   |  文本  |         清空文本          |
 |   空   |   空   |         无需处理          |
 
-## diff 算法
-### sync from start
-
+## 🔥 diff 算法
+### 头部比较
+<blue>获取新老节点的长度,从头比较新老节点,如果是 <code>isSameVnde</code> 继续<code>patch</code></blue>  
+🦌i 表示有多少个相同节点
 <img src="@img/diff-1.png"/>
 
 ```js
@@ -187,11 +193,13 @@ const patchKeydChildren = (c1, c2, container) => {
     }
 }
 ```
-### sync from end
+
+### 尾部比较
+尾部比较,获取最近的不相同的位置   
+🦌 e1,e2 表示新老节点去除尾部相同节点的长度
 <img src="@img/diff-2.png"/>
 
 ```js
-// 2. sync from end
 // a (b c)
 // d e (b c)
 while (i <= e1 && i <= e2) {
@@ -206,15 +214,18 @@ while (i <= e1 && i <= e2) {
     e2--;
 }
 ```
-### common sequence + mount
+### 数组长度不一致,新节点大于老节点 挂载
+<blue>新节点比老节点长度长,需要挂载</blue>      
+<br/>
+<blue>🔥新节点需要挂载到下一个节点前面,否则会错乱</blue>  
 <img src="@img/diff-3.png"/>
 <img src="@img/diff-4.png"/>
 
 ```js
-// 3. common sequence + mount
-// (a b)
-// (a b) c
-// i = 2, e1 = 1, e2 = 2
+// (a b) 原来节点
+// (a b) c  现在节点
+// i = 2, e1 = 1, e2 = 2 // length-1
+
 // (a b)
 // c (a b)
 // i = 0, e1 = -1, e2 = 0
@@ -230,14 +241,12 @@ if (i > e1) { // 说明有新增
     }
 }
 ```
-### common sequence + unmount
-
-<img src="@img/diff-5.png"/>
+### 同序列 + 卸载
+<blue>同样的,老节点的长度要比新节点的长度要长，需要卸载多余的节点</blue>
+<img src="@img/diff-5.png" />
 <img src="@img/diff-6.png"/>
 
-
 ```js
-// 4. common sequence + unmount
 // (a b) c
 // (a b)
 // i = 2, e1 = 2, e2 = 1
@@ -251,8 +260,8 @@ else if (i > e2) {
     }
 }
 ```
-### unknown sequence
-<blue>build key:index map for newChildren</blue>
+### 未知序列
+<blue>对新节点构建出 形如 <code>{index:vnode}</code> 的 Map,然后遍历老节点,判断是否有可以复用的节点</blue>
 <img src="@img/diff-7.png"/>
 
 ```js
@@ -268,35 +277,52 @@ for (let i = s2; i <= e2; i++) {
     keyToNewIndexMap.set(nextChild.key, i);
 }
 ```
-loop through old children left to be patched and try to patch
+遍历老节点判断是否有可用的节点,如果没有,就要把老节点删除,如果有,直接复用  
+
 ```js
-const toBePatched = e2 - s2 + 1;
-const newIndexToOldMapIndex = new Array(toBePatched).fill(0);
+const toBePatcheded = e2 - s2 + 1;
+// newIndexToOldMapIndex 是为了判断新节点有但是老节点没有的情况,初始化为0
+const newIndexToOldMapIndex = new Array(toBePatcheded).fill(0);
+
 for (let i = s1; i <= e1; i++) {
     const prevChild = c1[i];
     let newIndex = keyToNewIndexMap.get(prevChild.key); // 获取新的索引
     if (newIndex == undefined) {
         unmount(prevChild); // 老的有 新的没有直接删除
-    } else {
+    } else { 
+       // 复用新节点,需要 减去头部重复的节点数量,不能从0开始,和头部节点相同了
         newIndexToOldMapIndex[newIndex - s2] = i + 1;
         patch(prevChild, c2[newIndex], container);
     }
 }
+// newIndexToOldMapIndex 对应的位置就是老索引 + 1
 ```
 
-### move and mount
+### 移动并挂载
+[🔗最长递增子序列视频课程](https://www.javascriptpeixun.cn/p/t_pc/course_pc_detail/video/v_6364732ee4b01126ea9fff95?product_id=p_634f5ab1e4b0a51fef2ad55f&content_app_id=&type=6)
 <img src="@img/diff-8.png"/>
 
 ```js
+// 最长递增子序列
+const cressingIndexMap = getSeq(newIndexToOldMapIndex);
+let lastIndex = cressingIndexMap.length - 1;
+// 数组里面映射着老的关系
 for (let i = toBePatched - 1; i >= 0; i--) {
-    const nextIndex = s2 + i; // [ecdh]   找到h的索引 
-    const nextChild = c2[nextIndex]; // 找到 h
-    let anchor = nextIndex + 1 < c2.length ? c2[nextIndex + 1].el : null; // 找到当前元素的下一个元素
-    if (newIndexToOldMapIndex[i] == 0) { // 这是一个新元素 直接创建插入到 当前元素的下一个即可
-        patch(null, nextChild, container, anchor)
+  // [3,2,1,0] = h d c e
+  // 3
+  const anchorIndex = s2 + i; // h
+  const child = c2[anchorIndex];
+  const insertAnchor = c2[anchorIndex + 1]?.el;
+
+  if (newIndexToOldMapIndex[i] === 0) {
+    // 说明这个虚拟节点创建过
+    patch(null, child, el, insertAnchor);
+  } else {
+    if (cressingIndexMap[lastIndex] === i) {
+      lastIndex--;
     } else {
-        // 根据参照物 将节点直接移动过去  所有节点都要移动 （但是有些节点可以不动）
-        hostInsert(nextChild.el, container, anchor);
+      hostInsert(child.el, el, insertAnchor);
     }
+  }
 }
 ```

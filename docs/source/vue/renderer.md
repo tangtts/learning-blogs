@@ -1,7 +1,7 @@
 # renderer
 
 ## 自定义渲染器 - createRenderer
-创建自定义渲染器,可以针对小程序,canvas传入自己的渲染逻辑
+创建自定义渲染器,可以允许 小程序,canvas 传入自己的渲染逻辑
 ```js
 const renderer = createRenderer({
   insert(element, container) {
@@ -107,15 +107,15 @@ function patchAttr(el, key, nextValue) {
 :::
 重点是对 <blue>事件的处理<code> patchEvent </code></blue> 
 #### patchEvent
-:::info
+:::tip
  对于事件而言，我们并不关心之前是什么，而是用最新的结果  
 
  通过一个自定义的变量,绑定这个变量,后续更改变量对应的值
 :::
 
-1. `<div @click="a"/>` 变为了 `<div @click="b">`,换绑事件
-2. `<div @click="a"/>` 变为了 `<div>`,删除事件
-3. `<div>` 变为了 `<div @click="a">`,添加事件
+1. `<div>` 变为了 `<div @click="a">`,添加事件
+2. `<div @click="a"/>` 变为了 `<div @click="b">`,换绑事件
+3. `<div @click="a"/>` 变为了 `<div>`,删除事件
 
 ```js
   function patchEvent(el, eventName, nextValue){
@@ -169,12 +169,3 @@ invokers['click'] = invoker;
  console.log(r) // {name: "zs"}
  console.log(div) // {_evi: {click: {val: ƒ}}}
 ```
-## 默认 `render`
-接收两个参数 `vdom` 和 `container`
-```js
-function render(vdom, container) {
-  const { render } = createRenderer(renderOptions);
-  render(vdom, container);
-}
-```  
-通过 `createRenderer` 的返回值调用 [`render`](./render.md) 方法

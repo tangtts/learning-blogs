@@ -14,7 +14,7 @@ h 可以接收 两个参数 / 三个参数
 - <blue>多个参数</blue>
   1. h('div', {}, h('span'), h('span'), h('span'), h('span'))
   
-需要对参数进行 `归一化`,归一成 `type,props,children` 三个参数,由 `createVNode` 集中处理,`createVNode` 要求 `children` 是一个「文本 / 数组」
+需要对参数进行 `归一化`,归一成 `type,props,children` 三个参数,由 `createVNode` 集中处理,`createVNode` 要求 `children` 是一个<blue>「文本 / 数组」</blue>
 
 ```js
  function h(type, propsOrChildren?, children?){
@@ -28,9 +28,9 @@ h 可以接收 两个参数 / 三个参数
  } 
 ```
 ### 参数等于2
-参数等于2的情况,第二个参数可能是一个对象 / 一个文本 / 一个数组 / 一个对象 / 一个 h
+参数等于 2 的情况,第二个参数可能是一个对象 / 一个文本 / 一个数组 / 一个对象 / 一个 h
 
-对于文本/数组来说,children 就是文本/数组
+对于 文本/数组 来说,children 就是 文本/数组
 
 对于对象来说,需要区分是 `h('div', h('span'))` 还是 `h('div', { style: { color: 'red' } })` 
 
@@ -63,6 +63,7 @@ if (len > 3) {
       children = [children];
     }
 }
+return createVNode(type, propsOrChildren, children);
 ```
 
 ## createVNode
@@ -84,7 +85,7 @@ export function createVNode(type, props, children = null) {
     type,
     props,
     key: props && props.key,
-    el: null, // 每个虚拟节点都对应一个真实节点，用来存放真实节点的后续更新的时候会产生新的虚拟节点，比较差异更新真实DOM
+    el: null, // 每个虚拟节点都对应一个真实节点，用来存放真实节点
     children,
   };
   if (children) {
@@ -115,8 +116,8 @@ export const enum ShapeFlags {
   COMPONENT = ShapeFlags.STATEFUL_COMPONENT | ShapeFlags.FUNCTIONAL_COMPONENT,
 }
 ```
-### << |  &
-#### << 无符号左移运算符，左操作数的值向左移动右操作数指定的位数。
+## 运算符 << |  &
+### << 无符号左移运算符，左操作数的值向左移动右操作数指定的位数。
 ```  
 > 0000000001  -> 1  
 > 0000000010; -> 2  
@@ -134,7 +135,7 @@ export const enum ShapeFlags {
 0000000101
 ```
 
-#### [按位与 &](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_AND) 
+### [按位与 &](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_AND) 
 > 按位与（&）运算符在两个操作数对应的二进位都为 1 时，该位的结果值才为 1   
 ```
 0000000101  

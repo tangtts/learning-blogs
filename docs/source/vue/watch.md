@@ -1,12 +1,12 @@
 # watch
 
-`watch` 可以接收一个普通对象,也可以接收一个`函数`
-watch 可以接收的有
+
+watch  第一个参数可以接收的有
 1. isRef
 2. isReactive
 3. isArray
-4. isFunction
-除此之外,无法使用,比如 `普通对象`,`reactive的某一个值`...
+4. isFunction  
+<blue>无法使用其实参数类型,比如 <code>普通对象</code>,<code>reactive</code> 的某一个值...</blue>
 
 ## 解析
 ```js
@@ -14,9 +14,12 @@ function watch(source, cb, options: any = {}) {
   doWatch(source, cb, options);
 }
 ```
-:::tip
-  对 source 进行判断,如果 source 是 ref 或者 reactive 的某一个值,那么就直接使用 getter 获取值,如果 source 是数组,那么就遍历数组,然后使用 getter 获取值,如果 source 是函数,那么就直接使用 source 作为 getter
+:::tip 对 source 进行判断
+ 如果 source 是 ref 或者 reactive 的某一个值,那么就直接使用 getter 获取值  
+ 如果 source 是数组,那么就遍历数组,然后使用 getter 获取值  
+ 如果 source 是函数,那么就直接使用 source 作为 getter
 :::
+
 ```js
 function doWatch(source, cb, options) {
   let getter;
@@ -61,6 +64,7 @@ function traverse(source, seen = new Set()) {
   return source;
 }
 ```
+## 本质
 <blue><code> watch</code>本质也是一个 <code>ReactiveEffect</code> </blue>  
 
 ```js
@@ -70,13 +74,37 @@ if (options.immediate) {
 }
 oldValue = effect.run();
 ```
-当不是`immediate` 的时候,执行 `effect.run`,那么 `getter` 方法会执行, `ref/reactive` 开始依赖追踪
-当`ref/reactive` 发生变化时,由于传入了 `scheduler`, 会执行 `job` 方法, 然后 `effect.run` 方法会再次执行, 获取最新的值
+当`immediate` 为 `false` 的时候,执行 `effect.run`,那么 `getter` 方法会执行, `ref/reactive` 开始依赖追踪  
+当 `ref/reactive` 发生变化时,由于传入了 `scheduler`, 会执行 `job` 方法, 然后 `effect.run` 方法会再次执行, 获取最新的值
 
 ```js
 const newValue = effect.run();
 cb(newValue, oldValue, onCleanup);
 oldValue = newValue;
+```
+
+
+```js
+let oldValue;
+let clean;
+const onCleanup = (fn) => {
+ clean = fn;
+};
+const job = () => {
+ if (cb) {
+   if (clean) clean();
+   const newValue = effect.run();
+   cb(newValue, oldValue, onCleanup);
+   oldValue = newValue;
+ } else {
+   effect.run();
+ }
+};
+const effect = new ReactiveEffect(getter, job);
+if (options.immediate) {
+ job();
+}
+oldValue = effect.run();
 ```
 
 ## cleanup 函数的作用
@@ -107,11 +135,13 @@ watch(() => state.n, async (newVal, oldVal, onCleanup) => {
 state.n++;
 state.n++
 ```
-当`state.n`发生变化之后,`watch` 会执行,但是第一个接口还没有返回,第二个接口就已经执行了,导致`app.innerHTML` 两秒之后显示的是 `bcd`,等到第三秒转到了 `abc`
+当`state.n`发生变化之后,`watch` 会执行,但是第一个接口还没有返回,第二个接口就已经执行了,导致`app.innerHTML` 两秒之后显示的是第二个较快的结果 - `bcd`,等到第三秒转到了较慢的结果 - `abc`
+
+**应该是如果我发送了第二个请求,要把第一个请求给取消掉,对于请求<blue>分页数据/查询数据接口</blue>来说很重要**
 
 所以要避免这种情况发生,就要在执第二个getData函数的时候，把第一个给屏蔽掉  
 
-<blue>可以使用闭包</blue>
+### 闭包
 
 ```js
 watch(() => state.n, async (newVal, oldVal, onCleanup) => {
@@ -142,10 +172,10 @@ function getData(newVal) {
 }
 
 let i = 0;
+let clean; //[!code hl]
 
-let clean;
 const onCleanup = fn => {
-  if (clean) clean();
+  if (clean) clean(); //[!code hl]
   clean = fn;
 };
 
