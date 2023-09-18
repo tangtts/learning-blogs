@@ -155,8 +155,9 @@ const patchElement = (n1, n2, container) => {
 
 ## 🔥 diff 算法
 ### 头部比较
-<blue>获取新老节点的长度,从头比较新老节点,如果是 <code>isSameVnde</code> 继续<code>patch</code></blue>  
-🦌i 表示有多少个相同节点
+<blue>获取新老节点的长度,从头比较新老节点,如果是 <code>isSameVnde</code> 继续<code>patch</code></blue> 
+
+**i 表示有多少个相同节点**
 <img src="@img/diff-1.png"/>
 
 ```js
@@ -196,7 +197,7 @@ const patchKeydChildren = (c1, c2, container) => {
 
 ### 尾部比较
 尾部比较,获取最近的不相同的位置   
-🦌 e1,e2 表示新老节点去除尾部相同节点的长度
+**e1,e2 表示新老节点去除尾部相同节点的长度**
 <img src="@img/diff-2.png"/>
 
 ```js
@@ -241,8 +242,10 @@ if (i > e1) { // 说明有新增
     }
 }
 ```
-### 同序列 + 卸载
+### 数组长度不一致,老节点大于新节点 + 卸载
+
 <blue>同样的,老节点的长度要比新节点的长度要长，需要卸载多余的节点</blue>
+
 <img src="@img/diff-5.png" />
 <img src="@img/diff-6.png"/>
 
@@ -260,28 +263,28 @@ else if (i > e2) {
     }
 }
 ```
-### 未知序列
-<blue>对新节点构建出 形如 <code>{index:vnode}</code> 的 Map,然后遍历老节点,判断是否有可以复用的节点</blue>
+### 中间序列
+<blue>对新节点构建出形如: <code>{index:vnode}</code> 的 <code>Map</code>,然后遍历老节点,判断是否有可以复用的节点</blue>
 <img src="@img/diff-7.png"/>
 
 ```js
-// 5. unknown sequence
 // a b [c d e] f g
 // a b [e c d h] f g
 // i = 2, e1 = 4, e2 = 5
-const s1 = i;
-const s2 = i;
+const s1 = i; // s1 -> e1
+const s2 = i; // s2 -> e2
+ // 将新的元素做成一个映射表，去老的里面找
 const keyToNewIndexMap = new Map();
 for (let i = s2; i <= e2; i++) {
     const nextChild = c2[i];
-    keyToNewIndexMap.set(nextChild.key, i);
+    keyToNewIndexMap.set(nextChild.key, i); // [!code hl]
 }
 ```
 遍历老节点判断是否有可用的节点,如果没有,就要把老节点删除,如果有,直接复用  
 
 ```js
 const toBePatcheded = e2 - s2 + 1;
-// newIndexToOldMapIndex 是为了判断新节点有但是老节点没有的情况,初始化为0
+// newIndexToOldMapIndex 对应的位置就是老索引 + 1
 const newIndexToOldMapIndex = new Array(toBePatcheded).fill(0);
 
 for (let i = s1; i <= e1; i++) {
@@ -290,35 +293,44 @@ for (let i = s1; i <= e1; i++) {
     if (newIndex == undefined) {
         unmount(prevChild); // 老的有 新的没有直接删除
     } else { 
+        // a b [c d e] f g 
+        // a b [e c d h] f g
+       // 老索引 + 1 
+        // c = 2 + 1,d = 3 + 1,e = 4 + 1,h = 0
        // 复用新节点,需要 减去头部重复的节点数量,不能从0开始,和头部节点相同了
-        newIndexToOldMapIndex[newIndex - s2] = i + 1;
-        patch(prevChild, c2[newIndex], container);
+        newIndexToOldMapIndex[newIndex - s2] = i + 1; // [!code hl]
+         // 只是比较了属性，还需要移动位置
+        patch(prevChild, c2[newIndex], container); // [!code hl]
     }
 }
-// newIndexToOldMapIndex 对应的位置就是老索引 + 1
+
 ```
 
-### 移动并挂载
+### 上一步只更新属性，这一次移动并挂载
 [🔗最长递增子序列视频课程](https://www.javascriptpeixun.cn/p/t_pc/course_pc_detail/video/v_6364732ee4b01126ea9fff95?product_id=p_634f5ab1e4b0a51fef2ad55f&content_app_id=&type=6)
 <img src="@img/diff-8.png"/>
 
 ```js
 // 最长递增子序列
+// 如果 newIndexToOldMapIndex = [5,3,4,0]，那么最长递增子序列是 [1,2]
+// 老节点的序列是:[0,1,2,3]
+// 从最长递增子序列的尾部与老节点进行比对,
+// 第一次是 3，需要移动
+// 第二次是 2，不需要移动
+// 第三次是 1，不需要移动
 const cressingIndexMap = getSeq(newIndexToOldMapIndex);
-let lastIndex = cressingIndexMap.length - 1;
-// 数组里面映射着老的关系
+let lastIndex = cressingIndexMap.length - 1; // 从末尾找最后一项
+
 for (let i = toBePatched - 1; i >= 0; i--) {
-  // [3,2,1,0] = h d c e
-  // 3
-  const anchorIndex = s2 + i; // h
+  const anchorIndex = s2 + i; //从末尾插入 h
   const child = c2[anchorIndex];
   const insertAnchor = c2[anchorIndex + 1]?.el;
-
+  // 说明是一个新元素
   if (newIndexToOldMapIndex[i] === 0) {
-    // 说明这个虚拟节点创建过
     patch(null, child, el, insertAnchor);
   } else {
     if (cressingIndexMap[lastIndex] === i) {
+      // 不做移动,跳过节点
       lastIndex--;
     } else {
       hostInsert(child.el, el, insertAnchor);
@@ -326,3 +338,48 @@ for (let i = toBePatched - 1; i >= 0; i--) {
   }
 }
 ```
+:::details 最长递增子序列
+```js
+function getSeq(arr) {
+  const result = [0];
+  const len = arr.length;
+  let resultLastIndex;
+  let start;
+  let end;
+  let middle = 0;
+  let p = arr.slice(0).fill(0);
+  for (let i = 0; i < len; i++) {
+    const arrI = arr[i];
+    if (arrI != 0) {
+      resultLastIndex = result[result.length - 1];
+      if (arr[resultLastIndex] < arrI) {
+        result.push(i);
+        p[i] = resultLastIndex;
+        continue;
+      }
+      start = 0;
+      end = result.length - 1;
+      while (start < end) {
+        middle = Math.floor((start + end) / 2);
+        if (arr[result[middle]] < arrI) {
+          start = middle + 1;
+        } else {
+          end = middle;
+        }
+      }
+      if (arrI < arr[result[end]]) {
+        p[i] = result[end - 1];
+        result[end] = i;
+      }
+    }
+  }
+  let i = result.length;
+  let last = result[i - 1];
+  while (i-- > 0) {
+    result[i] = last;
+    last = p[last];
+  }
+  return result;
+}
+```
+:::

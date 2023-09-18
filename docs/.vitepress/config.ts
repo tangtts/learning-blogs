@@ -273,7 +273,7 @@ export default defineConfig({
             { text: "watch原理", link: "/source/vue/watch" },
             { text: "h", link: "/source/vue/h" },
             { text: "renderer", link: "/source/vue/renderer" },
-            { text: "todo-render", link: "/source/vue/render" },
+            { text: "render", link: "/source/vue/render" },
             { text: "组件", link: "/source/vue/component" },
             { text: "生命周期", link: "/source/vue/lifecycle" },
             { text: "插槽", link: "/source/vue/slots" },
