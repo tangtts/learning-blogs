@@ -152,6 +152,21 @@ git branch -d dev
  # 在 master 分支上合并
 git merge dev
 ```
+### 合并其他分支的文件
+也就是说合并 `origin/dev` 分支下的 这个文件夹
+```bash
+ git checkout origin/dev src/views/Board-management/personal-management/performance-management 
+```
+### 合并其他分支的这一次的提交
+
+在 `dev` 分支下,有一个 `commitId` 为 `123456`  
+
+在 `Q` 分支下,使用:
+```bash
+ git cherry-pick 123456
+```
+可以把其他分支的 `commit` 合并到本分支
+
 ### 暂存分支
 ```bash
 # 在 dev 分支 开发，突然要切换回 master 分支

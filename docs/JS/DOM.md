@@ -65,3 +65,79 @@ appendChild() 返回的是被附加的子元素,不支持多参数，不支持 s
 var p = document.createElement("p");
 document.body.appendChild(p);
 ```
+## scrollIntoView
+
+```js
+dom.scrollIntoView({ 
+  behavior: "smooth", 
+  block: "end", // 纵向
+  inline: "nearest" // 横向
+});
+```
+### block
+- 「start」：「默认值」。元素顶部和滚动容器顶部对齐
+- 「center」：元素和滚动容器居中对齐
+- 「end」：元素底部和滚动容器底部对齐
+- 「nearest」：如果已经在视野范围内，就不滚动，否则就滚动到顶部或者底部（哪个更靠近就滚到哪里
+「start」 和 「end」分别是顶部对齐和底部对齐，效果等同于
+```js
+// 以下写法
+dom.scrollIntoView({
+  block: 'start'
+})
+dom.scrollIntoView({
+  block: 'end'
+})
+// 等同于
+dom.scrollIntoView(true)
+dom.scrollIntoView(false)
+```
+
+<img src="@img/nearest.png"/>
+
+### 间距
+`scroll-margin`是直接设置目前元素上的  
+`scroll-padding`它需要设置在滚动容器上  
+可以看做 `padding/margin`的区别
+
+
+```html
+ <style>
+  .parent {
+    height: 300px;
+    overflow: auto;
+    /* scroll-padding:50px */
+  }
+  .child {
+    height: 100px;
+    background-color: rgb(196, 66, 66);
+    color: white;
+    text-align: center;
+    line-height: 100px;
+    scroll-margin: 50px;
+  }
+  .child + .child {
+    margin-top: 10px;
+  }
+</style>
+  <div class="parent">
+    <div style="height: 100%;">
+      <div class="child">1</div>
+      <div class="child">2</div>
+      <div class="child">3</div>
+      <div class="child">4</div>
+      <div class="child">5</div>
+      <div class="child">6</div>
+    </div>
+  </div>
+  <button id="button">跳转到3</button>
+  <script>
+    let b = document.getElementById('button');
+    b.addEventListener('click', function () {
+      let o = document.querySelector('.child:nth-child(3)');
+      o.scrollIntoView({
+        behavior: "smooth", 
+      }); // 滚动到底部
+    })
+  </script>
+```
