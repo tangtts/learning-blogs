@@ -701,3 +701,17 @@ boxElList.forEach((el) => {
  ``` 
 
 <img src="@img/相加效果.png"/>
+
+## 循环
+### for 循环
+使用 `label` 语法,可以退出外层 `for` 循环
+```js
+outer:for(let i =0;i<10;i++){
+  inner:for(let j = 0;j< 10;j++){
+    if(j == 5){
+      break outer;
+    }
+    console.log(j) // [1,2,3,4,5]
+  }
+}
+```

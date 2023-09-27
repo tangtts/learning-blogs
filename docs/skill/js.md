@@ -277,3 +277,27 @@ const toggleHeight = () => {
 }
 </script>
 ```
+## 控制设置值的范围
+:::tip
+ `Object.defineProperty` 可以被 `Reflect.defineProperty` 替代,参数是一样的,不同的是 `Reflect.defineProperty` 返回的是 `boolean`
+
+ `Object.defineProperty(target, prop, descriptor)`   
+ `Reflect.defineProperty(target, prop, descriptor)`
+:::
+
+```js
+Object.defineProperty(config, x, {
+	get(){
+		return this._x;
+	},
+	set(val){
+		if(val < 0){
+			val = 0
+		}else if(val > 100){
+			val = 100
+		}
+		this._x = val;
+	}
+})
+```
+

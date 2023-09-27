@@ -88,6 +88,12 @@ export default defineConfig({
               { text: "英语", link: "/skill/英语", activeMatch: "/skill/英语" },
             ],
           },
+          {
+            text: "",
+            items: [
+              { text: "工具包", link: "/skill/工具包", activeMatch: "/skill/工具包" },
+            ],
+          },
         ],
       },
       {
@@ -122,6 +128,11 @@ export default defineConfig({
             text: "链表",
             link: "/algorithm/链表",
             activeMatch: "/algorithm/链表",
+          },
+          {
+            text: "工作算法",
+            link: "/algorithm/工作算法",
+            activeMatch: "/algorithm/工作算法",
           },
         ],
       },
@@ -259,6 +270,7 @@ export default defineConfig({
             { text: "git", link: "/skill/git" },
             { text: "快捷键", link: "/skill/快捷键" },
             { text: "英语", link: "/skill/英语" },
+            { text: "面试", link: "/skill/面试" },
           ],
         },
       ],

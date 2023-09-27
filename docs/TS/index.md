@@ -1642,3 +1642,14 @@ let s2: Props = {
   fn?.()
 }
 ```
+
+### 不允许传入某种类型
+
+使用 `never` 来控制传入类型
+```ts
+function log<T>(x:T extends number ? never : T){ }
+
+log(10) //[!code error] // 类型 number 的参数不能赋给类型“never”的参数
+log({})
+log("10")
+```
