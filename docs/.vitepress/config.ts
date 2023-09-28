@@ -91,7 +91,11 @@ export default defineConfig({
           {
             text: "",
             items: [
-              { text: "工具包", link: "/skill/工具包", activeMatch: "/skill/工具包" },
+              {
+                text: "工具包",
+                link: "/skill/工具包",
+                activeMatch: "/skill/工具包",
+              },
             ],
           },
         ],
@@ -144,6 +148,11 @@ export default defineConfig({
             link: "/source/vue/reactive",
             activeMatch: "/source/vue",
           },
+          {
+            text: "emotion源码",
+            link: "/source/emotion/emotion",
+            activeMatch: "/source/emotion",
+          }
         ],
       },
     ],

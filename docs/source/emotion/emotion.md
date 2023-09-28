@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+# @emotion/css
+由于css 没有模块,会造成 css 污染问题, 为了解决css的污染问题
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <style>
-    .flex {
-      display: flex;
-      height: 300px;
-      /* align-items: center; */
-      /* align-content: center; */
-      gap: 2px;
-      flex-wrap: wrap;
-      /* margin: auto; */
-    }
-  </style>
-</head>
+1. emotion是一个用JS编写CSS样式的库
+2. 通过生成唯一的CSS选择器来达到CSS局部作用域的效果
 
-<body>
-  <div class="flex">
-    <div id="child">abcd</div>
-  </div>
-  <script>
+
+```html
+   <div id="child">abcd</div>
+```
+
+```js
     function insertStyles(serialized) {
       const className = "css" + "-" + serialized.name;
       const rule = "." + className + "{" + serialized.styles + "}";
@@ -33,6 +20,7 @@
       document.head.appendChild(tag);
     }
 
+    // 生成唯一的css选择器
     function hashString(keys) {
       let val = 10000000;
       for (let i = 0; i < keys.length; i++) {
@@ -45,13 +33,11 @@
     function serializeStyles(args) {
       var styles = '';
       var strings = args[0];
-      console.log("🚀 ~ file: index2.html:47 ~ serializeStyles ~ strings:", strings,args);
       // 说明是一个对象
       if (strings.raw === undefined) {
         styles += handleInterpolation(strings);
       } else {
-        // "\n      color: red\n    "
-        // raw ["\n      color: red\n    "]
+        // ["\n  color: red\n  ", raw:["\n  color: red\n  "]]
         styles += strings[0];
       }
 
@@ -78,19 +64,11 @@
     //   color: "yellow",
     // });
 
-        const className = css`
+    const className = css`
       color: red
     `;
-    let x = document.getElementById
 
     child.classList.add(className);
-    console.log("🚀 ~ file: index.js:40 ~ className:", className);
+```
 
-
-
-
-
-  </script>
-</body>
-
-</html>
+ 
