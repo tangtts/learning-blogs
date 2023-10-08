@@ -167,6 +167,45 @@ git merge dev
 ```
 可以把其他分支的 `commit` 合并到本分支
 
+### 添加其他分支的文件
+比如在 `02` 分支下, 修改了文件,需要在 `03` 分支下同步,那么在 02 分支下使用
+```bash
+# 从最近一次打起
+git format-patch HEAD^
+# 最近的二个patch内容
+git format-patch HEAD^^
+```
+同上
+```bash
+git format-patch -1
+git format-patch -2
+```
+
+会生成一个 `02.patch` 文件   
+把这个文件放到 `03` 根目录下  
+在 `03` 分支下,使用 
+```bash
+git am 02.patch
+```
+
+#### 其他操作
+
+##### 生成单个commit 的 patch
+```bash
+#生成单个commit的patch
+git format-patch -1 <r1>
+```
+##### 生成某commit以来的修改patch
+```bash
+ #生成某commit以来的修改patch（不包含该commit）
+ git format-patch <r1>  
+```
+##### 生成两个commit间的修改的patch
+```bash
+ #生成两个commit间的修改的patch
+git format-patch <r1>..<r2>  
+```
+
 ### 暂存分支
 ```bash
 # 在 dev 分支 开发，突然要切换回 master 分支

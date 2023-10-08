@@ -34,6 +34,7 @@ export default defineConfig({
           { text: "JS", link: "/JS/window", activeMatch: "/JS/window" },
           { text: "TS", link: "/TS/index", activeMatch: "/TS/index" },
           { text: "Vue", link: "/Vue/directives/ripple", activeMatch: "/Vue/" },
+          { text: "React", link: "/React/ts", activeMatch: "/React/" },
         ],
       },
       {
@@ -152,7 +153,7 @@ export default defineConfig({
             text: "emotion源码",
             link: "/source/emotion/emotion",
             activeMatch: "/source/emotion",
-          }
+          },
         ],
       },
     ],
@@ -195,6 +196,17 @@ export default defineConfig({
             { text: "字符串", link: "/JS/字符串" },
             { text: "日期", link: "/JS/日期" },
             { text: "DOM", link: "/JS/DOM" },
+          ],
+        },
+      ],
+      React: [
+        {
+          text: "React",
+          items: [
+            {
+              text: "ts",
+              link: "/React/ts",
+            },
           ],
         },
       ],
