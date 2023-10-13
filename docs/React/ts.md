@@ -1,6 +1,9 @@
 # ts 在 react 的使用
 ## 定义 children 类型
 ### [React.ReactNode🔗](https://react.dev/learn/typescript#typing-children)
+
+`React.ReactNode` 包含的范围更广
+
 ```ts
 interface ModalRendererProps {
   title: string;
@@ -29,6 +32,7 @@ type PropsWithChildren<P> = P & {
 ```
 
 ### React.ReactElement
+它只包括 JSX 元素，而不包括 JavaScript 原始类型，如 string 或 number:
 
 ```ts
 interface ModalRendererProps {

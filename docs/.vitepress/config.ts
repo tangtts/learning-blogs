@@ -17,6 +17,7 @@ export default defineConfig({
         utils: fileURLToPath(new URL("../../src/utils", import.meta.url)),
         "@": fileURLToPath(new URL("../../src", import.meta.url)),
         "@img": fileURLToPath(new URL("../assets/img", import.meta.url)),
+        "@backImg": fileURLToPath(new URL("../assets/backendImg", import.meta.url)),
       },
     },
   },
@@ -58,6 +59,7 @@ export default defineConfig({
           },
           { text: "加密", link: "/backend/加密", activeMatch: "/backend/加密" },
           { text: "mock", link: "/backend/mock", activeMatch: "/backend/mock" },
+          { text: "nest", link: "/nest/nest/index", activeMatch: "/nest/" },
         ],
       },
       {
@@ -196,6 +198,7 @@ export default defineConfig({
             { text: "字符串", link: "/JS/字符串" },
             { text: "日期", link: "/JS/日期" },
             { text: "DOM", link: "/JS/DOM" },
+            { text: "class", link: "/JS/class" },
           ],
         },
       ],
@@ -206,6 +209,14 @@ export default defineConfig({
             {
               text: "ts",
               link: "/React/ts",
+            },
+            {
+              text: "hook",
+              link: "/React/hook",
+            },
+            {
+              text: "关于",
+              link: "/React/other",
             },
           ],
         },
@@ -260,6 +271,18 @@ export default defineConfig({
               ],
             },
             { text: "其他", link: "/Vue/other" },
+          ],
+        },
+      ],
+      "nest": [
+        {
+          text: "nest",
+          collapsed: true,
+          items: [
+            { text: "nest", link: "/nest/nest/index" },
+            { text: "swagger", link: "/nest/helper/swagger" },
+            { text: "校验", link: "/nest/helper/校验" },
+            { text: "jwt", link: "/nest/helper/jwt" },
           ],
         },
       ],

@@ -6,7 +6,7 @@
 
 :::tip 🚀type 和 interface 的定义区别
 `type` 是类型别名  
- `interface` 是定义一个新的类型
+`interface` 是接口,定义一个新的规则,必须要满足这个规则才能使用
 
 所以`type` 可以定义 `string/boolean` 等基本类型,也可以解释 `type` 合并会报错,`interface` 会自动合并
 :::
@@ -335,8 +335,14 @@ Object 表示一个 js 的全局对象,任何时候都不建议使用
 
 ## Class
 ### 类型
-- 当把类直接作为类型时，该类型约束的是该类型必须是类的实例；即该类型获取的是该类上的实例属性和实例方法（也叫原型方法）；
+- 当把类直接作为类型时，该类型约束的是该类型必须是类的实例；即该类型获取的是该类上的实例属性和实例方法（也叫原型方法）;
 - 当把typeof 类作为类型时，约束的满足该类的类型；即该类型获取的是该类上的静态属性和方法。
+
+具体原因可以[查看🔗](/JS/class.html#class)
+
+
+类本质是一个函数,成员属性和方法是放置在函数的原型上的
+
 ```ts
 class People {
   name: number|undefined;
@@ -358,6 +364,32 @@ const p1: People = new People();
 const p4: typeof People = People;
 p4.a
 ``` 
+### 继承
+
+```ts
+class Person {
+  getP(){
+    console.log("Child")
+  }
+}
+
+class Child extends Person {
+  getChild(){
+    console.log("Child")
+  }
+}
+```
+如果使用 `ts` 限定类型 
+
+```ts
+let c:Person = new Child;
+// c.getChild() // [!code --]
+// c.getP() // [!code ++]
+```
+如果一个人是超人,就是有超过人类的其他能力  
+但是使用 `ts` 约束了它的类型,那么它只能是人类,只能拥有人类的属性  
+
+
 
 ## 关键字
 
