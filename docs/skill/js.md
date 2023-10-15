@@ -301,3 +301,34 @@ Object.defineProperty(config, x, {
 })
 ```
 
+## groupBy
+
+**使用函数可以更加方便的对数组进行分组,更加的灵活**
+
+```js
+function groupBy(array, generateKey) {
+
+	if(typeof generateKey !== 'function'){ //[!code hl]
+		const propName = generateKey;   //[!code hl]
+		generateKey = (obj) => obj[propName]; //[!code hl]
+	} //[!code hl]
+
+	const groups = {};
+	for(const item of array){
+		const key = generateKey(item);
+		if(!groups[key]){
+			groups[key] = [];
+		}
+		groups[key].push(item);
+	}
+	return groups;
+}	
+```
+使用
+```js
+const groups = groupBy(arr, (item) => item.id + item.age);
+```
+```js
+const groups = groupBy(arr, "age");
+```
+

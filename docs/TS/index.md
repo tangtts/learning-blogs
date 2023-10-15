@@ -326,12 +326,12 @@ let s: StringNumberBooleans = ["a", 12];
 :::info 区别
 object：表示任何非原始类型的值，包括对象、数组、函数等,但不包括 null 和 undefined
 
-Object 表示一个 js 的全局对象,任何时候都不建议使用
+Object 表示一个 js 的顶级对象,任何时候都不建议使用,只能使用 `Object` 上的公共方法
 
-{} 是 Object 的实例,和 Object 一样
+{} 表示一个空对象,*不允许添加属性*, 是 Object 的实例,和 Object 一样，可以使用 `Object` 上的原型方法,但是没有提示
 :::
 
-<iframe src="https://www.typescriptlang.org/play?#code/FDA2FMBcAIHsCMBWAuOTwGNIG5gMdALzQDeAvttAPRXSAQKoKs2gMP+BeXoJ-aghjGD0ZmopjIG8fQNHqeJEWgBtALqUa9ZoAdTQCN+PfP2jDRBYgAoAlEQB8pCtVqMmgX8UFq9Fg0j84gIyVo7s9EB66QwA0PADsAVwBbeHAAJwcQCBh8ACZUAHk7HC148XJZc2Z2bmgUvntNBPFpbPkmZR5C9RKkDN0DQmMszwtrGtTo0uJnDwH2v36uosERGKhoAA9UNXtiACIAC3BQUFhFisBYOQtAdW1AMm9AJjkuQHzlQGnNYSZt2zHosCmAT2TupYB3WAjQABMtz13mIcThcrjcCt1NJMYAAvZDkcSLACGi2AQA" width="100%" height="600"/>
+<iframe src="https://www.typescriptlang.org/play?#code/FDA2FMBcAIHsCMBWAuOTwGNIG5gMdALzQDeAvttAPRXSAQKoKs2gMP+BeXoJ-aghjGD0ZmopjIG8fQNHqeJEWgBtALqUa9ZoAdTQCN+PfP2jDRBYgAoAlEQB8pCtVqMmgX8UFq9Fg0j84gIyVo7s9EB66QwA0PADsAVwBbeHAAJwcQCBh8ACZUAHk7HC148XJZc2Z2bmgUvntNBPFpbPkmZR5C9RKkDN0DQmMszwtrGtTo0uJnDwH2v36uosEREGhY6AAPVDV7YgAiAAtwUFBYJYrAWDkLQHVtQDJvQCY5LkB85UBpzWEmHdsx6LAoaABPZO7lgHdYCNAAE22hkxRnUJs8AHSQWAAZUgEQAlgEAObAcEANwAhqAguAkgAzGJPABeyHImTInmAhLB6JcAAZPD4QFTITD4UjPIToIBquMAUHKAQptAJDmgG+5QCq8oAF40AXJ5MQBi8lxAPfKgFO5QD+8oAKVzOQkAnaYMSlgjFYnH4x4wEIk8nLdFLIYgYBAA" width="100%" height="600"/>
 
 ## Class
 ### 类型

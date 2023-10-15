@@ -3,94 +3,68 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    .flex {
-      display: flex;
-      height: 300px;
-      /* align-items: center; */
-      /* align-content: center; */
-      gap: 2px;
-      flex-wrap: wrap;
-      /* margin: auto; */
+    .grid {
+      background: green;
+      height: 600px;
+      display: grid;
+      grid-template-columns: repeat(2, 100px);
+      grid-template-rows: repeat(4, 100px);
+      /*里面的子元素与单元格之间位置*/
+      align-items: flex-end;
+      /* 对行之间*/
+      align-content: space-between
+    }
+
+    .grid div {
+      width: 50px;
+      height: 50px;
+      border: 1px solid black;
+    }
+
+    .grid div:nth-child(1) {
+      background: #ef3429;
+    }
+
+    .grid div:nth-child(2) {
+      background: #ffa500;
+    }
+
+    .grid div:nth-child(3) {
+      background: #669900;
+    }
+
+    .grid div:nth-child(4) {
+      background: #223472;
+    }
+
+    .grid div:nth-child(5) {
+      background: #990055;
+    }
+
+    .grid div:nth-child(6) {
+      background: #f0f0c0;
+    }
+
+    .grid div:nth-child(7) {
+      background: #e0dfcc;
     }
   </style>
 </head>
 
 <body>
-  <div class="flex">
-    <div id="child">abcd</div>
+  <div class="grid">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
   </div>
-  <script>
-    function insertStyles(serialized) {
-      const className = "css" + "-" + serialized.name;
-      const rule = "." + className + "{" + serialized.styles + "}";
-      const tag = document.createElement("style");
-      // 说明是emotion
-      tag.setAttribute("data-emotion", "css");
-      tag.appendChild(document.createTextNode(rule));
-      document.head.appendChild(tag);
-    }
-
-    function hashString(keys) {
-      let val = 10000000;
-      for (let i = 0; i < keys.length; i++) {
-        val += keys.charCodeAt(i);
-      }
-      return val.toString(16).slice(0, 6);
-    }
-
-
-    function serializeStyles(args) {
-      var styles = '';
-      var strings = args[0];
-      console.log("🚀 ~ file: index2.html:47 ~ serializeStyles ~ strings:", strings,args);
-      // 说明是一个对象
-      if (strings.raw === undefined) {
-        styles += handleInterpolation(strings);
-      } else {
-        // "\n      color: red\n    "
-        // raw ["\n      color: red\n    "]
-        styles += strings[0];
-      }
-
-      var name = hashString(styles);
-      return { name, styles }
-    }
-
-    function handleInterpolation(obj) {
-      var string = '';
-      for (var key in obj) {
-        var value = obj[key];
-        string += key + ":" + value + ";";
-      }
-      return string;
-    }
-
-    function css(...args) {
-      const serialized = serializeStyles(args);
-      insertStyles(serialized);
-      return "css" + "-" + serialized.name;
-    }
-
-    // const className = css({
-    //   color: "yellow",
-    // });
-
-        const className = css`
-      color: red
-    `;
-    let x = document.getElementById
-
-    child.classList.add(className);
-    console.log("🚀 ~ file: index.js:40 ~ className:", className);
-
-
-
-
-
-  </script>
 </body>
 
 </html>

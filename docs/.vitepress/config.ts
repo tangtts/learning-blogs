@@ -17,7 +17,9 @@ export default defineConfig({
         utils: fileURLToPath(new URL("../../src/utils", import.meta.url)),
         "@": fileURLToPath(new URL("../../src", import.meta.url)),
         "@img": fileURLToPath(new URL("../assets/img", import.meta.url)),
-        "@backImg": fileURLToPath(new URL("../assets/backendImg", import.meta.url)),
+        "@backImg": fileURLToPath(
+          new URL("../assets/backendImg", import.meta.url)
+        ),
       },
     },
   },
@@ -60,6 +62,7 @@ export default defineConfig({
           { text: "加密", link: "/backend/加密", activeMatch: "/backend/加密" },
           { text: "mock", link: "/backend/mock", activeMatch: "/backend/mock" },
           { text: "nest", link: "/nest/nest/index", activeMatch: "/nest/" },
+          { text: "java", link: "/java/config", activeMatch: "/java/config" },
         ],
       },
       {
@@ -274,7 +277,7 @@ export default defineConfig({
           ],
         },
       ],
-      "nest": [
+      nest: [
         {
           text: "nest",
           collapsed: true,
@@ -297,6 +300,19 @@ export default defineConfig({
             { text: "任务队列", link: "/backend/任务队列" },
             { text: "加密", link: "/backend/加密" },
             { text: "mock", link: "/backend/mock" },
+          ],
+        },
+      ],
+      java: [
+        { text: "config", link: "/java/config" },
+        {
+          text: "api",
+          collapsed: true,
+          items: [
+            { text: "class", link: "/java/class" },
+            { text: "时间", link: "/java/api/date" },
+            { text: "数字", link: "/java/api/number" },
+            { text: "数组", link: "/java/api/array" },
           ],
         },
       ],
