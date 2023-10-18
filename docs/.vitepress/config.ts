@@ -62,7 +62,7 @@ export default defineConfig({
           { text: "加密", link: "/backend/加密", activeMatch: "/backend/加密" },
           { text: "mock", link: "/backend/mock", activeMatch: "/backend/mock" },
           { text: "nest", link: "/nest/nest/index", activeMatch: "/nest/" },
-          { text: "java", link: "/java/config", activeMatch: "/java/config" },
+          { text: "java", link: "/java/base", activeMatch: "/java/base" },
         ],
       },
       {
@@ -278,16 +278,12 @@ export default defineConfig({
         },
       ],
       nest: [
-        {
-          text: "nest",
-          collapsed: true,
-          items: [
-            { text: "nest", link: "/nest/nest/index" },
-            { text: "swagger", link: "/nest/helper/swagger" },
-            { text: "校验", link: "/nest/helper/校验" },
-            { text: "jwt", link: "/nest/helper/jwt" },
-          ],
-        },
+        { text: "nest", link: "/nest/nest/index" },
+        { text: "typeorm", link: "/nest/helper/typeorm" },
+        { text: "swagger", link: "/nest/helper/swagger" },
+        { text: "校验", link: "/nest/helper/校验" },
+        { text: "jwt", link: "/nest/helper/jwt" },
+        { text: "config", link: "/nest/helper/config" },
       ],
       backend: [
         {
@@ -304,7 +300,7 @@ export default defineConfig({
         },
       ],
       java: [
-        { text: "config", link: "/java/config" },
+        { text: "基础", link: "/java/base" },
         {
           text: "api",
           collapsed: true,
@@ -313,6 +309,7 @@ export default defineConfig({
             { text: "时间", link: "/java/api/date" },
             { text: "数字", link: "/java/api/number" },
             { text: "数组", link: "/java/api/array" },
+            { text: "字符串", link: "/java/api/string" },
           ],
         },
       ],

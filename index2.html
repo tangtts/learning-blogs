@@ -3,68 +3,43 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    .grid {
-      background: green;
-      height: 600px;
-      display: grid;
-      grid-template-columns: repeat(2, 100px);
-      grid-template-rows: repeat(4, 100px);
-      /*里面的子元素与单元格之间位置*/
-      align-items: flex-end;
-      /* 对行之间*/
-      align-content: space-between
+    #example-container {
+      width: 14rem;
     }
 
-    .grid div {
-      width: 50px;
-      height: 50px;
-      border: 1px solid black;
-    }
-
-    .grid div:nth-child(1) {
-      background: #ef3429;
-    }
-
-    .grid div:nth-child(2) {
-      background: #ffa500;
-    }
-
-    .grid div:nth-child(3) {
-      background: #669900;
-    }
-
-    .grid div:nth-child(4) {
-      background: #223472;
-    }
-
-    .grid div:nth-child(5) {
-      background: #990055;
-    }
-
-    .grid div:nth-child(6) {
-      background: #f0f0c0;
-    }
-
-    .grid div:nth-child(7) {
-      background: #e0dfcc;
+    #example-element {
+      background: linear-gradient(#d5e8b7, #bad6b3);
+      color: #fff;
+      padding: 0 1em;
+      border-radius: 16px;
+      line-height: 2;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
     }
   </style>
 </head>
 
 <body>
-  <div class="grid">
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>
-    <div>4</div>
-    <div>5</div>
-    <div>6</div>
-    <div>7</div>
+  <div id="example-container">
+    <span id="example-element">Lorem ipsum dolor sit amet consectetur adipisicing elit. A veniam quaerat, ex cumque
+      assumenda possimus alias officiis voluptatem repellendus sint dolores atque, qui ea ipsam placeat fuga itaque
+      saepe iure?</span>
   </div>
+  <!-- <span class="clone">The<br>quick<br>orange fox</span> -->
 </body>
+<script>
+
+class A {
+
+}
+
+let  reg = /[a-z&&[cdf]]/;
+let r =  reg.test("c]");
+console.log(r)
+
+</script>
 
 </html>

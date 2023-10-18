@@ -1,4 +1,6 @@
 # 时间
+
+世界标准时间: 格林威治时间(GMT) Greenwish Mean Time
 ## 获取时间戳
 ```java
 System.currentTimeMillis();

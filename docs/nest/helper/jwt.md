@@ -73,7 +73,7 @@ export class LoginGuard implements CanActivate {
 
     try {
       const info = this.jwtService.verify(token); // [!code hl]
-      (request as any).user = info.user; // [!code hl] // 把用户信息存入 request 对象中
+      request.user = info.user; // [!code hl] // 把用户信息存入 request 对象中
       return true; 
     } catch(e) {
       throw new UnauthorizedException('登录 token 失效，请重新登录');

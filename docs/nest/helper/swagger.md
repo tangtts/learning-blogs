@@ -1,9 +1,9 @@
 # swagger
-
+## 安装
 ```bash
-npm install --save @nestjs/swagger
+pnpm install --save @nestjs/swagger
 ```
-
+## 使用
 然后在 main.ts 添加这样一段代码
 ```ts
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
@@ -159,7 +159,7 @@ export class CccDto {
 }
 ```
 
-## tag
+## tag分组
 比如 controller 是 xxx 开头的，那可以用 @ApiTags 来分组到 xxx。
 <img src="@backImg/controllTag.webp" />
 也可以添加在 handler 上：
