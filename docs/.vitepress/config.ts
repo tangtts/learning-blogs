@@ -305,7 +305,7 @@ export default defineConfig({
           text: "api",
           collapsed: true,
           items: [
-            { text: "class", link: "/java/class" },
+            { text: "class", link: "/java/api/class" },
             { text: "时间", link: "/java/api/date" },
             { text: "数字", link: "/java/api/number" },
             { text: "数组", link: "/java/api/array" },

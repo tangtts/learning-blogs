@@ -141,3 +141,14 @@ dom.scrollIntoView(false)
     })
   </script>
 ```
+## childNodes / children
+
+- childNodes 包含了所有的子节点，包括文本节点,注释节点
+- children 只包含元素节点
+
+## Node / Element
+Node 是一个基类，Element是它的子类
+ - Node 包含 `Comment` 注释节点，`Text` 文本节点，`Document` 文档节点，`DocumentFragment` 片段节点
+等等
+
+- Element 包含 `HTMLElement` 元素节点，`HTML` 标签节点，`SVG` 标签节点

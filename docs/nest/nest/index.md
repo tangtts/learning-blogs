@@ -22,7 +22,13 @@ nest g module redis
 ```bash
 nest g service redis --no-spec
 ```
-
+5. 去掉测试文件
+ > nest-cli.json
+ ```json
+ "generateOptions": { //[!code ++]
+    "spec": false //[!code ++]
+  }, //[!code ++]
+ ``` 
 ## DTO / DAO / VO
 
 DTO：Data Transfer Object，数据传输对象
