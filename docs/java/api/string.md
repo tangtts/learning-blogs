@@ -1,7 +1,7 @@
 # String
 
-字符串是不可变的,原因如下:
 
+:::details 字符串是不可变的,原因如下:
 
 - 安全性： 字符串不可变性提供了一定程度的安全性，防止在多线程环境下发生并发访问和修改冲突。多个线程可以同时共享一个字符串对象，而无需担心其值会被修改。
 
@@ -14,6 +14,8 @@
 - 代码优化： 不可变字符串使得编译器和运行时环境可以进行一些优化。例如，对字符串进行连接操作时，编译器可以使用StringBuilder来提高效率，而无需额外的开发人员干预。
 
 尽管不可变字符串可能会导致创建新的字符串对象，但是它们提供了许多优势，如线程安全、安全性、简化代码和性能优化。因此，在Java中将字符串设计为不可变的是经过仔细考虑和权衡的决策。
+
+:::
 
 ---- 
 
@@ -38,3 +40,54 @@ sb.delete(0,1);
 sb.reverse();
 System.out.println(sb);
 ```
+
+## 构建字符串
+使用 **`""`** 字符串是一个常量，会放到字符串常量池中,不会重复创建  
+但是 使用 `new String` 会重新创建一个对象  
+```java
+String s = "abc";
+String s1 = "abc";
+String s2 = new String("abc");
+System.out.println(s == s1); // true
+
+System.out.println(s == s2); // false
+
+System.out.println(s.equals(s2)); // true
+```
+引用类型比较使用 `equals`, 基本类型比较使用 `==`
+
+### 字符串
+
+字符串本质是一个字符数组，在字符串常量创建之后，它的值不能改变。
+
+```java
+char[] cs =  {'a','中'};
+String s = new String(cs);
+System.out.println(s); // a中
+```
+
+### 字节
+
+**如果是普通的英文字符，一个字节一个字符对应，如果是汉字，则需要三个字节一个字符对应。**
+
+```java 
+byte[] bs = {-28,-72,-83,-27,-101,-67};
+String s1 = new String(bs);
+System.out.println(s1);
+```
+
+#### 字符获取字节
+```java
+String str = "中";
+byte[] bytes = str.getBytes();
+System.out.println(Arrays.toString(bytes)); // [-28, -72, -83]
+```
+
+```java
+String str = "a";
+byte[] bytes = str.getBytes();
+System.out.println(Arrays.toString(bytes)); // [97]
+```
+<img src="@backImg/javaChar.png">
+
+

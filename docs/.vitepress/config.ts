@@ -310,6 +310,8 @@ export default defineConfig({
             { text: "数字", link: "/java/api/number" },
             { text: "数组", link: "/java/api/array" },
             { text: "字符串", link: "/java/api/string" },
+            { text: "错误", link: "/java/api/错误" },
+            { text: "集合", link: "/java/api/集合" },
           ],
         },
       ],
