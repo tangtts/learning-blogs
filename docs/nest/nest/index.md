@@ -431,10 +431,11 @@ export class PermissionGuard implements CanActivate {
 | imports | 导入模块的列表，这些模块导出了此模块中所需提供者 |
 | exports | 由本模块提供并应在其他模块中可用的提供者的子集。 |
 
-🚀 <blue>如果别的 service 要使用本模块的 service</blue>
+### 🚀 <blue>如果别的 service 要使用本模块的 service</blue>
 1. 需要本模块导出 service
 2. 在需要的模块中 使用 imports 引入本模块的 module
 3. 在需要的地方使用 inject 注入 本模块 service 即可
+备注: **不需要在使用的地方中 `providers` 引入本模块的 service,直接 使用即可**
 
 如果别的模块不想使用 `imoprt`,可以在本模块的 `module` 上添加 `@Global`,使本模块成为全局模块
 
@@ -466,6 +467,32 @@ export class SessionService {
   @Inject(RedisService)
   private redisService: RedisService;
 }
+```
+### module 中使用别的模块的 service
+#### useFactory
+使用 inject 注入 service,然后可以在 module 的 useFactory 中使用
+
+> Nest 将从 inject 列表中以相同的顺序将实例作为参数传递给工厂函数。
+```ts
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ".env",
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService], // [!code hl]
+      useFactory(configService: ConfigService) { // [!code hl]
+        return {
+          type: "mysql",
+          host: configService.get("mysql_server_host"), // [!code hl]
+          database: configService.get("mysql_server_database"),
+          // ....
+        };
+      },
+    }),
+  ],
+})
 ```
 
 ## 中间件

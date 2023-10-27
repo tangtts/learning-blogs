@@ -91,3 +91,110 @@ System.out.println(Arrays.toString(bytes)); // [97]
 <img src="@backImg/javaChar.png">
 
 
+
+## 方法
+
+### toCharArray
+
+```java
+String s = "acd";
+char[] str = s.toCharArray();
+str[0] = 'h';
+System.out.println(str); // hcd
+```
+### charAt
+字符串不能直接使用 `s[0]` 的形式
+```java
+String s = "acd";
+s.charAt(0) // 'a'
+```
+
+### indexOf/lastIndexOf
+
+```java
+String s = "acd";
+s.indexOf("a") // 0
+s.lastIndexOf('a')
+```
+### contains
+包含字符
+
+```java
+String s = "acd";
+s.contains("a")
+```
+### startsWith/endWith
+
+```java
+String s = "acd";
+System.out.println(s.startsWith("a")); // true
+System.out.println(s.endsWith("a")); // false
+```
+### isEmpty
+判断是否为空字符
+```java
+String s = "acd";
+System.out.println(s.isEmpty());
+```
+### concat
+拼接字符,使用 `+` 号拼接不行
+```java
+String s = "acd";
+String s1 = "acd";
+String s2 = s.concat(s1); // acdacd
+```
+### trim
+去除首尾空格
+```java
+String s = "acd";
+s.trim();
+```
+
+### replace
+必须有变量去接收返回值
+```java
+String s = "acd";
+s = s.repalce("a","x")
+```
+### replaceAll
+可以写正则
+```java
+String s = "acd";
+String s1 = "acd";
+String s2 = s.concat(s1);
+s2 =  s2.replaceAll("a|c","x");
+System.out.println(s2);
+```
+
+### 比较
+
+#### equals
+
+```java
+String s = "a";
+String s1 = "A";
+System.out.println(s.equals(s1)); // false
+```
+
+#### equalsIgnoreCase
+忽略大小写
+```java
+String s = "a";
+String s1 = "A";
+System.out.println(s.equalsIgnoreCase(s1));
+```
+#### compareTo / compareToIgnoreCase
+比较 Unicode 
+```java
+byte b1 = 'a';
+byte b2 = 'A';
+System.out.println(b1); // 97
+System.out.println(b2);; // 65
+```
+
+```java
+System.out.println(s.compareTo(s1)); // 32
+
+System.out.println(s.compareToIgnoreCase(s1)); // 0
+```
+

@@ -95,6 +95,10 @@ let r2 = await this.userRepository.find({
 
 ##### Like / ILike
 
+:::tip
+与普通模式下的区别在于 可以 **只需要输入部分字符**
+:::
+
 1. LIKE 操作符用于执行基于模式的字符串匹配。它区分大小写  
 2. ILIKE 操作符： ILIKE 操作符也用于执行模式匹配，但它是不区分大小写的。与 LIKE 不同，ILIKE 会忽略字符的大小写
 > I 是 ignore

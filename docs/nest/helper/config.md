@@ -130,6 +130,53 @@ export class AppController{
   ]
 })
 ```
+## main.ts 中使用
+```ts
+import { ConfigService } from "@nestjs/config";
+const configService =  app.get(ConfigService)
+await app.listen(configService.get('nest_server_port'));
+```
+##  在 module 中使用
+```ts
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { DataSourceOptions } from "typeorm";
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // [!code hl]
+      envFilePath: ".env",
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService], // [!code hl]
+      useFactory(configService: ConfigService) { // [!code hl]
+        return {
+          type: "mysql",
+          host: configService.get("mysql_server_host"),
+          port: configService.get("mysql_server_port"),
+          username: configService.get("mysql_server_username"),
+          password: configService.get("mysql_server_password"),
+          database: configService.get("mysql_server_database"),
+          synchronize: true,
+          logging: true,
+          entities: [],
+          poolSize: 10,
+          connectorPackage: "mysql2",
+          extra: {
+            authPlugin: "sha256_password",
+          },
+        };
+      },
+    }),
+  ],
+ // ...
+})
+export class AppModule {}
+
+```
+
 
 ## 局部使用
 通过 `ConfigModule.forFeautrue` 来注册局部配置

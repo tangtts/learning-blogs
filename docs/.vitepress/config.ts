@@ -312,6 +312,8 @@ export default defineConfig({
             { text: "字符串", link: "/java/api/string" },
             { text: "错误", link: "/java/api/错误" },
             { text: "集合", link: "/java/api/集合" },
+            { text: "常用工具", link: "/java/api/常用工具" },
+            { text: "io", link: "/java/api/io" },
           ],
         },
       ],
