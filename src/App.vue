@@ -1,50 +1,37 @@
 <template>
   <div>
-    <el-button @click="toggleHeight">切换高度{{ isShow }}</el-button>
-    <div class="rounded-md overflow-hidden transition-all duration-1000 h-0" ref="c">
-      <div class="bg-red-100 h-[60px] py-2 border border-solid" v-for="item in 10" :key="item">
-      </div>
-    </div>
+    <el-button @click="toggleHeight">切换高度</el-button>
+    {{ count }}
   </div>
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, computed, reactive, watch } from "vue";
-const c = ref<HTMLElement | null>(null)
-const isShow = ref(false);
-watch(isShow, (val) => {
-  if (val) {
-    openPanel()
-  } else {
-    closePanel()
+const count = ref(0);
+
+
+function animate(duration, from, to, onProgress) {
+  let value = from;
+  let speed = (to - from) / duration;
+  let startTime = Date.now();
+  function _run() {
+    let now = Date.now();
+    const time = now - startTime;
+    if (time >= duration) {
+      value = to;
+      onProgress?.(value)
+      return
+    }
+    value = from + speed * time;
+    onProgress?.(value)
+    requestAnimationFrame(_run)
   }
-})
-
-
-
-const openPanel = () => {
-  const el = c.value as HTMLElement;
-  el.style.height = 'auto';
-  let h = el.offsetHeight;
-  el.style.height = '0px';
-  requestAnimationFrame(() => {
-    el.style.height = h + 'px'
-  })
-
-  // showContent.value = true
-  // requestAnimationFrame(() => {
-  //   let h = el.offsetHeight;
-  //   el.style.height = '0px';
-  //   requestAnimationFrame(() => {
-  //     el.style.height = h + 'px'
-  //   })
-  // })
+  _run()
 }
-const closePanel = () => {
-  const el = c.value as HTMLElement;
-  el.style.height = '0px'
-}
+
 const toggleHeight = () => {
-  isShow.value = !isShow.value;
+  animate(1000, 1000, 0, (value: number) => {
+    count.value = +value.toFixed(2);
+  })
 }
 
 </script>

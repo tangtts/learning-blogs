@@ -11,6 +11,7 @@ declare module 'vue' {
     CardList: typeof import('./src/components/flip/cardList.vue')['default']
     Child: typeof import('./src/components/test/child.vue')['default']
     CollapseItem: typeof import('./src/components/CollapseItem.vue')['default']
+    CountTo: typeof import('./src/components/countTo.vue')['default']
     CutPic: typeof import('./src/components/cutPic.vue')['default']
     Date: typeof import('./src/components/date.vue')['default']
     DatePicker: typeof import('./src/components/datePicker.vue')['default']

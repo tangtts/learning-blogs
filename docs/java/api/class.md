@@ -1,6 +1,14 @@
 
 # class
 
+拿一条狗来举例，它的状态有：名字、品种、颜色，行为有：叫、摇尾巴和跑。  
+软件对象也有状态和行为。软件对象的状态就是属性，行为通过方法体现。  
+<blue>类可以看成是创建 Java 对象的模板。</blue>
+
+<img src="@backImg/dog-class.png">
+
+
+----
 在 java 中 权限主要分为 4 种
 1. private 私有的,同一个类可以使用
 2. default (默认的),当不设置任何权限时, 在同一个包可以使用
@@ -21,6 +29,18 @@ public static class main (String args[]){
 ## 构造方法
 
 构造方法是类中都有的一个方法,如果没有显式定义, `jvm` 虚拟机会自动生成一个无参的构造方法
+一个类可以有多个构造方法。
+
+```java
+public class Puppy{
+    public Puppy(){
+    }
+ 
+    public Puppy(String name){
+        // 这个构造器仅有一个参数：name
+    }
+}
+```
 
 ```java
 class Parent {
@@ -38,6 +58,12 @@ class Child extends Parent {
 2. 然后执行构造函数
  构造函数为了属性初始化, super 必须给父类初始化  
 
+### Override 重写
+重写是子类对父类的允许访问的方法的实现过程进行重新编写, 返回值和形参都不能改变。**即外壳不变，核心重写！**
+重写的好处在于子类可以根据需要，定义特定于自己的行为。 也就是说子类能够根据需要实现父类的方法。
+
+<img src="@backImg/重载重写2.png"/>
+<img src="@backImg/重载重写.png"/>
 
  ## 方法重载
 
@@ -90,6 +116,94 @@ p2.testBoy(); // 错误  // [!code error]
 ```
 boy类相当于一个超人，平时是人类，有特殊需要可以变成超人    
 person 类型对 boy 进行约束，只能当做人类来用
+
+同一个 `show` 方法，根据不同的对象，有不同的表现形式
+
+```java
+public class Test {
+ public static void main(String[] args) {
+   show(new Cat());  // 以 Cat 对象调用 show 方法
+   show(new Dog());  // 以 Dog 对象调用 show 方法
+             
+   Animal a = new Cat();  // 向上转型  
+   a.eat();               // 调用的是 Cat 的 eat
+   Cat c = (Cat)a;        // 向下转型  
+   c.work();        // 调用的是 Cat 的 work
+}  
+         
+ public static void show(Animal a)  {
+   a.eat();  
+     // 类型判断
+     if (a instanceof Cat)  {  // 猫做的事情 
+         Cat c = (Cat)a;  
+         c.work();  
+     } else if (a instanceof Dog) { // 狗做的事情 
+         Dog c = (Dog)a;  
+         c.work();  
+     }  
+ }  
+}
+ 
+abstract class Animal {  
+  abstract void eat();  
+}  
+  
+class Cat extends Animal {  
+ public void eat() {  
+    System.out.println("吃鱼");  
+ }  
+ public void work() {  
+    System.out.println("抓老鼠");  
+ }  
+}  
+  
+class Dog extends Animal {  
+ public void eat() {  
+     System.out.println("吃骨头");  
+ }  
+ public void work() {  
+     System.out.println("看家");  
+ }  
+}
+```
+## 封装
+实现细节部分包装、隐藏起来的方法
+封装可以被认为是一个保护屏障，防止该类的代码和数据被外部类定义的代码随机访问。  
+封装最主要的功能在于我们能修改自己的实现代码，而不用修改那些调用我们代码的程序片段。  
+
+```java
+public class Person {
+ private String name;
+ private int age;
+}
+```
+
+这段代码中，将 `name` 和 `age` 属性设置为私有的，只能本类才能访问，其他类都访问不了，如此就对信息进行了隐藏
+
+```java
+public class Person{
+ private String name;
+ private int age;
+​
+ public int getAge(){
+   return age;
+ }
+​
+ public String getName(){
+   return name;
+ }
+​
+ public void setAge(int age){
+   this.age = age;
+ }
+​
+ public void setName(String name){
+   this.name = name;
+ }
+}
+```
+可以修改内部变量,外界是无法感知的，只要对外暴露的方法名不变即可
+
 
 ## 静态方法
 

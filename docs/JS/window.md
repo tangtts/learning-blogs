@@ -715,3 +715,93 @@ outer:for(let i =0;i<10;i++){
   }
 }
 ```
+## Reflect
+<blue>调用对象的基本方法</blue>
+什么是基本方法
+
+<img src="@img/reflect.png" style='height:400px'/>
+
+```js
+let o = {}
+o.a = 1
+```
+此时会触发会触发外层方法,外层方法触发 对象深处的 `[[set]]` 方法
+
+使用 `Object.keys` 这种暴露出来的方法的时候，外层方法会做出判断,会把 `enumerable` 或者 `symbol` 属性 拦截
+```js
+let obj = { a: 1, b: 2, c: 3 };
+
+  Object.defineProperty(obj, 'd', {
+    value: 4,
+    enumerable: false
+  })
+
+  console.log("🚀", Object.keys(obj)); // [a,b,c]
+
+  console.log("🚀 ", Reflect.ownKeys(obj));// [a,b,c,d]
+```
+但是使用 `Reflect` 直接操作的是 `基本方法`,不会遭到拦截
+
+再举一个例子
+
+```js
+let obj = {
+ a: 1, 
+ b: 2, 
+ get c() {
+   return this.a + this.b;
+ }
+};
+console.log("🚀", obj.c); // 3
+```
+由于外层方法把 `this` 已经确定,所以 `obj.c` 为 `3`  
+但是使用 `Reflect`,可以改变 `this`指向
+```js
+let r = Reflect.get(obj, "c", { a: 2, b: 5 })
+console.log(r) // 7
+```
+### 在 proxy 中的使用
+
+使用 `target[key]` 读取的 this 是原始对象 `obj`,而不是代理对象，不会触发 `proxy` 的 get 方法
+```js
+  let obj = {
+    a: 1, b: 2, get c() {
+      console.log(this) // { obj }
+      return this.a + this.b;
+    }
+  };
+
+  let p = new Proxy(obj, {
+    get(target, key) {
+      // 使用这种方式读取的 obj.c 中的 this是原始对象
+      return target[key]
+    }
+  })
+```
+使用 `reflect` 读取,第三个参数 可以更改 this 指向
+
+```js
+let obj = {
+ a: 1, b: 2, get c() {
+   console.log(this)
+   return this.a + this.b;
+ }
+};
+
+let p = new Proxy(obj, {
+ get(target, key) {
+   console.log(key) //c,a,b
+   return Reflect.get(target, key, p); // [!code hl]
+ }
+})
+
+p.c
+```
+但是直接传入proxy 返回值  `p` 不够灵活,使用 `receiver`
+
+```js
+ get(target, key,receiver) {
+   console.log(key) //c,a,b
+   return Reflect.get(target, key, receiver); // [!code hl]
+ }
+```

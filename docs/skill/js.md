@@ -331,4 +331,16 @@ const groups = groupBy(arr, (item) => item.id + item.age);
 ```js
 const groups = groupBy(arr, "age");
 ```
+## 浏览器打印异常
+```js
+let obj = [{ n: 1 }, { n: 2 }]
+console.log(obj)
+obj[0].n++;
+console.log(obj)
+```
 
+<img src="@other/paintError.png"/>
+
+会发现两个对象是一样的，其实这是浏览器做的一个优化，因为对象是引用类型，所以浏览器会认为两个对象是同一个，所以不会重新创建，而是指向同一个对象，所以修改其中一个对象的属性，另一个也会跟着改变。    
+
+**当你点击的时候，才会真正计算这个对象**

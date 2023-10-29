@@ -291,21 +291,30 @@ $color: white;
 }
 
 .colors {
-  @include colors { color: $color; }
+ @include colors { 
+  color: $color;
+ }
   // 也可以
-  @include colors(yellow) { color: $color; } // [!code ++]
+  @include colors(yellow) { 
+    color: $color; // [!code ++]
+   } 
 }
-
+```
+传递参数编译为 css
+```scss
 /*编译为  */
+$color: white;
 .colors {
-  background-color: blue;
-  color: white;
-  border-color: blue;
+  @include colors(yellow) { 
+    color: $color; // [!code ++]
+    border-radius:10px;
+  } 
 }
 
 .colors {
   background-color: yellow; // [!code ++]
   color: white;
+  border-radius: 10px;
   border-color: yellow; // [!code ++]
 }
 ```
@@ -362,6 +371,79 @@ p {
 through是[1-3]，to 是 [1-3)
 ```scss
 @for $i from 1 through 3 {
-  .item-#{$i} { width: 2em * $i; }
+ .item-#{$i} {
+   width: 2em * $i; 
+  }
 }
+```
+## map
+在 scss 中,map 可以使用 `()` 来表示,同时 数组也可以使用 `()` 来表示
+`nth` 表示从 数组中取出某一项  
+`map-get` 表示从 map 中取出某一项  
+`type-of` 判断类型
+```scss
+$map:(
+ phone:(red,green),
+ pad:black
+);
+
+@mixin responseTo($breakname){
+  $bg:map-get($map,$breakname);
+  
+   @if type-of($bg) == 'list' {
+    $background:nth($bg,1);
+    $fontColor:nth($bg,2);
+    .color{
+        background:$background;
+        color:$fontColor;
+    }
+  }@else{
+      .color{
+        background:$bg;
+        color:$bg;
+    }
+  }
+};
+
+.c{
+ @include responseTo(phone)
+}
+```
+## type-of
+### number
+```scss
+type-of(0) // number
+type-of(1px) // number
+```
+
+### string
+```scss
+type-of(a)   // string
+type-of("a") // string
+```
+
+### bool
+```scss
+type-of(true) // bool
+type-of(0<1) // bool
+```
+
+### color
+```scss
+type-of(rgba(1,2,3,.3))       // color
+type-of(rgb(1,2,3))           // color
+type-of(#fff)                 // color
+type-of(red)                  // color
+```
+
+### list(sass.list=js.array)
+```scss
+// 需要加括号
+type-of((1px,2px,3px))        // list
+type-of((1px 2px 3px rgba(0,0,0,.3))) // list
+```
+
+### map(sass.map=js.json)
+```scss
+type-of((a:1px,b:2px))    // map
 ```
