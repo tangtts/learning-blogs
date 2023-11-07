@@ -234,7 +234,35 @@ for (var value of searchParams.values()) {
 }
 ```
 
-### [URL.createObjectURL()](https://developer.mozilla.org/zh-CN/docs/Web/API/URL/createObjectURL_static)
+## Blob
+Blob 对象表示一个**不可变、原始数据的类文件对象**。它的数据可以按**文本或二进制的格式进行读取**，也可以转换成 ReadableStream 来用于数据操作  
+
+Blob 表示的不一定是 JavaScript 原生格式的数据。File 接口基于 Blob，继承了 blob 的功能并将其扩展以支持用户系统上的文件
+
+```js
+const obj = { hello: "world" };
+const blob = new Blob([JSON.stringify(obj)], {
+  type: "application/json",
+});
+```
+### 从 blob 中提取数据
+```js
+const text = await new Response(blob).text();
+```
+或者
+```js
+const text = await blob.text();
+```
+或者
+```js
+const reader = new FileReader();
+reader.addEventListener("loadend", () => {
+  // reader.result 包含被转化为类型化数组的 blob 中的内容
+});
+reader.readAsArrayBuffer(blob);
+```
+
+## [URL.createObjectURL()](https://developer.mozilla.org/zh-CN/docs/Web/API/URL/createObjectURL_static)
 
 ```js
 objectURL = URL.createObjectURL(object);
@@ -823,9 +851,9 @@ for(表达式1;表达式2;表达式3){
       -  否则，停止执行，最后执行表达式3.
 
 2. 换个姿势再来一次：
-   1.    首先执行表达式
+   1. 首先执行表达式
    2. 判断表达式3是否符合表达式2的条件；
-      -  如果符合，继续执行表达式4，
+      -  如果符合，继续执行表达式4
       -  否则停止执行，最后执行表达式
    3. 如此往复，直到表达式3不再满足表达式2的条件
 

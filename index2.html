@@ -1,52 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    #example-container {
-      width: 14rem;
-    }
-
-    #example-element {
-      background: linear-gradient(#d5e8b7, #bad6b3);
-      color: #fff;
-      padding: 0 1em;
-      border-radius: 16px;
-      line-height: 2;
-      box-decoration-break: clone;
-      -webkit-box-decoration-break: clone;
+  
+    .inner {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      margin: 100px;
+      display: inline-block;
     }
   </style>
 </head>
-
 <body>
-  <p> event Loop </p>
-  &#10150
+    <div class="inner">
+
+    </div>
+    <!-- <div style="display: flex;"> -->
+      <div class="inner">
+
+      </div>
+    <!-- </div> -->
+    
 </body>
-<script>
-  let obj = {
-    a: 1, b: 2, get c() {
-      console.log(this)
-      return this.a + this.b;
-    }
-  };
-
-  let p = new Proxy(obj, {
-    get(target, key) {
-      // 使用这种方式读取的 obj.c 中的 this是原始对象
-      console.log(target, key)
-      return Reflect.get(target, key, p);
-    }
-  })
-
-  p.c
-
-
-
-
-</script>
-
 </html>

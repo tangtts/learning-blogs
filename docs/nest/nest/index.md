@@ -551,9 +551,13 @@ export class UsersModule implements NestModule {
 }
 ```
 
- ## 错误处理
+ ## 错误处理 filter
 ### [异常请求过滤器](https://docs.nestjs.cn/8/exceptionfilters?id=%e5%bc%82%e5%b8%b8%e8%bf%87%e6%bb%a4%e5%99%a8-1)
 >   负责捕获作为 `HttpException` 类实例的异常，并为它们设置自定义响应逻辑。
+
+使用装饰器 `@Catch` 装饰过滤器类，并**指定要捕获的异常类型**。  
+`@Catch(HttpException)` 就是捕捉 HttpException 异常
+
 
 ```typescript
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
@@ -576,6 +580,55 @@ export class HttpExceptionFilter implements ExceptionFilter {
         path: request.url,
       });
   }
+}
+```
+
+### 自定义异常 
+ UnLoginException
+```ts
+import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus } from '@nestjs/common';
+import { Response } from 'express';
+
+export class UnLoginException{ // [!code hl]
+  message: string;
+
+  constructor(message?){
+    this.message = message;
+  }
+}
+
+@Catch(UnLoginException)
+export class UnloginFilter implements ExceptionFilter { // [!code hl]
+  catch(exception: UnLoginException, host: ArgumentsHost) { // [!code hl]
+    const response = host.switchToHttp().getResponse<Response>();
+
+    response.status(HttpStatus.UNAUTHORIZED).json({
+      code: HttpStatus.UNAUTHORIZED,
+      message: 'fail',
+      data: exception.message || '用户未登录'
+    }).end();
+  }
+}
+```
+在 AppModule 里注册这个全局 Filter
+```ts
+@Module({
+  provide: APP_FILTER,
+  useClass: UnloginFilter
+})
+```
+使用
+```ts
+throw new UnloginFilter('未登录')
+```
+
+使用 `APP_FILTER` 这种有一个好处是可以注入其他服务
+
+```ts
+@Catch(HttpException)
+export class HelloFilter implements ExceptionFilter {
+  @Inject(AppService)
+  private service: AppService;
 }
 ```
 
