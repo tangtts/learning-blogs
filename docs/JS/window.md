@@ -6,8 +6,8 @@
 
 defer 和 async 都是异步加载
 
-defer 具有推迟的意思,就是说当 Dom 树加载完毕之后执行，可以获取真实的 dom
-async 是只自己加载完毕，就立即执行，会阻塞 dom 的渲染
+- defer 具有推迟的意思,就是说当 Dom 树加载完毕之后执行，可以获取真实的 dom
+- async 具有异步的意思,是自己异步加载，加载完毕之后就立即执行，会阻塞 dom 的渲染
 
 <img src="@img/test.3ca4a381.png"/>
 
@@ -28,17 +28,18 @@ jquery.js 可能在 script2 和 script3 之前或之后调用，如果这样，�
 添加 defer 属性的脚本将**按照在页面中出现的顺序加载**，
 因此第二个示例可确保 jquery.js 必定加载于 script2.js 和 script3.js 之前，
 同时 script2.js 必定加载于 script3.js 之前。
+
 :::
 脚本调用策略小结：
 - 如果脚本无需等待页面解析，且无依赖独立运行，那么应使用 async。
-- 如果脚本需要等待页面解析，且依赖于其它脚本，调用这些脚本时应使用 defer，将关联的脚本按所需顺序置于 HTML 中。
+- 如果脚本需要等待页面解析，且**依赖于其它脚本**，调用这些脚本时应使用 defer，将关联的脚本按所需顺序置于 HTML 中。
 
 ### preload
 
 :::tip
 提供一种声明式的命令,让浏览器提前加载资源(加载后并不执行),在需要执行的时候再执行
-- 将加载和执行分离开，不阻塞渲染和document的onload 事件
-- 提交加载指定资源，不再出现依赖的font字体隔了一段时间才刷出
+- 将加载和执行分离开，不阻塞渲染和 document 的 onload 事件
+- 提前加载指定资源，不再出现依赖的 font 字体隔了一段时间才刷出
 :::
 #### 使用 HTTP 响应头的 Link 字段创建
 如我们常用到的 antd 会依赖一个 CDN 上的 font.js 字体文件，我们可以设置为提前加载，以及有一些模块虽然是按需异步加载，但在某些场景下知道其必定会加载的，则可以设置 preload 进行预加载，如：
@@ -51,6 +52,7 @@ jquery.js 可能在 script2 和 script3 之前或之后调用，如果这样，�
 <link rel="preload" as="script" href="https://a.xxx.com/xxx/TabsPc.js">
 ```
 #### 如何区分 preload 和 prefetch
+**⭐一个是预执行，另一个是预请求**
 - preload 是告诉浏览器页面必定需要的资源，浏览器一定会加载这些资源;不管资源是否被使用
 - prefetch 是告诉浏览器页面可能需要的资源，浏览器不一定会加载这些资源(有空闲时加载)
 #### 避免错用 preload 加载跨域资源
@@ -114,7 +116,7 @@ Promise.race([]).then(res => {
 </script>
 ```
 
-<p>Promise.race([])的结果是:{{race}}</p>
+<p>Promise.race([])的结果是:{{race}}即:一个`pending`状态</p>
 
 ### await
 [🔗await使用](../Vue/functions/useFetch.html#使用-await-同步请求数据)  
@@ -454,7 +456,7 @@ a();
 ### dragover/drop
 
 :::tip
-必须要阻止 元素的 drapover 默认事件，默认事件是打开文件
+必须要阻止 元素的 dragover 默认事件，默认事件是打开文件
 :::
 
 ```vue{4}
@@ -613,10 +615,13 @@ console.log(encodeURIComponent(set4)); // ABC%20abc%20123 (空格被编码为 %2
 
 ```js
 let s = new URL(
-  "http://zs:123456@localhost:8080/directorPerformance/todo?id=1#name=zs#age=5");
-  console.log(s)
+"http://zs:123456@localhost:8080/directorPerformance/todo?id=1#name=zs#age=5"
+);
 
-<img src="@img/url.png"/>
+console.log(s)
+```
+
+<img src="@img/url.png" style="margin-bottom:10px"/>
 
 
 <iframe
@@ -627,11 +632,11 @@ let s = new URL(
 ></iframe>
 
 ### 属性
-- search
-一个USVString ，指示 URL 的参数字符串；如果提供了任何参数，则此字符串包括所有参数，并以开头的“？”开头 字符。
+- search  
+指示 URL 的参数字符串；如果提供了任何参数，则此字符串包括所有参数，并以开头的`"?"`开头 字符。
 
-- searchParams 只读
-URLSearchParams对象，可用于访问search中找到的各个查询参数。
+- searchParams 只读  
+URLSearchParams对象，可用于访问`search`中找到的各个查询参数。
 ```js
 // https://some.site/?id=123
 const parsedUrl = new URL(window.location.href);
@@ -645,10 +650,10 @@ console.log(parsedUrl.searchParams.get("id")); // "123"
 
 
 ### 静态方法
-createObjectURL()
+createObjectURL()  
 返回一个DOMString ，包含一个唯一的 blob 链接（该链接协议为以 blob:，后跟唯一标识浏览器中的对象的掩码）。
 
-revokeObjectURL()
+revokeObjectURL()  
 销毁之前使用URL.createObjectURL()方法创建的 URL 实例。
 
 ## IntersectionObserver
@@ -690,14 +695,14 @@ boxElList.forEach((el) => {
 ## == 比较规则
 1. 两端类型相同,比较值
 2. 只要存在`NaN`,返回`false`
-3. undefined 和 null只有与自身比较，或者互相比较，返回true
-4. 两端都是原始类型，转化为数字
+3. `undefined` 和 `null` 只有与自身比较，或者互相比较，返回 `true`
+4. ⭐<blue>两端都是原始类型，转化为数字</blue>
    ```js
     var a = "a"
     console.log(a == 1) // false
     //a 转化为数字是 NaN, NaN 比较任何值都是false
    ``` 
-5. 一端是原始类型，一端是对象类型，把对象转换成原始类型后进行第一步
+5. ⭐<blue>一端是原始类型，一端是对象类型，把对象转换成原始类型后进行第一步</blue>
    :::tip 对象转原始类型
     1. 先使用 `[Symbol.toPrimitive]` 方法,判断是否可以获取到原始值
     2. 调用 `valueOf` 方法,是否可以获取原始值
@@ -744,7 +749,7 @@ outer:for(let i =0;i<10;i++){
 }
 ```
 ## Reflect
-<blue>调用对象的基本方法</blue>
+<blue>⭐调用对象的基本方法</blue>
 什么是基本方法
 
 <img src="@img/reflect.png" style='height:400px'/>
@@ -755,7 +760,7 @@ o.a = 1
 ```
 此时会触发会触发外层方法,外层方法触发 对象深处的 `[[set]]` 方法
 
-使用 `Object.keys` 这种暴露出来的方法的时候，外层方法会做出判断,会把 `enumerable` 或者 `symbol` 属性 拦截
+使用 `Object.keys` 这种暴露出来的方法的时候，外层方法会做出判断,会把 `enumerable` 或者 `symbol` 属性进行拦截
 ```js
 let obj = { a: 1, b: 2, c: 3 };
 
@@ -793,7 +798,9 @@ console.log(r) // 7
 使用 `target[key]` 读取的 this 是原始对象 `obj`,而不是代理对象，不会触发 `proxy` 的 get 方法
 ```js
   let obj = {
-    a: 1, b: 2, get c() {
+    a: 1,
+    b: 2,
+    get c() {
       console.log(this) // { obj }
       return this.a + this.b;
     }
@@ -842,17 +849,18 @@ for(表达式1;表达式2;表达式3){
 }
 ```
 <img src="@img/for循环.jpg" />
-执行顺序:  
-1. 第一次循环，即初始化循环。    
-   1. 首先执行表达式1（一般为初始化语句）
-   2. 再执行表达式2（一般为条件判断语句）  
-   3. 判断表达式1是否符合表达式2的条件
-      -  如果符合，则执行表达式4
-      -  否则，停止执行，最后执行表达式3.
+执行顺序: 
 
-2. 换个姿势再来一次：
-   1. 首先执行表达式
-   2. 判断表达式3是否符合表达式2的条件；
+ 1. 第一次循环，即初始化循环。
+    1. 首先执行表达式1（一般为初始化语句）
+    2. 再执行表达式2（一般为条件判断语句）
+    3. 判断表达式1是否符合表达式2的条件
+       -  如果符合，则执行表达式4
+       -  否则，停止执行，最后执行表达式3
+
+1. 换个姿势再来一次：
+   1. 首先执行表达式3
+   2. 判断表达式3是否符合表达式2的条件:
       -  如果符合，继续执行表达式4
       -  否则停止执行，最后执行表达式
    3. 如此往复，直到表达式3不再满足表达式2的条件

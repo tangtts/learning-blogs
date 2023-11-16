@@ -776,7 +776,7 @@ $height:300px;
            drop-shadow(0 0 .5px #000)
            drop-shadow(0 0 .5px #000)
            drop-shadow(0 0 .5px #000)
-           drop-shadow(0 0 .5px #000);;
+           drop-shadow(0 0 .5px #000);
    }
    .children {
        height: 100%;

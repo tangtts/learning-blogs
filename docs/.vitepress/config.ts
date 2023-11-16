@@ -332,8 +332,7 @@ export default defineConfig({
             { text: "代码规范", link: "/skill/代码规范" },
             { text: "git", link: "/skill/git" },
             { text: "快捷键", link: "/skill/快捷键" },
-            { text: "英语", link: "/skill/英语" },
-            { text: "面试", link: "/skill/面试" },
+            { text: "英语", link: "/skill/英语" }
           ],
         },
       ],

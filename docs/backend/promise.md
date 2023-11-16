@@ -83,6 +83,9 @@ const p = new Promise((resolve, reject) => {
 ```js
 class Promise {
   constructor(executor) {
+    this.value = undefined;
+    this.reason = undefined;
+
     this.onFulfilledCallbacks = []; // [!code ++]
     this.onRejectedCallbacks = []; // [!code ++]
 
@@ -117,7 +120,21 @@ class Promise {
   }
 }
 ```
+当执行 `then` 的时候,只是把 `then` 里面的回调函数传入对应的 `函数池` 里面,  
+当 `Promise` 状态改变的时候,会依次执行 `函数池` 里面的函数，此时的 `value` 是最新的 值
 
+```js
+let v = 10;
+
+let arr = [];
+arr.push(()=>{
+  console.log(v) // 20
+})
+
+v = 20;
+arr.forEach(f=>f())
+```
+⭐函数懒执行,只有当执行的时候,才会计算 `v` 的值
 ## 防止报错
 
 ```js
@@ -178,7 +195,7 @@ class Promise {
         // 如果是 reject,那么一直都是 reject
         if (val instanceof Promise) {  //[!code ++]
           return val.then(onFulfilled, onRejected); //[!code ++]
-        }
+        }//[!code ++]
 
         this.value = val;
         this.status = FULFILLED;
@@ -202,10 +219,10 @@ new Promise((resolve, reject) => {
     console.log(res);
     return new Promise(resolve => {
       resolve(10);
-    }); // 1
+    });
   })
   .then(e => {
-    console.log(e);
+    console.log(e);  // 10
   });
 ```
 
@@ -401,7 +418,7 @@ Promise.prototype.finally = function (callback){ 
 ```
 
 ### race
-
+如果传入了一个空数组, 因为是 `arr.length == 0`,所以不会执行 `resolve`,所以只能返回 一个 `pending` 的 `promise`
 ```js
 let PromiseArr = [P1, P2, P3];
 function Race(arr) {

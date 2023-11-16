@@ -7,8 +7,11 @@ HTTP 是一个无状态的协议
 
 :::tip 不同点
 当你切换页面的时候，切换 tab 时，需要使用sessionStorage
-因为 sessionStorage 是会话级存储，**在不同的 tab 会存储不同的数据,虽然是同一个域名**
-使用 localeStorage 的话，每个人都是一样的
+因为 sessionStorage 是会话级存储，**在不同的 tab 会存储不同的数据,虽然是同一个域名**  
+
+使用 localeStorage 的话，如果访问 **源`origin`不变**,那么就会一直存在浏览器中
+
+
 :::
 比如
 两个页面都是 `http://127.0.0.1:5500/a.html`
@@ -49,7 +52,7 @@ maxAge 代表过期时间,默认是 -1,关闭浏览器时过期,如果是 0,表�
 
 httpOnly 代表只能通过 http修改，无法通过 document.cookie  修改，但是可以直接修改在浏览器里  
 
-comment 该Cookie的用处说明，浏览器显示Cookie信息的时候显示该说明。
+comment 该 Cookie 的用处说明，浏览器显示Cookie信息的时候显示该说明。
 
 <img src="@img/cookie.png"/>
 
@@ -68,7 +71,7 @@ Session 的会话管理
 
 ## jwt(json web tokens)
 *bearer 持票人*  
-其实和 加密的 cookie 很相似，但是cookie 不能跨域，token 可以随便传递，而且自带加密
+其实和 加密的 cookie 很相似，但是 cookie 不能跨域，token 可以随便传递，而且自带加密
 
 优点 :  
 - 服务端不需要存储和用户鉴权有关的信息,降低了系统架构复杂度，避免了大量的数据库和缓存查询，降低了业务接口的响应延迟 
@@ -79,8 +82,8 @@ Session 的会话管理
 - 正常情况下要比 session_id 更大，需要消耗更多流量，挤占更多带宽
 
 :::tip 加密encode
-1. part1: 头部是 { typ: JWT,alg:'HS256'} 的base64        类型和加密算法
-2. part2: payload 的 base64
+1. part1: 头部是 { typ: JWT,alg:'HS256'} 的 **base64** 类型和加密算法
+2. part2: payload 的 **base64**
 3. footer 是 (part1+ . + part2) + secret 的加密
 返回 part1 + . + part2 + . + part3
 :::

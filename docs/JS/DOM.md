@@ -1,16 +1,16 @@
 # DOM对象
 
-## [getBoundingClientRect](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect)
-获取元素在视口中的位置
+## [🔗getBoundingClientRect](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect)
+获取元素在<blue>⭐视口</blue>中的位置
 <img src="@img/element-box-diagram.png"/>
 
 :::tip
-  该方法返回的 DOMRect 对象中的 width 和 height 属性是包含了 padding 和 border-width 的，而不仅仅是内容部分的宽度和高度
+  ⭐该方法返回的 DOMRect 对象中的 width 和 height 属性是包含了 padding 和 border-width 的，而不仅仅是内容部分的宽度和高度
 :::
 
 ## clientWidth / offsetWidth / scrollWidth / getBoundingClientRect
-1. clientWidth 表示元素内部宽度,即只有 width 和 padding,属于自身内部宽度,padding 可以看做自己内部间距
-2. offsetWidth 表示元素偏移宽度, 包含可能会导致别的元素偏移的宽度,即 width 和 padding,border
+1. clientWidth **表示元素内部宽度**,即只有 width 和 padding,属于自身内部宽度,padding 可以看做自己内部间距
+2. offsetWidth 表示元素偏移宽度, 包含可能 **会导致别的元素偏移** 的宽度,即 width 和 padding,border
 3. [scrollWidth](https://developer.mozilla.org/zh-CN/docs/Web/API/element/scrollWidth) 表示滚动宽度,**包含元素的内边距，但不包括边框，外边距或垂直滚动条**,如果元素没有水平滚动条，则和 clientWidth 是一样的
 4. getBoundingClientRect 表示元素在视口中的位置，是经过计算的,上面的几种情况是在 `layout` 布局阶段计算的，但是经过 `transform: scale` 之后,由于 `transform` 是使用 `gpu` 计算的, 需要使用 `getBoundingClientRect` 获取最终结果
 
@@ -30,9 +30,9 @@
 
 <iframe src="/demo/width.html" width="100%" height="380px"/>
 
-## append & appendChlid
+## append & appendChild
 ### append
-是比appendChild更加新的api,可以传入多个参数，还可以传入文本，但是没有返回值
+是比 `appendChild` 更加新的api,可以传入多个参数，还可以传入文本，但是没有返回值
 ```js
 let div = document.createElement("div")
 let p = document.createElement("p")
@@ -141,10 +141,10 @@ dom.scrollIntoView(false)
     })
   </script>
 ```
-## childNodes / children
+## ⭐ childNodes / children
 
 - childNodes 包含了所有的子节点，包括文本节点,注释节点
-- children 只包含元素节点
+- children 只包含 **元素节点**
 
 ## Node / Element
 Node 是一个基类，Element是它的子类

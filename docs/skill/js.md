@@ -21,8 +21,8 @@ obj[obj.up = 0] = "up" // obj[0] = 'up'
 ```js
   // 如果传 slow 字符串的话，其实就是传 600 默认值，也可以传固定时间
   let speeds = {
-  slow:600,
-  fast:500
+  	slow:600,
+  	fast:500
 }
 
 function delay(time){
@@ -31,13 +31,13 @@ function delay(time){
 ```
 
 ## js 中的枚举成员
-使用 freeze 保证不会被修改
+⭐使用 `Object.freeze` 保证不会被修改
 ```js
 const userType = Object.freeze({
   child:1,
   adult:2,
-  elder"3"
-})
+  elder:"3"
+});
 
 if(xx == usertType.child) { }
 ```
@@ -50,14 +50,15 @@ num = ++ num || 1
 ```
 
 ## 统一导出
+`⭐default` 可以看成是一个关键字,可以使用 `as` 关键字来重命名
 ```js
  // 在 home.js 中使用到的 export default
 export { default as Home} from "./Home.js"
 // 本质是是下面的简写
 import { default as Home } from "./Home.js"
 export Home
-// 在使用是
-import {Home} fromr "../xxx"
+// 再次使用是
+import { Home } fromr "../xxx"
 ```
 ## do-while 优化
  有大量的 if 条件语句,可以使用 do while
@@ -160,11 +161,11 @@ dom.addEventListener('scroll', () => {
 主要利用了 `IntersectionObserver`
 
 ## 按位与 判断奇偶
-按位与（&）运算符在两个操作数对应的二进位都为 1 时，该位的结果值才为 1(**必须同时为 1 才为 1**)  
+⭐按位与（&）运算符在两个操作数对应的二进位都为 1 时，该位的结果值才为 1(**必须同时为 1 才为 1**)  
 
 可以利用 1 的二进制是 `00001`来进行最后一位的判断
-因为偶数的最后一位一定是 0,奇数的末尾一定是 1
-`(2).toString(2)`
+因为偶数的最后一位一定是 0,奇数的末尾一定是 1  
+`(2).toString(2)`获取对应的二进制
 ```js
 	2 & 1 // 0
 	4 & 1 // 0
@@ -195,7 +196,7 @@ switch (true) {
 
 ## 强制重排
 使用 `el.offsetHeight` 触发重排,获取最新的 dom 结构    
-或者使用 `requestAnimationFrame` 获取下一帧动画  
+或者使用 [🔗`requestAnimationFrame`](https://developer.mozilla.org/zh-CN/docs/Web/API/window/requestAnimationFrame) 下次重绘之前执行回调函数
 
 
 <script setup lang="ts">
@@ -214,8 +215,8 @@ switch (true) {
 		el.style.height = 'auto';
 		let h = el.offsetHeight;
 		el.style.height = '0px';
-		el.offsetHeight // [!code ++]
-		requestAnimationFrame(() => {  // [!code ++]
+		// el.offsetHeight
+		requestAnimationFrame(() => {  
 			el.style.height = h + 'px'
 		})
 	}
@@ -264,9 +265,11 @@ const openPanel = () => {
   let h = el.offsetHeight;
   el.style.height = '0px';
 	// el.offsetHeight // [!code ++]
+	// el.style.height = h + 'px' // [!code ++]
+	// 或者使用
   requestAnimationFrame(() => {  // [!code ++]
-    el.style.height = h + 'px'
-  })
+    el.style.height = h + 'px' // [!code ++]
+  }) // [!code ++]
 }
 const closePanel = () => {
   const el = c.value as HTMLElement;
@@ -300,6 +303,7 @@ Object.defineProperty(config, x, {
 	}
 })
 ```
+可以用在某些设置值的情况,不用自己判断
 
 ## groupBy
 

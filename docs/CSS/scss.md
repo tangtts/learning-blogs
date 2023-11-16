@@ -1,7 +1,8 @@
 # scss
 :::tip
-其中 $animal 类似于变量 var,使用变量 #${xx},主要是为了区别普通值和变量值   
-如果只有变量，直接使用${xx}
+其中 $animal 类似于变量 `var`, 使用变量 `#${xx}`,主要是为了区别普通值和变量值
+
+如果只有变量，直接使用 `${xx}`
 
 scss 尽可能的简洁
 :::
@@ -13,18 +14,18 @@ scss 尽可能的简洁
 ```scss
  @import url("xxx.scss")
 ```
-它会原封不动的进行导入,不论这个文件时候存在
+它会原封不动的进行导入,不论这个文件是否存在
 #### 编译时
 > 会把导入的文件编译到当前文件  
  
-common.scss
+> common.scss
 ```scss
   .a{
     font-size:40px
   }
   $color:red
 ```
-index.scss
+>index.scss
 ```scss
 @import "./common.scss";
 .b {
@@ -41,14 +42,15 @@ index.scss
       color: red
    }
 ```
-相当于直接放到顶部位置
+<blue>相当于直接放到顶部位置</blue>
+
 ##### 问题
 1. 容易混淆, css 也使用 import，但是他是运行时，但是 scss 是编译时
 2. 命名冲突,如果多个文件使用了同一变量,后者会覆盖前者
 3. 没有私有变量
 
 ### @use
-自带命名空间,不论嵌套多深,都是 以最后文件名 开头
+自带命名空间,不论嵌套多深,都是 以 <blue>⭐最后文件名</blue> 开头
 ```scss
 @use "common.scss";
 .b{
@@ -74,21 +76,22 @@ SCSS中变量名使用中划线或下划线都是指向同一变量的
 2. 后定义的会被忽略,但是会执行赋值
 
 ```scss
-  $border-color:#aaa; //声明变量
+$border-color:#aaa; //声明变量
 $border_color:#ccc;
 
-   //  .a {
-   //    color: #ccc;
-  //    }
-  // 不论是 $border-color 还是 $border_color 都是一样的
+// .a {
+//   color: #ccc;
+//  }
+// 不论是 $border-color 还是 $border_color 都是一样的
   .a{
       color:$border_color;
   }
  
 ```
-### [#{}](https://sass-lang.com/documentation/interpolation/)
+### [🔗#{}](https://sass-lang.com/documentation/interpolation/)
 
-**将 SassScript 表达式的结果嵌入到 CSS 块中**
+
+<blue> ⭐将 SassScript 变量嵌入到字符串或选择器中</blue>
 
 作用是引用表达式   
 
@@ -123,7 +126,7 @@ $border_color:#ccc;
 ## 嵌套
 
 scss识别一个属性以分号结尾时则判断为一个属性  
-以大括号结尾时则判断为一个嵌套属性  
+**以大括号结尾时则判断为一个嵌套属性**  
 规则是将外部的属性以及内部的属性通过中划线连接起来形成一个新的属性
 1. 属性值嵌套
 ```scss
@@ -177,7 +180,7 @@ li {
       }
   ```
 
-## [隐藏变量](https://sass-lang.com/documentation/style-rules/declarations/#hidden-declarations)
+## [🔗隐藏变量](https://sass-lang.com/documentation/style-rules/declarations/#hidden-declarations)
 ```scss
 $rounded-corners: false;
 
@@ -216,7 +219,10 @@ $rounded-corners: false;
 ```scss
 $i: 6;
 @while $i > 0 {
-  .item-#{$i} { width: 2em * $i; }
+  .item-#{$i} { 
+    width: 2em * $i;
+   }
+
   $i: $i - 2;
 }
 ```
@@ -224,7 +230,7 @@ $i: 6;
 ## @mixin
 
 :::tip
-混合指令（Mixin）用于定义可重复使用的样式，避免了使用无语意的 class，这也是和函数不同的地方
+混合指令（Mixin）用于定义可重复使用的样式，**避免了使用无语义的 class**，这也是和函数不同的地方
 :::
 
 ```scss
