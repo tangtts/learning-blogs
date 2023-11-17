@@ -613,6 +613,8 @@ console.log(encodeURIComponent(set4)); // ABC%20abc%20123 (空格被编码为 %2
 
 ## [URL](https://developer.mozilla.org/zh-CN/docs/Web/API/URL)
 
+<img src="@img/URL.webp" style="margin-bottom:10px"/>
+
 ```js
 let s = new URL(
 "http://zs:123456@localhost:8080/directorPerformance/todo?id=1#name=zs#age=5"
@@ -655,6 +657,46 @@ createObjectURL()
 
 revokeObjectURL()  
 销毁之前使用URL.createObjectURL()方法创建的 URL 实例。
+
+### 可写
+
+```js
+function constructURL(param) {
+  const { category, limit, userId } = param;
+  const baseURL = "https://fakestoreapi.com/products";
+  const url = new URL(baseURL);
+  const params = new URLSearchParams();
+
+  // 添加参数，更改 url
+  if (category) url.pathname += `/category/${category}`;
+  if (limit) params.append('limit', Number(limit).toString());
+  if (userId) params.append('userId', Number(userId).toString());
+
+  // 可读可写
+  url.search = params.toString();
+  return url.toString();
+}
+
+let r = constructURL({
+  category: 'mugs',
+  limit: 10,
+  userId: 1
+})
+
+// https://fakestoreapi.com/products/category/mugs?limit=10&userId=1
+console.log(r); 
+```
+
+<iframe
+  height="500"
+  width="100%"
+  frameborder="1"
+  src="https://unpkg.com/javascript-playgrounds@1.2.3/public/index.html#data=%7B%22code%22%3A%22function%20constructURL(param)%20%7B%5Cn%20%20const%20%7B%20category%2C%20limit%2C%20userId%20%7D%20%3D%20param%3B%5Cn%20%20const%20baseURL%20%3D%20%5C%22https%3A%2F%2Ffakestoreapi.com%2Fproducts%5C%22%3B%5Cn%20%20const%20url%20%3D%20new%20URL(baseURL)%3B%5Cn%20%20const%20params%20%3D%20new%20URLSearchParams()%3B%5Cn%5Cn%20%20if%20(category)%20url.pathname%20%2B%3D%20%60%2Fcategory%2F%24%7Bcategory%7D%60%3B%5Cn%20%20if%20(limit)%20params.append('limit'%2C%20Number(limit).toString())%3B%5Cn%20%20if%20(userId)%20params.append('userId'%2C%20Number(userId).toString())%3B%5Cn%2F%2F%20%E5%8F%AF%E8%AF%BB%E5%8F%AF%E5%86%99%5Cn%20%20url.search%20%3D%20params.toString()%3B%5Cn%20%20return%20url.toString()%3B%5Cn%7D%5Cnlet%20r%20%3D%20constructURL(%7B%5Cn%20%20category%3A%20'mugs'%2C%5Cn%20%20limit%3A%2010%2C%5Cn%20%20userId%3A%201%5Cn%7D)%5Cnconsole.log(r)%3B%22%7D"
+></iframe>
+
+
+
+
 
 ## IntersectionObserver
 

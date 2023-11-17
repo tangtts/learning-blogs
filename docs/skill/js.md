@@ -348,3 +348,26 @@ console.log(obj)
 会发现两个对象是一样的，其实这是浏览器做的一个优化，因为对象是引用类型，所以浏览器会认为两个对象是同一个，所以不会重新创建，而是指向同一个对象，所以修改其中一个对象的属性，另一个也会跟着改变。    
 
 **当你点击的时候，才会真正计算这个对象**
+
+## reduce
+
+```js
+// using Map
+const todosForUserMap = {};
+todos.forEach(todo=>{
+	if (todosForUserMap[todo.userId]){
+		todosForUserMap[todo.userId].push(todo);  
+	}else{
+		todosForUserMap[todo.userId] = [todo];
+	}  
+})
+```
+使用 `reduce` 优化
+
+```js
+const todosForUserMap = todos.reduce((accumulator, todo)=>{
+	if (accumulator[todo.userId]) accumulator[todo.userId].push(todo);
+	if (!accumulator[todo.userId]) accumulator[todo.userId] = [todo];
+	return accumulator;
+},{})
+```

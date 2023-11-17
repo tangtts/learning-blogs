@@ -29,6 +29,23 @@
   let p = document.querySelector('.property');
   let r =  p.getBoundingClientRect(); // 获取元素相对于视窗的位置
   console.log(r)
+
+
+  async function *fetchProducts(){
+
+    yield false
+    const productUrl = "https://fakestoreapi.com/products?limit=2";
+    const res = await fetch(productUrl)
+    const data = await res.json()
+    yield data;
+  
+}
+
+async function main() {
+  const itr = fetchProducts();
+  console.log( await itr.next() );
+}
+main()
 </script>
 </body>
 
