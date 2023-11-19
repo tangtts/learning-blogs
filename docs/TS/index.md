@@ -2,6 +2,30 @@
 
 **TS 基础及类型体操**
 
+## 类型编程
+泛型就是可以看做成一个函数的参数,只不过接收的是一个类型而不是一个值  
+
+在 `TypeScript` 中,变量和函数都是由<blue>类型别名(type)</blue>承担
+
+```ts
+// 类型别名和函数很像
+type x = (x:string,y:number)=>number
+
+let x1:x = (x,y)=>{
+  return y
+}
+```
+
+```ts
+interface x {
+  (x:string,y:number):number
+} 
+
+let x1:x = (x,y)=>{
+  return y
+}
+```
+
 ## type 和 interface 的区别
 
 :::tip 🚀type 和 interface 的定义区别
@@ -33,6 +57,98 @@ const a: A = "this is string";
 
 **A1，A2 两个接口，满足 A2 的接口一定可以满足 A1**，所以条件为真，A 的类型取 string
 
+## 鸭子类型
+只要满足所定义类型即可
+```ts
+interface x {
+  a: string
+  b: string
+}
+
+interface y {
+  a: string
+  c: number
+}
+```
+x 和 y 进行交叉,交叉后的类型既要满足 `x`,又要满足 `y`
+```ts
+type c = x & y
+
+let x2: c = {
+  a: "1",
+  b: "2",
+  c: 2
+}
+```
+对于 `x2` 来说,必须要这样写才既满足`x` 和 `y`,可以看到经过 `Computed` 之后的类型
+
+```ts
+type c = x & y;
+
+type Computed<T> = {
+  [K in keyof T] :T[K]
+}
+
+// type F = {
+//     a: string;
+//     b: string;
+//     c: number;
+// }
+type F = Computed<c>
+```
+如果是联合类型
+```ts
+type c1 = x | y;
+let x2: c1= {
+  a: "1",
+  b: "2",
+  c: 2,
+}
+```
+满足 x 或者 满足 y 之一即可,两个都满足也可以
+
+满足之一即可
+```ts
+let x2: c1= {
+  a: "1",
+  b: "2",
+}
+
+let x2: c1= {
+  a: "1",
+  c: 2,
+}
+```
+```tsx
+interface x {
+  a: string
+  b: string
+}
+
+interface y {
+  a: string
+  c: number
+}
+
+type c = x & y;
+type c1 = x | y;
+
+
+type Computed<T> = {
+  [K in keyof T] :T[K]
+}
+
+type F1 = Computed<c1>
+
+
+let x2: c1=...
+```
+
+<iframe 
+width="100%" height="600"
+src="https://www.typescriptlang.org/play?target=1&module=1#code/JYOwLgpgTgZghgYwgAgB7IN4ChnLgLmQGcwpQBzHZAI0JLJEoF8stRJZEUBPTKg4qQpUEhEAFcAttWhYWWMNwAOKBMgC8aZADJk3ANwLlqgIwatAHz2HWilcgDCAe0lLxkACYAeACoA+c2xcAG0AaWRQZABrCG4nGGQfAF1kfB8wpLlbY2QAMTNNZ1d3CG8EEz9WLAAbCDA0ACZCcs0gvEIAIhMOgBoqWmQOht6RQga++SA" />
+
+
 ## 函数
 
 ### 函数重载
@@ -40,6 +156,12 @@ const a: A = "this is string";
 :::info
 **函数重载 = 重载签名 + 实现签名 + 函数体**
 :::
+
+在标注了每一种的重载方式以后，我们需要在最后实际实现的函数类型标注里，需要标注各个参数类型和返回值的联合类型   
+
+<blue>实际上最后一个函数类型标注不会被调用方看到</blue>
+
+在类型层面上做了重载，但是函数内部函数依靠 `if/else` 进行判断
 
 ```ts
 interface User {
@@ -164,6 +286,11 @@ sum().age / sum.name;
 
 <iframe src="https://www.typescriptlang.org/play?#code/C4TwDgpgBAYgrgOwMYF4oAoCUKB8BvBAQwFsIAuAZ2ACcBLBAcwBpCHyE5iAjCagXwBQAgDYRgUCpzLxkIsVABmARihosuPFGpi41BFAIlyAcgBeFY30GjxCgEyqM2fNuC79moqTJmLLNmR2AAxMbAgAJrxkKlZCAPRxUIClRoCYqUyAiDqAAHKAVHKAK-GAe2qAPAoCksQoykKl5XZAA" width="100%" height="600"/>
 
+### 总结
+1. 协变是返回类型多的函数可以赋值给返回类型少的函数，可以保证安全
+2. 逆变和协变是**相反**的，反正函数体没用到,你随便多传几个参数无所谓的
+3. 只要记住一个 协变即可
+
 ### 特点
 
 **`TS` 中只有 `函数参数` 这一处逆变**
@@ -172,7 +299,7 @@ sum().age / sum.name;
 **infer 推导的名称相同并且都处于逆变的位置，可推导出交叉类型**  
 **infer 推导的名称相同并且都处于协变的位置，可推导出联合类型**
 :::
-交叉类型
+逆变推导出交叉类型
 
 ```ts
 type Bar<T> = T extends { a: (x: infer U) => void; b: (x: infer U) => void }
@@ -183,7 +310,7 @@ type T20 = Bar<{ a: (x: string) => void; b: (x: string) => void }>; // string
 type T21 = Bar<{ a: (x: string) => void; b: (x: number) => void }>; // string & number
 ```
 
-联合类型
+协变推导出联合类型
 
 ```ts
 type Foo<T> = T extends () => { a: infer U; b: infer U } ? U : never;
@@ -1383,6 +1510,14 @@ let PromiseAry: C<N> = [
 `type x = Promise<string | number | boolean>`
 
 ### 🚩ParseQueryString
+
+递归写法，递归一定要知道**终止条件和返回类型**
+
+```ts
+type c = ParamsString<"a=1&b=2&c=3&a=2">
+// 可以写成这种写法
+MergeParams<{a:1}, MergeParams<{b:1}, MergeParams<{c:3},{a:2}>>>
+```
 
 ```ts
 type MergeValues<One, Other> = One extends Other ? One : [One, Other];

@@ -318,6 +318,11 @@ export default defineConfig({
             { text: "io", link: "/java/api/io" },
           ],
         },
+        {
+          text: "spring-boot",
+          collapsed: true,
+          items: [{ text: "spring 基础", link: "/java/spring-boot/index" }],
+        },
       ],
       skill: [
         {
