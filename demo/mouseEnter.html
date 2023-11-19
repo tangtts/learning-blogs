@@ -7,50 +7,102 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    #mouseTarget {
+    #mouseenterParent,
+    #mouseOverParent {
       width: 100px;
       height: 100px;
       margin: 20px auto;
       background-color: antiquewhite;
     }
 
-    #unorderedList {
+    #mouseenterChild,
+    #mouseOverChild {
       height: 50px;
       background-color: yellowgreen;
     }
+
+    .flex {
+      display: flex;
+      gap: 20px
+    }
+
+    .info{
+    display: flex;
+  }
+ 
+  .text{
+    flex: 1;
+    width: 10px;
+  }
+  .desc{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   </style>
 </head>
 
 <body>
-  <div id="mouseTarget">
-    <div id="unorderedList"></div>
+
+  <div class='info'>
+    width
+    <div class='text'>
+      <div class='desc'>黑海哈维和花时间家具家电等接口你到家那几你黑海哈维和花时间家具家电等接口你到家那几你黑海哈维和花时间家具家电等接口你到家那几你黑海哈维和花时间家具家电等接口你到家那几你黑海哈维和花时间家具家电等接口你到家那几你黑海哈维和花时间家具家电等接口你到家那几你黑海哈维和花时间家具家电等接口你到家那几你黑海哈维和花时间家具家电等接口你到家那几你</div>
+    </div>
   </div>
+
+
+  <div class="flex">
+
+    <div>
+      mouseEnter
+      <div id="mouseenterParent">
+        父亲
+        <div id="mouseenterChild">儿子</div>
+      </div>
+    </div>
+
+    <div>
+      mouseOver
+      <div id="mouseOverParent">
+        父亲
+        <div id="mouseOverChild">儿子</div>
+      </div>
+    </div>
+  </div>
+
+
   <p>
-    无冒泡:mouseover
+    无冒泡:
     <span id="mouseenter">This is mouseenter event 0</span>
   </p>
   <p>
-    有冒泡:mouseover
+    有冒泡:
     <span id="mouseover">This is mouseover event 0</span>
-
   </p>
+
+  <p style="color:red">使用 mouseenter 的时候,从父元素到子元素不会执行 </p>
+  <p>使用 mouseover 的时候,从父元素到子元素会再次执行 </p>
   <script>
     let enterEventCount = 0;
     let overEventCount = 0;
 
-    const mouseTarget = document.getElementById('mouseTarget');
-    const unorderedList = document.getElementById('unorderedList');
+    const mouseenterParent = document.getElementById('mouseenterParent');
+    const mouseenterChild = document.getElementById('mouseenterChild');
 
+    const mouseOverParent = document.getElementById('mouseOverParent');
+    const mouseOverChild = document.getElementById('mouseOverChild');
 
+    // 输出
     const mouseenter = document.getElementById('mouseenter');
     const mouseover = document.getElementById('mouseover');
 
-    mouseTarget.addEventListener('mouseenter', (e) => {
+    mouseenterParent.addEventListener('mouseenter', (e) => {
       enterEventCount++;
       mouseenter.innerHTML = `This is mouseenter event ${enterEventCount}.`
     });
 
-    unorderedList.addEventListener("mouseover", function () {
+    mouseOverParent.addEventListener("mouseover", function () {
       overEventCount++
       mouseover.innerHTML = `This is mouseover event ${overEventCount}.`
     })
