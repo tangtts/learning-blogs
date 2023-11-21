@@ -17,6 +17,7 @@ declare module 'vue' {
     DatePicker: typeof import('./src/components/datePicker.vue')['default']
     DirectiveLazy: typeof import('./src/components/DirectiveLazy.vue')['default']
     Drag: typeof import('./src/components/drag.vue')['default']
+    ElButton: typeof import('element-plus/es')['ElButton']
     Flip: typeof import('./src/components/flip/index.vue')['default']
     ImgPreview: typeof import('./src/components/imgPreview/index.vue')['default']
     InfiniteScroll: typeof import('./src/components/InfiniteScroll.vue')['default']

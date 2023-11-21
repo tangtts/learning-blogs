@@ -85,10 +85,10 @@ import { customRef } from 'vue'
 ```ts
     const Host = {
         render() {
-        return h(component, {
+         return h(component, {
           ...props,
           ...eventListener,
-        })
+         })
       },
     }
 ```
@@ -258,3 +258,16 @@ function mount(component: Component): MountInstance {
 
   <img src="@img/动态访问办法3.png"/>
      
+## 在 `.vue`文件中使用 `tsx`
+```vue
+ <template>
+   <div>
+     <Fn :a="1" />
+   </div>
+ </template>
+ <script lang="tsx" setup>
+   const Fn = ({ a }) => {
+     return <div>{a}afdfaf</div>;
+   };
+ </script>
+```

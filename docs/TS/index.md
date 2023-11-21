@@ -1,11 +1,13 @@
 # TS
 
-**TS 基础及类型体操**
+TS 基础及类型体操...
 
 ## 类型编程
 泛型就是可以看做成一个函数的参数,只不过接收的是一个类型而不是一个值  
 
-在 `TypeScript` 中,变量和函数都是由<blue>类型别名(type)</blue>承担
+在 `TypeScript` 中,变量和函数都是由<blue>类型别名(type)</blue>承担  
+
+`type` 定义函数是最接近真实函数的定义方式
 
 ```ts
 // 类型别名和函数很像
@@ -15,7 +17,7 @@ let x1:x = (x,y)=>{
   return y
 }
 ```
-
+如果使用 `interface` 定义
 ```ts
 interface x {
   (x:string,y:number):number
@@ -28,7 +30,7 @@ let x1:x = (x,y)=>{
 
 ## type 和 interface 的区别
 
-:::tip 🚀type 和 interface 的定义区别
+:::tip 🚀 type 和 interface 的定义区别
 `type` 是类型别名  
 `interface` 是接口,定义一个新的规则,必须要满足这个规则才能使用
 
@@ -57,8 +59,32 @@ const a: A = "this is string";
 
 **A1，A2 两个接口，满足 A2 的接口一定可以满足 A1**，所以条件为真，A 的类型取 string
 
+## 联合 / 交叉
+
+交叉类型会把多个类型给扩大成一个总类型,也可以说是生成的类型 要满足多个类型      
+
+
+因为 `z` 是一个 「可变类型」  的 `string` 与一个 「`readonly`」 的 `string` 类型合并,由于要扩大,所以变为 `可变类型`
+```ts
+type X3 =   {
+  z:string;
+  x:number
+} & {
+  z1:boolean
+  readonly z: string;
+};
+
+// 合并类型
+type C<T> = {
+  [k in keyof T]: T[k];
+};
+
+// 交叉类型是一个是马老师的粉丝,一个是蔡徐坤的粉丝,他们共有的粉丝是交叉类型
+type g3 = C<X3>;
+```
+
 ## 鸭子类型
-只要满足所定义类型即可
+只要满足所定义的类型即可
 ```ts
 interface x {
   a: string
@@ -159,7 +185,7 @@ src="https://www.typescriptlang.org/play?target=1&module=1#code/JYOwLgpgTgZghgYw
 
 在标注了每一种的重载方式以后，我们需要在最后实际实现的函数类型标注里，需要标注各个参数类型和返回值的联合类型   
 
-<blue>实际上最后一个函数类型标注不会被调用方看到</blue>
+<blue>⭐实际上最后一个函数类型标注不会被调用方看到</blue>
 
 在类型层面上做了重载，但是函数内部函数依靠 `if/else` 进行判断
 
@@ -231,7 +257,7 @@ A此处类型更多但是其表达的类型更宽泛，所以A是父类型，B�
 因此b = a不成立（父类型不能赋值给子类型），而a = b成立（子类型可以赋值给父类型）
 
 ---
-:::tip
+:::tip ⭐
 **_赋值的主要是赋值的是函数体_**  
 形参数量少的可以赋值给形参数量多的,因为形参少，在 **_函数体内_** 只能用到这些形参
 :::
@@ -406,6 +432,37 @@ type T3 = `${"top" | "bottom"}-${"left" | "right"}`;
 type T4 = `${1 | 2 | 3}` | 1 | 2 | 3;
 ```
 
+### 模板字符串
+作为字符串字面量联合类型会进行类型检查
+```ts
+type monthOryear = "month" | "year"
+type addOrMinus = "+" | "-"
+// type x = "month+" | "month-" | "year+" | "year-"
+type x = `${monthOryear}${addOrMinus}`;
+```
+
+```ts
+const addOrMinus = (monthOryear: "month" | "year", addOrMinus: "+" | "-") => {
+
+  type N = `${"year" | "month"}${"+" | "-"}`
+
+  let map = new Map<N, Function>([])
+  
+  map.set('year+', function () {})
+  map.set('year-', function () {})
+
+  map.set('month+', function () {})
+
+  map.set('month-', function () {})
+
+  let x = `${monthOryear}${addOrMinus}`;
+
+  let fn = map.get(`${monthOryear}${addOrMinus}`); 
+  // 被当做一个 string 类型
+  let fn2 = map.get(monthOryear+addOrMinus);  //[!code error]
+}
+```
+
 ## 元祖[tuple]
 
 **用于保存定长/定数据类型的数据**
@@ -451,7 +508,7 @@ let s: StringNumberBooleans = ["a", 12];
 ## {} & Object & object
 
 :::info 区别
-object：表示任何非原始类型的值，包括对象、数组、函数等,但不包括 null 和 undefined
+object：⭐表示任何非原始类型的值，包括对象、数组、函数等,但不包括 null 和 undefined
 
 Object 表示一个 js 的顶级对象,任何时候都不建议使用,只能使用 `Object` 上的公共方法
 
@@ -506,7 +563,7 @@ class Child extends Person {
   }
 }
 ```
-如果使用 `ts` 限定类型 
+⭐如果使用 `ts` 限定类型 
 
 ```ts
 let c:Person = new Child;
@@ -516,13 +573,18 @@ let c:Person = new Child;
 如果一个人是超人,就是有超过人类的其他能力  
 但是使用 `ts` 约束了它的类型,那么它只能是人类,只能拥有人类的属性  
 
-
-
 ## 关键字
 
-### NonNullable
+### ⭐NonNullable
 
-去除 null 类型,_主要利用了 TS 的分发类型_
+去除 null 类型,_主要利用了 TS 的分发类型_  
+
+因为是 `{}` 定义了一个空对象,当有其他类型的值与 `空对象` 做交叉类型时,就相当于去除 `null` 类型，只保留其他的类型
+
+```ts
+type Y = { a:number } & {}
+let x:Y = { a:100 }
+```
 
 ```ts
 // 原理
@@ -601,8 +663,13 @@ const goodImage = {
   image: "aa",
 } satisfies IUser; // [!code ++]
 
-badImage.image; // 只能获取字符串和 对象的公有方法
-goodImage.image; // 就是一个字符串，可以获取字符串的方法
+let r = badImage.image; // 只能获取字符串和 对象的公有方法
+r.toString
+r.valueOf 
+
+let r1 = goodImage.image; // 就是一个字符串，可以获取字符串的方法
+r1.at
+r1.search
 ```
 
 ### Exclude(排除)
@@ -620,15 +687,16 @@ type A = Exclude<"key1" | "key2", "key2">; // 'key1'
 利用了条件类型中的分配原则
 
 ```ts
-type A = `Exclude<'key1' | 'key2', 'key2'>`
+type A = Exclude<'key1' | 'key2', 'key2'>
 
 // 等价于
 
-type A = `Exclude<'key1', 'key2'>` | `Exclude<'key2', 'key2'>`
+type A = Exclude<'key1', 'key2'> | Exclude<'key2', 'key2'>
 
 // =>
 
-type A = ('key1' extends 'key2' ? never : 'key1') | ('key'2 extends 'key2' ? never : 'key2')
+type A = ('key1' extends 'key2' ? never : 'key1') 
+        |('key2' extends 'key2' ? never : 'key2')
 
 // =>
 
@@ -640,6 +708,23 @@ type A = 'key1' | never = 'key1'
 
 ```ts
 type Extract<T, U> = T extends U ? T : never;
+```
+可以从联合类型中根据部分字段提取出类型
+```ts
+interface A {
+  name:string
+  age:number
+}
+
+interface B {
+  address:string
+  code:number
+}
+
+type C = A | B;
+
+//B
+type D = Extract<C, { address:string }>;
 ```
 
 ### ReturnType
@@ -665,6 +750,8 @@ type ExcludeType<T extends Array<any>, K extends string | number | boolean> = {
 ```
 
 对多个对象进行遍历
+
+`K in keyof F | keyof S`  k 属于 `keyof F` 和 `keyof S` 的联合类型
 
 ```ts
 type Merge<F extends Record<string, any>, S extends Record<string, any>> = {
@@ -718,11 +805,11 @@ interface Example {
 let D: Example["b" | "a"] = false;
 ```
 
-### infer
+### ⭐infer
 
-infer 只能在条件类型的 extends 子句中，推断的类型变量需要可以在条件类型的 true 分支中引用。
+infer 只能在条件类型的 `extends` 子句中，推断的类型变量需要可以在条件类型的 true 分支中引用。
 
-infer 可以指代一个类型，也可以是具体的值
+infer 可以指代一个类型，也可以是具体的值(其实也是一个更具体的类型,比如字符串`abcd`其实就是字符串的子类型)
 
 :::danger
 元组成员必须全部具有或全部不具有名称
@@ -744,7 +831,7 @@ type Flatten<T extends any[]> = T extends [infer F, ...infer R]
   : T;
 ```
 
-具名
+具名,为了更加清晰的指代参数的含义
 
 ```ts
 // R 指代的第一个字符，infer _ 没有用到
@@ -794,8 +881,8 @@ const instance: MyInstanceType = new MyClass("Alice", 30);
 ```
 
 ## any / unknown
-### keyof any 为啥是 string | number | symbol
-因为 keyof 本意是提取key值,key 的类型只能是 string / number / symbol
+### ⭐keyof any 为啥是 string | number | symbol
+**因为 keyof 本意是提取 `key` 值,`key` 的类型只能是 string / number / symbol**
 
 :::info
 unknown 是 top type  
@@ -817,7 +904,7 @@ let x: any = 1;
 x = [];
 ```
 
-## 分配条件类型（Distributive Conditional Types）
+## ⭐分配条件类型（Distributive Conditional Types）
 
 :::tip ✈️✈️✈️
 对于使用 extends 关键字的条件类型（即上面的三元表达式类型），如果 **_extends 前面的参数_** 是一个 _泛型类型_，当传入该参数的是 _联合类型_，则使用分配律计算最终的结果。
@@ -855,15 +942,30 @@ type WrappedPromise<T> = Promise<T> extends Promise<boolean> ? "Y" : "N";
 type T1 = WrappedTuple<number | boolean>; // "N"
 type T2 = WrappedArray<number | boolean>; // "N"
 type T3 = WrappedPromise<true | false>; // "Y"
+```
 
+```ts
 // 重要
 type NoDistrubate<T> = T & {}
 type UnionAsset<T> =  NoDistrubate<T> extends boolean ? true :false
 // 没有分发
 type s = UnionAsset<true | false>  // true
-
 ```
+#### ⭐转发本质
+<blue>谁在 extends 前面谁被分发</blue>
 
+`T extends U` 那么 `T` 会被分发    
+`U extends T` 那么 `U` 会被分发  
+
+```ts
+type Extract2<T, U> = U extends T ? string : number;
+
+// 'a' extends "a" | 'b' extends "a"  => string | number
+type z = Extract2<"a", "a" | 'b'> // string | number
+
+// 'a' extends "a" | 'b'  => string
+type z1 = Extract2<"a" | "b" , "a" > // string
+```
 ## enum(枚举)
 
 ### 扩展
@@ -908,7 +1010,7 @@ enum Status {
 ```
 
 #### 获取枚举的 key 类型
-
+本质是把 `enum` 当做对象来看待
 ```ts
 type StatusKey = keyof typeof Status;
 // 'SUCCESS' | 'DANGER' | 'WARNING'
@@ -925,7 +1027,7 @@ type StatusVal = `${Status}`;
 const valArr: StatusVal[] = ["success", "danger", "warning"]; // passed
 ```
 
-## assets
+## assets(断言)
 
 保证后续代码的安全执行,可以在后面推导出具体的类型
 
@@ -969,13 +1071,13 @@ interface Person {
 type PickKeysByValues<T extends object,U>={
   [K in keyof T as T[K] extends U ? never : K]:T[K]
 }
-
+// type C = {
+//     age: number;
+// }
 type C = PickKeysByValues<Person,string>
 ```
 
-
-
-## 类型声明文件
+## ⭐类型声明文件
 ### 声明对象
 ```ts
 let result = myLib.makeGreeting("hello, world");
@@ -983,7 +1085,7 @@ console.log("The computed greeting is:" + result);
 let count = myLib.numberOfGreetings;
 ```
 
-使用 `namespace` 以key-value形式声明
+使用 `namespace` 以 `key-value` 形式声明
 ```ts
   declare namespace myLib {
   function makeGreeting(s: string): string;
@@ -1017,6 +1119,7 @@ class SpecialGreeter extends Greeter {
   }
 }
 ```
+定义 `class`
 ```ts
   declare class Greeter {
   constructor(greeting: string);
@@ -1034,7 +1137,7 @@ mock({
   "@type":12321
 })
 ```
-和其他类型一样,需要 export 导出
+和其他类型一样,需要 `export` 导出
 ```ts
 declare module "Mock" {
   export interface IMock {
@@ -1080,7 +1183,7 @@ interface ElementCSSInlineStyle {
     readonly style: CSSStyleDeclaration;
 }
 ```
-所以 `HTMLElement` 是 `Element` 的子集
+所以 `HTMLElement` 是 `Element` 的子集,`Element` 还包含 `SVG`, `Canvas` 等
 
 ## 类型体操
 
@@ -1111,7 +1214,8 @@ type cases = [
 ```ts
 //满足分发, 会进行分发
 type Extract<T, U> = T extends U ? T : never;
-
+// 必须是 T extends U["type"]
+// 因为 T 是联合类型,需要分发
 type LookUp<U extends { type: string }, T> = T extends U["type"]
   ? Extract<U, { type: T }>
   : never;
@@ -1247,10 +1351,8 @@ type MyReadonly2<T, K extends keyof T = keyof T> = {
 原因
 
 ```ts
-// {
-//   z:string
-// }
-
+// 交叉类型是一个是马老师的粉丝,一个是蔡徐坤的粉丝,他们共有的粉丝是交叉类型
+// 合并类型
 type X3 = {
   readonly z: string;
 } & {
@@ -1261,7 +1363,9 @@ type C<T> = {
   [k in keyof T]: T[k];
 };
 
-// 交叉类型是一个是马老师的粉丝,一个是蔡徐坤的粉丝,他们共有的粉丝是交叉类型
+// {
+//   z:string
+// }
 type g3 = C<X3>;
 ```
 
@@ -1421,13 +1525,11 @@ type TupleToUnion = ElementOf<[string, number, boolean]>; // 使用 infer
 ### Filter
 
 ```ts
-type Filter<T, U extends keyof any, F extends any[] = []> = T extends [
-  infer L,
-  ...infer R
-]
+type Filter<T, U extends keyof any, F extends any[] = []> = 
+ T extends [ infer L, ...infer R ]
   ? L extends U
-    ? Filter<R, U, [...F, L]>
-    : Filter<R, U, F>
+    ? Filter<R, U, [...F, L]> // 说明存在, 可以收集
+    : Filter<R, U, F> // 不收集
   : F; // 说明已经遍历完毕
 
 type x = Filter<["a", false, 1, "dev"], string>;
@@ -1439,11 +1541,10 @@ type x = Filter<["a", false, 1, "dev"], string>;
 在 `T extends  any` 中使用了分发
 
 ```ts
-type UnionToIntersection<T> = (
-  T extends any ? (arg: T) => void : never
-) extends (arg: infer U) => void
-  ? U
-  : never;
+type UnionToIntersection<T> = 
+  (T extends any ? (arg: T) => void : never) extends (arg: infer U) => void
+    ? U
+    : never;
 
 type Eg9 = UnionToIntersection<{ key1: string } | { key2: number }>;
 ```
@@ -1483,6 +1584,7 @@ type OptionalKeys<T> = {
 type Eg2 = {} extends { key1: string } ? true : false;
 // Eg3 = true
 type Eg3 = {} extends { key1?: string } ? true : false;
+type Eg3 = { key1?: string } extends {} ? true : false;
 ```
 
 ### Promise 数组
@@ -1506,7 +1608,7 @@ let PromiseAry: C<N> = [
 ];
 ```
 
-不能使用 `type x =  Promise<N[number]>`,否则会变成
+因为 `N[number] = number | string | boolean`,所以不能使用 `type x =  Promise<N[number]>`,否则会变成
 `type x = Promise<string | number | boolean>`
 
 ### 🚩ParseQueryString
@@ -1520,6 +1622,7 @@ MergeParams<{a:1}, MergeParams<{b:1}, MergeParams<{c:3},{a:2}>>>
 ```
 
 ```ts
+// 如果两个 value值 相同的话,只需要一个
 type MergeValues<One, Other> = One extends Other ? One : [One, Other];
 
 type MergeParams<
@@ -1615,6 +1718,46 @@ const c203 = (): Counter => {
   return c;
 };
 ```
+### all & race
+
+```ts
+interface PromiseConstructor {
+ all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>;
+
+ race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>;
+}
+```
+
+Iterable
+```ts
+interface Iterable<T> {
+    [Symbol.iterator](): Iterator<T>;
+}
+```
+
+await
+```ts
+type X<T> = T extends null | undefined
+  ? T
+  : T extends object & {
+      then(onfulfilled: (args: infer F) => any, onrejected: any):any;
+    } // 判断是否是promise
+  ? F extends (v: infer V) => any // 判断then的参数是否是函数
+    ? V
+    : F
+  : T;
+
+type x2 = X<Promise<10>>; // 10
+```
+PromiseLike
+```ts
+interface PromiseLike<T> {
+    then<TResult1 = T, TResult2 = never>(
+        onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, 
+        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null):  PromiseLike<TResult1 | TResult2>;
+}
+```
+
 
 ## 应用
 
@@ -1630,7 +1773,9 @@ const x = { ...pt, ...id };
 // 或者使用 Object.assign
 let z = {};
 const x = Object.assign(z, pt, id);
+// 无法获取提示
 z; // [!code error]
+// 可以获取提示
 x; //[!code ++]
 ```
 
@@ -1654,6 +1799,8 @@ type f = (ILogInUserProps | IUnLoginUserProps) & { city: string };
 let a: f = {
   isLogin: false,
   name: "123",
+  from:"",
+  sex:0,
   age: 12,
   city: "",
 };
@@ -1671,8 +1818,18 @@ interface User {
 }
 
 // 拿出其他值 & 让这两个值 变成可选
+// Omit<T, S> 只剩下 name
 type C<T, S extends keyof T> = Omit<T, S> & Partial<Pick<T, S>>;
 
+type Computed<T> = {
+  [L in keyof T]: T[L]
+}
+
+// type d = {
+//     name: string;
+//     age?: number | undefined;
+//     hobby?: string | undefined;
+// }
 type d = Computed<C<User, "age" | "hobby">>;
 ```
 
@@ -1749,8 +1906,31 @@ const obj10: QueryParams = {
   name: "zs",
 };
 ```
+和上文类型重复
+```ts
+const str = "age=12&name=zs";
 
-### 对象重载
+let s = {
+  name: "zs",
+  age: "12",
+};
+
+
+type ParseParams<S> = S extends `${infer F}=${infer L}` ? {
+  [K in F]: L;
+}: {} ;
+
+type Merge<T,O> = {
+  [ k in keyof T | keyof O ]: 
+    k extends keyof T ?  T[k] : k extends keyof O ? O[k] : never
+}
+
+type P<S extends string> = S extends `${infer F}&${infer L}` ? Merge<ParseParams<F>,P<L>> : ParseParams<S>
+
+type x = P<typeof str>
+```
+
+### 🚩对象重载
 
 ```ts
 type Props = {
@@ -1781,33 +1961,23 @@ let s2: Props = {
 ### 字符串拼接
  此处必须使用拼接的这种形式,如果使用相加的形式，会转变成字符串
 ```ts
-  const addOrMinus = (monthOryear: "month" | "year", addOrMinus: "+" | "-") => {
-  let time = new Date(tempTime.year, tempTime.month, tempTime.date);
+const addOrMinus = (monthOryear: "month" | "year", addOrMinus: "+" | "-") => {
+  type N = `${"year" | "month"}${"+" | "-"}`;
 
-  type N = `${"year" | "month"}${"+" | "-"}`
-  let map = new Map<N, Function>([])
-  map.set('year+', function () {
-    tempTime.year = time.getFullYear() + 1;
-  })
-  map.set('year-', function () {
-    tempTime.year = time.getFullYear() - 1;
-  })
+  let map = new Map<N, Function>([]);
 
-  map.set('month+', function () {
-    let m = time.getMonth() + 1;
-    const c = time.setMonth(m);
-    tempTime.month = new Date(c).getMonth();
-  })
+  map.set("year+", function () {});
+  map.set("year-", function () {});
 
-  map.set('month-', function () {
-    let m = time.getMonth() - 1;
-    const c = time.setMonth(m);
-    tempTime.month = new Date(c).getMonth();
-  })
+  map.set("month+", function () {});
 
-  let fn = map.get(`${monthOryear}${addOrMinus}`); //[!code hl]
-  fn?.()
-}
+  map.set("month-", function () {});
+
+  let x = `${monthOryear}${addOrMinus}`;
+
+  let fn = map.get(`${monthOryear}${addOrMinus}`);
+  let fn2 = map.get(monthOryear + addOrMinus);
+};
 ```
 
 ### 不允许传入某种类型
@@ -1819,4 +1989,32 @@ function log<T>(x:T extends number ? never : T){ }
 log(10) //[!code error] // 类型 number 的参数不能赋给类型“never”的参数
 log({})
 log("10")
+```
+### zip
+
+```ts
+type Zip<
+  S extends unknown[],
+  T extends unknown[],
+  Res extends any[] = []
+> = S extends [infer F, ...infer R]
+  ? T extends [infer F1, ...infer R1]
+    ? Zip<R, R1, [...Res, [F, F1]]>
+    : Zip<R, undefined[], [...Res, [F, undefined]]> // 有 S 没有 T
+  : T extends [infer F1, ...infer R1]
+  ? Zip<undefined[], R1, [...Res, [undefined, F1]]>// 有 T 没有 S
+  : Res;
+
+type x = Zip<[1, 2, 3], [3, 4, "5", 5]>;
+```
+
+```js
+function zip(source: Array<number>, target: Array<number>) {
+  if (!source.length && !target.length) return [];
+  let [first, ...rest] = source;
+  let [first1, ...rest1] = target;
+  return [[first, first1], ...zip(rest, rest1)];
+}
+// [[1,1],[2,2],[3,3],[undefined,4]]
+let r = zip([1, 2, 3], [1, 2, 3, 4, 5]); 
 ```
