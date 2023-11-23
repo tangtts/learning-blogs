@@ -12,7 +12,7 @@
 
 ## setup 指令
 
-```txt
+```vue
 import vWatermask from "./plugins/watermask";
 <div v-watermask="a"></div>
 ```
@@ -242,10 +242,10 @@ function mount(component: Component): MountInstance {
 <img src="@img/原始动态访问结果.png"/>
 
 **原因是打包之后路径发生变化**
-### vite 自动转换路径
+### 会发生 vite 自动转换路径的情况
 1. css 中的静态路径
-2. img 中的 src静态路径 (非 v-bind)
-3. 使用 `import()` 语句，打包之后会附带一个js文件
+2. img 中的 src 静态路径 (非 v-bind)
+3. 使用 `import()` 语句，打包之后会附带一个 js 文件
 ### 解决办法
 1. 直接当做一个模块引用
    返回的是打包之后的路径 
@@ -259,6 +259,7 @@ function mount(component: Component): MountInstance {
   <img src="@img/动态访问办法3.png"/>
      
 ## 在 `.vue`文件中使用 `tsx`
+`lang` 直接定义为 `tsx`
 ```vue
  <template>
    <div>

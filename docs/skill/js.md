@@ -19,8 +19,8 @@ obj[obj.up = 0] = "up" // obj[0] = 'up'
 
 ## 设置字符串形参
 ```js
-  // 如果传 slow 字符串的话，其实就是传 600 默认值，也可以传固定时间
-  let speeds = {
+// 如果传 slow 字符串的话，其实就是传 600 默认值，也可以传固定时间
+let speeds = {
   	slow:600,
   	fast:500
 }
@@ -49,11 +49,11 @@ num = ++ num || 1
 // ++undefined s是 NaN，属于 falsy 值
 ```
 
-## 统一导出
-`⭐default` 可以看成是一个关键字,可以使用 `as` 关键字来重命名
+## ⭐统一导出
+`default` 可以看成是一个关键字,可以使用 `as` 关键字来重命名
 ```js
  // 在 home.js 中使用到的 export default
-export { default as Home} from "./Home.js"
+export { default as Home } from "./Home.js"
 // 本质是是下面的简写
 import { default as Home } from "./Home.js"
 export Home
@@ -63,26 +63,54 @@ import { Home } fromr "../xxx"
 ## do-while 优化
  有大量的 if 条件语句,可以使用 do while
 ```js
-let flag =false
-if(a == 3){
-	if(b == 4){
-		if(c == 5){
-			flag = true
-		}
-	}
+function fn(i) {
+  let msg = "";
+  do {
+    if (i < 0) {
+      msg = `负数:${i}`;
+      break;
+    }
+
+    if (i === 0) {
+      msg = `零：${i}`;
+      break;
+    }
+
+    if (i > 0) {
+      msg = `正数:${i}`;
+    }
+
+    if (i % 2 === 0) {
+      msg = `偶数:${i}`;
+      break;
+    }
+
+    if (i % 2 === 1) {
+      msg = `奇数:${i}`;
+      break;
+    }
+    
+  } while (false);
+  console.log(msg);
 }
-// 使用 do while 优化
-do {
-	if(a !== 3){
+```
+## switch/case优化
+```js
+const age = 26;
+switch (true) {
+	case isNaN(age):
+		console.log("not a number");
 		break;
-	}
-	if(b!== 4){
+	case (age < 18):
+		console.log("under age");
 		break;
-	}
-	//更加的清楚，如果是在函数中，没有后续条件判断了，可以直接 return 
-	// 使用 switch case 就不管用了，Switch 对于单一变量可用
-	flag = true
-}while(false)
+	case (age >= 18):
+		console.log("adult");
+		break;
+	default:
+		console.log("please set your age");
+		break;
+}
 ```
 ## filter 过滤下标
 ```js
@@ -118,7 +146,9 @@ for (let index = 0; index < array.length; index++) {
 
 scrollHeight = 等于该元素在不使用滚动条的情况下为了适应视口中所用内容所需的最小高度  
 可视高度 + 滚动条在 Y 轴上的滚动距离 = 总高度    
-clientHeight + scrollTop === scrollHeight;
+clientHeight + scrollTop === scrollHeight;  
+
+*scrollHeight表示该元素内部内容的总高度，包括因滚动而不可见的溢出内容。它以像素为单位返回高度*
 ```js
 const dom = document.getElementById('scrollElement');
 
@@ -126,12 +156,13 @@ dom.addEventListener('scroll', () => {
 	const clientHeight = dom.clientHeight;
 	const scrollTop = dom.scrollTop;
 	const scrollHeight = dom.scrollHeight;
+
 	if (clientHeight + scrollTop === scrollHeight) {
 		console.log('竖向滚动条已经滚动到底部')
 	}
 })
 ```
-
+通过 `IntersectionObserver` 判断元素是否在可视区域
 ```vue
 <template>
   <div v-if="!has_more">暂无更多数据</div>
@@ -158,8 +189,6 @@ dom.addEventListener('scroll', () => {
   })
 </script>
 ```
-主要利用了 `IntersectionObserver`
-
 ## 按位与 判断奇偶
 ⭐按位与（&）运算符在两个操作数对应的二进位都为 1 时，该位的结果值才为 1(**必须同时为 1 才为 1**)  
 
@@ -173,25 +202,6 @@ dom.addEventListener('scroll', () => {
 
 	3 & 1 // 1
 	5 & 1 //1
-```
-
-## switch/case使用区间
-```js
-const age = 26;
-switch (true) {
-	case isNaN(age):
-		console.log("not a number");
-		break;
-	case (age < 18):
-		console.log("under age");
-		break;
-	case (age >= 18):
-		console.log("adult");
-		break;
-	default:
-		console.log("please set your age");
-		break;
-}
 ```
 
 ## 强制重排
@@ -267,6 +277,7 @@ const openPanel = () => {
 	// el.offsetHeight // [!code ++]
 	// el.style.height = h + 'px' // [!code ++]
 	// 或者使用
+	// requestAnimationFrame 浏览器下一次重绘之前执行
   requestAnimationFrame(() => {  // [!code ++]
     el.style.height = h + 'px' // [!code ++]
   }) // [!code ++]
@@ -303,7 +314,7 @@ Object.defineProperty(config, x, {
 	}
 })
 ```
-可以用在某些设置值的情况,不用自己判断
+可以用在某些设置值的情况,不用自己判断，相当于代理模式
 
 ## groupBy
 
@@ -370,4 +381,16 @@ const todosForUserMap = todos.reduce((accumulator, todo)=>{
 	if (!accumulator[todo.userId]) accumulator[todo.userId] = [todo];
 	return accumulator;
 },{})
+```
+因为 `prev[cur]++` 是 `NaN`,所以会执行 `prev[cur] = 1`  
+由于 `,` 运算符优先级较低,所以要用`()`包裹
+```ts
+const str = "abcdefa"
+
+const restult = [...str].reduce(
+			(prev,cur)=>(prev[cur]++ || (prev[cur] = 1),prev),{}
+	   )
+
+// { a: 2, b: 1, c: 1, d: 1, e: 1, f: 1 }
+restult
 ```

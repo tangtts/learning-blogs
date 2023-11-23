@@ -46,6 +46,63 @@ PO
 
 <img src="@backImg/nestCore.jpeg"/>
 
+## IOC / DI
+
+我们把IOC想像成一个容器，程序初始化的时候会扫描 class 上声明的依赖关系，然后把这些 class 都给 new 一个实例放到容器里。  
+
+创建对象的时候，还会把它们依赖的对象注入进去。这种依赖注入的方式叫做 Dependency Injection，简称 DI。本来是手动 new 依赖对象，然后组装起来，现在是声明依赖了啥，等待被注入。
+
+从主动创建依赖到被动等待依赖注入，这就是 Inverse Of Control，反转控制。
+
+```ts
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class AppService {
+  getHello(): string {
+    return 'Hello World!';
+  }
+}
+```
+它有一个 AppService 声明了 @Injectable，代表这个 class 可注入，那么 nest 就会把它的对象放到 IOC 容器里。
+
+```ts
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
+
+@Controller()
+export class AppController {
+  constructor(private readonly appService: AppService) {}
+
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
+  }
+}
+```
+AppController 声明了 @Controller，代表这个 class 可以被注入，nest 也会把它放到 IOC 容器里。
+
+```ts
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+
+@Module({
+  imports: [],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+```
+
+通过 @Module 声明模块，其中 controllers 是控制器，只能被注入。
+
+providers 里可以被注入，也可以注入别的对象，比如这里的 AppService。
+
+### DI
+从 自己 new 到 IOC 容器帮你创建
+
+
 ## 装饰器
 ### 内置装饰器
 
@@ -102,7 +159,7 @@ createOne(@Body() body) {
   }
 ```
 #### passthrough
-通常情况下，Nest.js会自动处理控制器方法返回的数据并将其转换为响应对象。然而，有时你可能需要更精细地控制响应过程，例如手动设置响应头、状态码或发送特定格式的响应体等。这时，你可以使用@Res({ passthrough: true}) res: Response来获取响应对象并自行操作。
+通常情况下，Nest.js会自动处理控制器方法返回的数据并将其转换为响应对象。然而，有时你可能需要更精细地控制响应过程，例如手动设置响应头、状态码或发送特定格式的响应体等。这时，你可以使用`@Res({ passthrough: true}) res: Response` 来获取响应对象并自行操作。
 ```ts
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
@@ -113,12 +170,13 @@ export class ExampleController {
   exampleRoute(@Res({ passthrough: true }) res: Response) {
     // 对响应对象进行操作
     res.set('Custom-Header', 'Hello');
-    res.status(200).json({ message: 'Example response' }); // 如果不传递 passthrough,请求就会挂起
+    // 如果不传递 passthrough,请求就会挂起
+    res.status(200).json({ message: 'Example response' }); 
   }
 }
 ```
 
-##### [状态码 HttpCode](https://docs.nestjs.cn/9/controllers?id=%e7%8a%b6%e6%80%81%e7%a0%81)
+##### [🔗状态码 HttpCode](https://docs.nestjs.cn/9/controllers?id=%e7%8a%b6%e6%80%81%e7%a0%81)
 ```typescript
 @Post()
 @HttpCode(204)  // [!code hl]
@@ -128,7 +186,7 @@ create() {
 }
 ```
 
-##### [Headers](https://docs.nestjs.cn/9/controllers?id=headers)
+##### [🔗Headers](https://docs.nestjs.cn/9/controllers?id=headers)
 ```typescript
 @Post()
 @Header('Cache-Control', 'none')
@@ -154,6 +212,7 @@ findOne(id: string) {
       //     "message": "Coffee #10 not found"
       // }
       throw new HttpException(`Coffee #${id} not found`, HttpStatus.NOT_FOUND); // [!code hl]
+
        throw new NotFoundException(`Coffee #${id} not found`);// [!code hl]
     }
     return coffee;
@@ -176,16 +235,17 @@ findOne(id: string) {
 ```
 
 ### 自定义装饰器
-#### [路由参数装饰器](https://docs.nestjs.cn/8/customdecorators?id=%e8%87%aa%e5%ae%9a%e4%b9%89%e8%b7%af%e7%94%b1%e5%8f%82%e6%95%b0%e8%a3%85%e9%a5%b0%e5%99%a8)
+#### [🔗路由参数装饰器](https://docs.nestjs.cn/8/customdecorators?id=%e8%87%aa%e5%ae%9a%e4%b9%89%e8%b7%af%e7%94%b1%e5%8f%82%e6%95%b0%e8%a3%85%e9%a5%b0%e5%99%a8)
 
-定义
+定义,使用 `createParamDecorator`
 ```typescript
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export const User = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
-  const request = ctx.switchToHttp().getRequest();
-  console.log(data,"data")
-  return "jjjj";
+export const User = createParamDecorator((data: unknown, ctx: ExecutionContext)
+  => {
+    const request = ctx.switchToHttp().getRequest();
+    console.log(data,"data")
+    return "jjjj";
 });
 ```
 使用自定义装饰器，对 page、参数进行判断
@@ -195,8 +255,8 @@ export const User = createParamDecorator((data: unknown, ctx: ExecutionContext) 
     @User('page')  @Query('page') page: number,
     @Query('limit', new DefaultValuePipe(10)) limit: number,
   ) {
-    // 如果请求中没有提供page参数或page参数的值为undefined，则page将被设置为默认值1
-    // 如果请求中没有提供limit参数或limit参数的值为undefined，则limit将被设置为默认值10
+  // 如果请求中没有提供page参数或page参数的值为undefined，则page将被设置为默认值1
+  // 如果请求中没有提供limit参数或limit参数的值为undefined，则limit将被设置为默认值10
     return `Finding cats. Page: ${page}, Limit: ${limit}`;
   }
 
@@ -290,7 +350,7 @@ import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 
 
 
-### [装饰器聚合](https://docs.nestjs.cn/8/customdecorators?id=%e8%a3%85%e9%a5%b0%e5%99%a8%e8%81%9a%e5%90%88)
+### [🔗装饰器聚合](https://docs.nestjs.cn/8/customdecorators?id=%e8%a3%85%e9%a5%b0%e5%99%a8%e8%81%9a%e5%90%88)
 > 多个装饰器的组合
 ```typescript
 import { applyDecorators } from '@nestjs/common';
@@ -314,11 +374,12 @@ findAllUsers() {}
 
 ### 路由守卫获取自定义装饰器
 
+`SetMetadata` 属于元编程
 > custom-decorator.ts
 定义自定义装饰器 `require-login`
 ```ts
 import { SetMetadata } from "@nestjs/common";
-export const  RequireLogin = () => SetMetadata('require-login', true);
+export const RequireLogin = () => SetMetadata('require-login', true);
 ```
 
 在 `controller` 中使用自定义装饰器
@@ -330,6 +391,7 @@ export class AController {
   constructor(private readonly aService: AService) {}
 }
 ```
+注册守卫, 因为要在守卫中使用 `自定义装饰器` 的属性
 > app.module.ts
 ```ts
 import { APP_GUARD } from "@nestjs/core";
@@ -342,9 +404,12 @@ providers: [
   },
 ]
 ```
+
+`this.reflector` 反射器
+
 > LoginGuard.ts
 ```ts
-import {Request} from "express"
+import { Request } from "express"
 declare module 'express' {
   interface Request {
     user: {
@@ -364,7 +429,7 @@ export class LoginGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request: Request = context.switchToHttp().getRequest();
-
+ 
     const requireLogin = this.reflector.getAllAndOverride("require-login", [ // [!code hl]
       context.getClass(), // [!code hl]
       context.getHandler(), // [!code hl]
@@ -406,6 +471,7 @@ export class LoginGuard implements CanActivate {
 })
 export class UserModule {}
 ```
+然后使用 `Inject` 注入到 `Guard` 中
 > PermissionGuard.ts
 ```ts
 import { UserService } from "./user/user.service";

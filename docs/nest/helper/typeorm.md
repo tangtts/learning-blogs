@@ -268,6 +268,18 @@ export class User {
 
 ----
 
+如果想关联自己指定属性,需要在 `JoinColumn` 添加 `name` 属性
+
+```ts
+@Entity()
+export class User {
+
+  @OneToOne(() => Profile)
+  @JoinColumn({name:Profile.name})
+  profile: Profile;
+}
+```
+
 #### 一对多
 让我们以User 和 Post 实体为例。 User 可以拥有多张 Post，但每张 Post 仅由一位 user 拥有。
 

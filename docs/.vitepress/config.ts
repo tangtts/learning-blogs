@@ -160,6 +160,11 @@ export default defineConfig({
             link: "/source/emotion/emotion",
             activeMatch: "/source/emotion",
           },
+          {
+            text: "class继承源码",
+            link: "/source/继承",
+            activeMatch: "/source/继承",
+          },
         ],
       },
     ],

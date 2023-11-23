@@ -1,8 +1,8 @@
 # hook
-## [useContext🔗](https://react.dev/reference/react/useContext#usage) 
-`useContext` 是一个 React Hook，它允许你在 React 组件之间共享数据，而不必显式地传递 props。
+## [🔗useContext](https://react.dev/reference/react/useContext#usage) 
+它允许你在 React 组件之间共享数据，而不必显式地传递 `props`。
 
-```jsx {1-4}
+```jsx {1-4,10}
 export const ThemeContext = 
   createContext<[
     string,React.Dispatch<React.SetStateAction<string>>
@@ -11,7 +11,8 @@ export const ThemeContext =
 function App(){
   const [theme, setTheme] = useState('light');
   return (
-    <ThemeContext.Provider value={[theme,setTheme]}>
+    // 传递的是数组
+    <ThemeContext.Provider value={[theme,setTheme]}> 
       {/* 路由 */}
     </ThemeContext.Provider>
   )
@@ -19,8 +20,9 @@ function App(){
 ```
 在 其他子组件中,使用 `useContext`
 ```jsx
-import {ThemeContext} from "../../App"
+import { ThemeContext } from "../../App"
 export function Theme(){
+  // 因为传递的是数组,所以接收的时候也是数组形式
   const [theme,setTheme] =  useContext(ThemeContext) // [!code hl]
   return (
     <Button onClick={()=>setTheme('dark')}>切换theme</Button>
@@ -252,18 +254,22 @@ const x = useId()
 2. 子组件使用 `forwardRef` 包裹
 3. 子组件使用 `useImperativeHandle` 暴露出方法
 
+绑定 `ref` 变量
+
 ```tsx
  const todoRef = useRef<ReactElement>(null);
+
  const handleClick = ()=>{
   todoRef.current?.doClick()
  }
+
   <button type="button" onClick={handleClick}>
     Edit
   </button>
 
   <Todo ref={todoRef}></Todo>
 ```
-
+使用 `forwardRef` 包裹
 ```tsx
 export default forwardRef(function Todo(props,ref){
     useImperativeHandle(ref,()=>{
