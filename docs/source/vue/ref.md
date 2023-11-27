@@ -114,8 +114,40 @@ setTimeout(() => {
 **因为 `ref` 并不是使用的 `porxy` 监控属性变化**   
  不论怎么修改,只要使用 `.value` 就会触发 `get/set` 访问器方法  
  **整个过程和引用地址修改无关**
+### 解构为何不失效
 
- ## toRef / toRefs
+```ts
+class RefImpl {
+  private _value: any;
+  constructor(value) {
+    this._value = value
+  }
+  get value() {
+    console.log("get")
+    return this._value
+  }
+  set value(newVal) {
+    this._value = newVal;
+    console.log("set")
+  }
+}
+function ref(value) {
+  return new RefImpl(value);
+}
+let o = {
+  a: ref("f")
+}
+let { a } = o
+console.log(a.value = 12)
+```
+只要不把`value` 解构出来，就不会失效
+
+```ts
+let { a:{value:x} } = o
+x = "b"
+```
+
+## toRef / toRefs
 
 ```js
 class ObjectRefImpl {

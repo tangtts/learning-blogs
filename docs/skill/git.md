@@ -16,12 +16,15 @@
   git commit -a -m 
 ```
 ### 仓库
+<img src="@other/git区域.png"/>
 - 工作区(working tree): 本地编辑器
 - 暂存区(index):git add操作后进入暂存区，可用git status查看
 - 本地仓库(repository):git commit 后进入本地仓库
 
 
 ### 修改
+
+<img src="@other/git目录.png"/>
 
 #### git restore
 ```bash
@@ -139,6 +142,7 @@ git rebase --continue
 git checkout dev
 ```
 ### 添加并且切换分支
+创建 `dev` 分支并且切换到 `dev` 分支
 ```bash
 git checkout -b dev
 ```
@@ -217,9 +221,22 @@ git stash list
 git stash pop
 # 使用分支，但不删除
 git stash apply
+# 使用指定版本号，因为你可能add多次 
+git stash apply 版本号
+
 # 删除分支
 git stash drop
+# 删除指定分支
+git stash drop 版本号
 ```
+### clone
+#### 下载指定分支
+这将会把 `yourrepository` 仓库的 `develop` 分支的代码下载到你的本地计算机上
+```bash
+git clone -b develop https://github.com/yourusername/yourrepository.git
+```
+
+
 ## gitignore
 
 ``` 

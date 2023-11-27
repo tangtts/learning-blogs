@@ -90,6 +90,11 @@ export default defineConfig({
             activeMatch: "/skill/快捷键",
           },
           {
+            text: "linux",
+            link: "/skill/linux",
+            activeMatch: "/skill/linux",
+          },
+          {
             text: "",
             items: [
               { text: "英语", link: "/skill/英语", activeMatch: "/skill/英语" },
@@ -342,7 +347,9 @@ export default defineConfig({
             { text: "代码规范", link: "/skill/代码规范" },
             { text: "git", link: "/skill/git" },
             { text: "快捷键", link: "/skill/快捷键" },
-            { text: "英语", link: "/skill/英语" }
+            { text: "linux", link: "/skill/linux" },
+            { text: "英语", link: "/skill/英语" },
+            { text: "工具包", link: "/skill/工具包" },
           ],
         },
       ],

@@ -272,3 +272,40 @@ function mount(component: Component): MountInstance {
    };
  </script>
 ```
+## 注册
+### 全局注册
+> x-ui.ts
+```ts
+const components = [
+  Button,
+  Icon
+]
+
+const install = (app: App) =>{
+  comonents.forEach(component=>{
+    app.component(component.name,component)
+  })
+}
+
+export default {
+  install
+}
+```
+> main.ts
+
+```ts
+import Xui from "./x-ui"
+app.use(Xui)
+```
+### 局部注册
+> vue-shim.d.ts
+```ts
+declare module '*.vue' {
+  import { DefineComponent,App } from 'vue';
+  const component: ReturnType<typeof DefineComponent> & {
+    install(app: App): void;
+  };
+  
+  export default component;
+}
+```

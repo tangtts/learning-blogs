@@ -280,7 +280,19 @@ export class User {
 }
 ```
 
-#### 一对多
+#### 一对多 `oneToMany` / `ManyToOne`
+
+第一个参数是目标实体类，第二个参数是关系名称，第三个参数是关系类型(`eager`)
+
+```ts
+@Entity()
+class User {
+@OneToMany((_type) => Task, (task) => task.user, { eager: false })
+  tasks: Task[];
+}
+```
+只有当访问 `tasks` 时才会查询 `Task` 实体,如果 `{ eager: true }` 会自动执行查询  
+
 让我们以User 和 Post 实体为例。 User 可以拥有多张 Post，但每张 Post 仅由一位 user 拥有。
 
 > user.entity.ts
