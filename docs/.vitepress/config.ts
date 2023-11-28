@@ -331,7 +331,10 @@ export default defineConfig({
         {
           text: "spring-boot",
           collapsed: true,
-          items: [{ text: "spring 基础", link: "/java/spring-boot/index" }],
+          items: [
+            { text: "spring 基础", link: "/java/spring-boot/index" },
+            { text: "lombok", link: "/java/spring-boot/lombok" },
+          ],
         },
       ],
       skill: [

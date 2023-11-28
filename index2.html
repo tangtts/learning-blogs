@@ -7,56 +7,19 @@
   <title>Document</title>
   <style>
     .property {
-      width: 100px;
-      height: 100px;
-      background-color: antiquewhite;
-      padding: 10px;
-      border: 5px solid black;
-      border-width: 5px;
+      display: flex;
+    }
+    span{
+      flex: 1;
+      min-width: 0;
     }
   </style>
 </head>
-
 <body>
-
-  <div class="property"></div>
-  <script>
-
-
-    let p = document.querySelector('.property');
-    let r = p.getBoundingClientRect(); // 获取元素相对于视窗的位置
-    console.log(r)
-
-
-    if(x = 11){
-
-
-
-
-
-
-      
-    }
-
-    async function* fetchProducts() {
-
-      yield false
-      const productUrl = "https://fakestoreapi.com/products?limit=2";
-      const res = await fetch(productUrl)
-      const data = await res.json()
-      yield data;
-    }
-
-    async function main() {
-      const itr = fetchProducts();
-      await itr.next();
-      let r = await itr.next()
-      console.log("🚀 ~ file: index2.html:81 ~ main ~ r:", r);
-      let j = await itr.next()
-      console.log("🚀 ~ file: index2.html:83 ~ main ~ j:", j);
-    }
-    main()
-  </script>
+  <div class="property">
+    <span>aaa</span>
+    <span>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</span>
+  </div>
 </body>
 
 </html>

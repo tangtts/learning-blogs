@@ -197,4 +197,49 @@ System.out.println(s.compareTo(s1)); // 32
 
 System.out.println(s.compareToIgnoreCase(s1)); // 0
 ```
+## StringUtils
 
+
+
+### isEmpty
+判断字符是否为空,但是不包含空格
+
+```java
+isEmpty(null)------true
+isEmpty("")------true
+isEmpty(" ")------false
+isEmpty("aa")----false
+```
+源码
+```java
+public static boolean isEmpty(String str) {
+   return str == null || str.length() == 0;
+}
+```
+
+### isBlank
+去除空格之后再去判断
+```java
+isBlank(null)------true
+isBlank(" ")------true
+isBlank(" ")------true
+isBlank("      ")------true
+isBlank("\t \n \f \r")------true      //制表符、换行符、换页符和回车符
+isBlank("qqqq")------false
+```
+源码
+```java
+public static boolean isBlank(String str) {
+  int strLen;
+  if (str != null && (strLen = str.length()) != 0) {
+      for(int i = 0; i < strLen; ++i) {// 判断字符是否为空格、制表符、tab
+          if (!Character.isWhitespace(str.charAt(i))) {
+              return false;
+          }
+      }
+      return true;
+  } else {
+      return true;
+  }
+}
+```
