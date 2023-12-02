@@ -394,3 +394,95 @@ const restult = [...str].reduce(
 // { a: 2, b: 1, c: 1, d: 1, e: 1, f: 1 }
 restult
 ```
+## 判断类型
+```js
+// NaN 也是一个number 类型
+typeof NaN == number
+```
+可以使用如下方式判断类型
+```ts
+// [object Array]
+ Object.prototype.toString.call([])
+```
+`{}` 是一个实例
+```ts
+// [object Array]
+let r = ({}).toString.call([])
+```
+null / undefined 也能判断
+```js
+// [object Undefined]
+Object.prototype.toString.call(undefined) 
+// [object Null]
+Object.prototype.toString.call(null) 
+```
+上述写法在[JQuery](https://www.bilibili.com/video/BV1Jv411H7Te?t=616.8&p=18)中找到,同时在jquery 中还做了一层映射,返回了一个简写
+
+```js
+let class2type = {};
+let r = [ 'Boolean', 'Number', 'String', 'Array' ]
+r.forEach(name=>{
+  class2type[`[object ${name}]`] = name.toLowerCase()
+})
+
+// [object Array]
+let c =  Object.prototype.toString.call([])
+
+// class2type
+// { '[object Boolean]': 'boolean',
+//   '[object Number]': 'number',
+//   '[object String]': 'string',
+//   '[object Array]': 'array' }
+let e = class2type[c] // array
+```
+## 判断对象/数组 是否为空
+只需要使用 `for in` 判断即可  
+**for in 能遍历原型链上的方法或者属性,前提是自己定义，而不是系统定义。自己定义的**
+自己定义的 `enumerable` 是 true
+```js
+Object.defineProperty(obj, "key2", {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: "static",
+});
+```
+
+```js
+// let obj = {};
+let obj = [];
+function isEmptyObject(obj) {
+  for (let name in obj) {
+    return false;
+  }
+  return true;
+}
+let r = isEmptyObject(obj);
+```
+在数组上自己定义属性
+```js
+let obj = [];
+obj.__proto__.name = "zs"
+function isEmptyObject(obj) {
+  for (let name in obj) {
+    return false;
+  }
+  return true;
+}
+let r = isEmptyObject(obj);
+```
+在函数原型链上添加属性
+```js
+function obj(){};
+// 如果不添加则为 true
+obj.prototype.age = 10;
+
+function a(obj) {
+  for (let name in obj) {
+    return false;
+  }
+  return true;
+}
+let r = a(obj.prototype); // false
+```
+
