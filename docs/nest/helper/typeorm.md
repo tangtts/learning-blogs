@@ -232,6 +232,39 @@ const user = new User();
 user.profile = { name: "John", nickname: "Malkovich" };
 ```
 
+#### Date
+设置默认 `Date` 使用 `NOW`
+```ts
+class IncomeOrCost {
+  @Column({
+    nullable: false, 
+    default: () => 'NOW()',
+    comment: "支付时间",
+  })
+  payTime: Date;
+}
+```
+#### 重命名
+使用 `name` 重新命名 `column`
+```ts
+  @Column({type:'int', name: 'is_finish'}) 
+  isFinish: boolean;
+```
+
+#### Exclude 排除
+`@Exclude` 是属于 `class-transformer`
+```ts
+import { Exclude } from 'class-transformer';
+
+@Entity()
+export class Task {
+  
+@ManyToOne((_type) => User, (user) => user.tasks, { eager: false })
+@Exclude({ toPlainOnly: true }) // [!code ++]
+user: User;
+}
+```
+把 `user` 给去除掉,特别是一些 敏感信息，可以不返回给客户端  
 
 ### JoinColumn
 

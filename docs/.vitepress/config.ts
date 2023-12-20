@@ -4,6 +4,9 @@ import AutoImport from "unplugin-auto-import/vite";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 export default defineConfig({
   vite: {
+    server: {
+      port: 5001,
+    },
     plugins: [
       AutoImport({
         imports: ["vue"],
@@ -232,6 +235,10 @@ export default defineConfig({
               text: "关于",
               link: "/React/other",
             },
+            {
+              text: "周边库",
+              link: "/React/周边库",
+            },
           ],
         },
       ],
@@ -296,6 +303,7 @@ export default defineConfig({
         { text: "校验", link: "/nest/helper/校验" },
         { text: "jwt", link: "/nest/helper/jwt" },
         { text: "config", link: "/nest/helper/config" },
+        { text: "redis", link: "/nest/helper/redis" },
       ],
       backend: [
         {

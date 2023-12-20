@@ -411,6 +411,31 @@ export default function Page({ productId, referrer }) {
 ```
 上面的两个例子是完全等价的，好处是 `useCallback` 防止你额外创建一个嵌套函数
 
+### 计算属性
+其实有点类似于 `vue` 中的 `computed`   
+
+当 `stateA或者stateB` 发生改变时, `useMemo` 自动执行 
+```js
+const [stateA, setStateA] = useState(0)
+const [stateB, setStateB] = useState(0)
+
+
+const handleClick = (type: clickType) => {
+    switch (type) {
+      case 'a':
+        setStateA(stateA + 1)
+        break;
+      case 'b':
+        setStateB(stateB + 1)
+        break;
+    }
+}
+
+const c = useMemo(() => {
+    return stateA + stateB
+}, [stateA, stateB])
+```
+
 ## useReducer
 ```jsx
 const [state, dispatch] = useReducer(reducer, initialArg, init);

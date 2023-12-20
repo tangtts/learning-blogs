@@ -123,6 +123,23 @@ $border_color:#ccc;
 您绝对不需要仅在属性值中使用变量。不用写作 color: #{$accent}，您可以写作  color: $accent！
 :::
 
+也可以写入属性中
+
+```scss
+$positionType:(
+	top,
+	bottom,
+	left,
+	right
+);
+
+@each $position in $positionType{
+	.margin-#{$position}-auto {
+		margin-#{$position}: auto; // [!code hl]
+	}
+};
+```
+
 ## 嵌套
 
 scss识别一个属性以分号结尾时则判断为一个属性  
@@ -452,4 +469,27 @@ type-of((1px 2px 3px rgba(0,0,0,.3))) // list
 ### map(sass.map=js.json)
 ```scss
 type-of((a:1px,b:2px))    // map
+```
+
+### math
+
+:::tip
+如果 `key` 值为颜色属性的话,需要加上 `引号`
+:::
+```scss
+@use "sass:math";
+
+$colors:(
+ success: varibleColors.$successColor,
+ warning: varibleColors.$warningColor,
+ "red":red
+);
+$numbers: 50 100 200 300 400 500 600 700 800 900;
+@each $colorType,$color in $colors {
+	@each $number in $numbers {
+		.text-#{$colorType}-#{$number}{
+			color:darken($color: $color, $amount: math.div($number , 100)) //[!code hl]
+		}
+	} 
+}
 ```

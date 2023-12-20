@@ -272,6 +272,52 @@ function mount(component: Component): MountInstance {
    };
  </script>
 ```
+## css 文件
+
+### JS 中使用 `SCSS` 变量
+
+<blue> 必须定义为 `module` 格式</blue>
+
+> index.module.scss
+```scss
+$title:red;
+
+:export {
+  title:$title
+}
+```
+使用
+```vue
+<script setup>
+export default {
+  import config from "./index.module.scss"
+  // {title: 'red'}
+  console.log("🚀 ~ file: App.vue:10 ~ config:", config);
+}
+</script>
+```
+### SCSS 使用 JS 变量
+
+```js
+const currentBgColor = ref('#333333')
+const currentTextColor = ref('#FFFFFF')
+```
+
+```ts
+const onBtnClick = (bgColor: string, textColor: string) => {
+  currentBgColor.value = bgColor
+  currentTextColor.value = textColor
+}
+```
+```scss
+  .example {
+    --textColor: v-bind(currentTextColor);
+    --bgColor: v-bind(currentBgColor);
+    color: var(--textColor);
+    background: var(--bgColor);
+  }
+```
+
 ## 注册
 ### 全局注册
 > x-ui.ts

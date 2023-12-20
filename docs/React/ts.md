@@ -58,3 +58,32 @@ interface MyComponentProps {
   style: React.CSSProperties;
 }
 ```
+
+## forwardRef
+
+>todo.tsx
+```ts
+export default forwardRef(function Todo(props,ref) {
+   useImperativeHandle(ref,()=>{
+    return {
+      doClick(){
+        console.log("todoClick",123)
+      }
+    }
+  })
+})
+```
+> main.ts
+```tsx
+import {RefObject } from 'react'
+
+const todoRef:RefObject<{
+  doClick():void
+}> = useRef(null);
+
+const handleClick = () => {
+  if (todoRef.current) {
+    todoRef.current.doClick();
+  }
+};
+```

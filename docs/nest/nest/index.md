@@ -1,5 +1,12 @@
 # nest
+## IOC / DI
 
+`IOC`(Inverse Of Control) 是控制反转,反转的是对象的创建和调用的
+
+DI 是 `dependency Injection` 依赖注入,因为在容器中有很多对象，对象之间可以相互引用依赖，可以通过 `构造器` 注入，也可以通过 `set` 方式注入
+
+ioc 指代的是容器去实例化对象  
+di 指代的是对象之间相互引用
 ## 快捷键
 
 1. 生成完整的 `CRUD` 文件
@@ -262,7 +269,7 @@ export const User = createParamDecorator((data: unknown, ctx: ExecutionContext)
 
 // Finding cats. Page: jjjj, Limit: 10
 ```
-#### File
+#### [🔗File](https://docs.nestjs.com/techniques/file-upload)
 ##### 安装
 ```bash
 pnpm i multer
@@ -346,6 +353,37 @@ import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
   ) {
     // console.log(req.file,"fa",uploadDTO.name)
   }
+```
+可以在 `uploadFile` 上添加校验
+
+```ts
+@UploadedFile(
+  new ParseFilePipe({
+    validators: [
+      new MaxFileSizeValidator({ maxSize: 1000 }),
+      new FileTypeValidator({ fileType: 'image/jpeg' }),
+    ],
+  }),
+)
+file: Express.Multer.File,
+```
+也可以使用 `build` 进行联合
+
+```ts
+@UploadedFile(
+  new ParseFilePipeBuilder()
+    .addFileTypeValidator({
+      fileType: 'jpeg',
+    })
+    .addMaxSizeValidator({
+      maxSize: 1000
+    })
+    .build({
+      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
+    }),
+)
+file: Express.Multer.File,
+
 ```
 
 
