@@ -121,12 +121,12 @@ Promise.race([]).then(res => {
 ### await
 [🔗await使用](../Vue/functions/useFetch.html#使用-await-同步请求数据)  
 
-**可以模拟,只需要返回一个 `then` 函数,函数中返回一个 `promise` 即可**
+**可以模拟,只需要返回一个 `then` 函数**
 ```js
   function a() {
   return {
     then(onFull) {
-      return new Promise(resolve => resolve(onFull(10)));
+      return onFull(10);
     },
   };
 }
@@ -137,9 +137,33 @@ async function b() {
 
 b().then(
   res => {
-    console.log(res);
+    console.log(res); // 10
   }
 );
+```
+### [🔗any](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise/any)
+
+返回第一个 `成功` 的 `promise`，如果 `失败` 不管  
+
+与 `race` 不同的是，`race` 是返回第一个完成的 `promise`，不管他是不是 `成功` 或者是 `失败`
+
+```js
+const pErr = new Promise((resolve, reject) => {
+  reject("总是失败");
+});
+
+const pSlow = new Promise((resolve, reject) => {
+  setTimeout(resolve, 500, "最终完成");
+});
+
+const pFast = new Promise((resolve, reject) => {
+  setTimeout(resolve, 100, "很快完成");
+});
+
+Promise.any([pErr, pSlow, pFast]).then((value) => {
+  console.log(value);
+  // pFast 第一个兑现
+});
 ```
 
 ## [URLSearchParams](https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams)

@@ -119,6 +119,16 @@ export default defineConfig({
         text: "算法",
         items: [
           {
+            text: "算法",
+            link: "/algorithm/算法",
+            activeMatch: "/algorithm/算法",
+          },
+          {
+            text: "字符串",
+            link: "/algorithm/字符串",
+            activeMatch: "/algorithm/字符串",
+          },
+          {
             text: "数组",
             link: "/algorithm/数组",
             activeMatch: "/algorithm/数组",
@@ -139,14 +149,19 @@ export default defineConfig({
             activeMatch: "/algorithm/动规",
           },
           {
-            text: "单调栈",
-            link: "/algorithm/单调栈",
-            activeMatch: "/algorithm/单调栈",
+            text: "栈与队列",
+            link: "/algorithm/栈与队列",
+            activeMatch: "/algorithm/栈与队列",
           },
           {
             text: "链表",
             link: "/algorithm/链表",
             activeMatch: "/algorithm/链表",
+          },
+          {
+            text: "二叉树",
+            link: "/algorithm/二叉树",
+            activeMatch: "/algorithm/二叉树",
           },
           {
             text: "工作算法",
@@ -216,6 +231,7 @@ export default defineConfig({
             { text: "日期", link: "/JS/日期" },
             { text: "DOM", link: "/JS/DOM" },
             { text: "class", link: "/JS/class" },
+            { text: "其他", link: "/JS/其他" },
           ],
         },
       ],
