@@ -30,7 +30,7 @@ export class AppService {
 ### where 查询
 
 #### 查询单个条件
-
+使用对象形式
 ```ts
 let r = await this.userRepository.find({
   where:{
@@ -178,6 +178,14 @@ let r1 = await this.userRepository.find({
 ## 实体
 
 ### Column
+#### 唯一
+```ts
+@Column({
+ unique:true,
+ comment:"名称"
+})
+name: string;
+```
 #### enum
 ```ts
 export enum UserRole {
@@ -493,3 +501,7 @@ export class Role {
     permissions: Permission[] 
 }
 ```
+
+
+
+

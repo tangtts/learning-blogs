@@ -10,11 +10,6 @@
 - test：增加测试
 - chore：构建过程或辅助工具的变动
 
-### commit 提交
-```bash
-  # 不用加引号，随便写
-  git commit -a -m 
-```
 ### 仓库
 <img src="@other/git区域.png"/>
 - 工作区(working tree): 本地编辑器
@@ -51,8 +46,17 @@ git commit --amend
 # 如果 不加 m 会进入 编辑模式
  git commit --amend -m '重新修改'
 ```
+当发现这一次的 `commit` 需要和上一次的合并，可以执行下面代码
+```bash
+ git add .
+ git commit --amend --no-edit
+```
 
 #### git reset 
+
+<blue>reset  -- 重置 </blue>
+
+
 ```bash
 # 将暂存区的所有文件恢复到工作区
 git reset HEAD
@@ -66,6 +70,7 @@ git reset --hard
 git reset 
 git reset --mixed 
 ```
+
 ```bash
 # 回到过去的某个版本
 git reset --soft 158bd35
@@ -76,8 +81,30 @@ git reset --soft HEAD^
 # 回退N个版本
 git reset --soft HEAD~n
 ```
+
+#### git revert
+
+```bash
+  git revert -n commit-id
+```
+只会反做commit-id对应的内容，然后重新commit一个信息，不会影响其他的commit内容
+
+反做多个commit-id
+```bash
+git revert -n commit-idA..commit- idB
+```
+- 反做commit-idA到commit-idB之间的所有commit
+- 注意：使用-n是应为revert后，需要重新提交一个commit信息，然后在推送。如果不使用-n，指令后会弹出编辑器用于编辑提交信息
+
+#### Git reset和git revert的区别  
+git reset 是回滚到对应的commit-id，相当于是删除了commit-id以后的所有的提交，并且不会产生新的commit-id记录，如果要推送到远程服务器的话，需要强制推送-f  
+
+git revert 是反做撤销其中的commit-id，然后重新生成一个commit-id。本身不会对其他的提交commit-id产生影响，如果要推送到远程服务器的话，就是普通的操作git push就好了
+
+
 #### git rebase 
-使用git rebase –i xxxx（commit编号），此处的编号是合并编号后一个提交的内容开始
+使用 git rebase –i xxxx（commit编号），此处的编号是合并编号后一个提交的内容开始
+
 *i 是interactive(交互式 / 互动)*  
 - pick  的意思是要会执行这个 commit
 - squash(压扁)  的意思是这个 commit 会被合并到前一个 commit
@@ -123,6 +150,24 @@ git rebase --continue
 # 如果使用了 r
 	# 会进入另一个 编辑页面
 	# 修改之后不用 git rebase
+```
+#### git commit
+合并 add / commit 
+```bash
+git commit -am "easy"
+```
+#### git stash
+```bash
+ # 可以填写 stash 信息
+ git stash save cool
+```
+查看所有保存的信息
+```bash
+git stash list
+```
+使用对应的索引
+```bash
+ git stash apply 0
 ```
 
 ## 分支
