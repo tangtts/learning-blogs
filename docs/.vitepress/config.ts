@@ -67,6 +67,7 @@ export default defineConfig({
           { text: "mock", link: "/backend/mock", activeMatch: "/backend/mock" },
           { text: "nest", link: "/nest/nest/index", activeMatch: "/nest/" },
           { text: "java", link: "/java/base", activeMatch: "/java/base" },
+          { text: "sql", link: "/backend/sql", activeMatch: "/backend/sql" },
         ],
       },
       {
@@ -324,7 +325,7 @@ export default defineConfig({
       backend: [
         {
           text: "后端",
-          collapsed: true,
+          collapsed: false,
           items: [
             { text: "node", link: "/backend/node" },
             { text: "promise", link: "/backend/promise" },
@@ -332,6 +333,9 @@ export default defineConfig({
             { text: "任务队列", link: "/backend/任务队列" },
             { text: "加密", link: "/backend/加密" },
             { text: "mock", link: "/backend/mock" },
+            { text: "nest", link: "/nest/nest/index"},
+            { text: "java", link: "/java/base" },
+            { text: "sql", link: "/backend/sql" }
           ],
         },
       ],

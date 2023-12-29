@@ -1,4 +1,4 @@
-# 快捷键
+# 快捷键1
 
 ## 浏览器
 
@@ -7,8 +7,11 @@
 ```bash
 ctrl + l
 ```
-### 接受建议 
-接受第一个建议使用 右箭头 `->` 或者使用 `tab`
+### 接受建议
+右箭头 `->`12312
+```js
+ →
+```
 ### 切换命令
 上下箭头
 ```bash
@@ -16,23 +19,21 @@ ctrl + l
 ```
 ### 打开工具并进入 Console 面板
 ```bash
-ctrl + shift + j
+Ctrl + Shift + J
 ```
 
 ### 切换 `DevTools` 窗口的展示布局(即打开 F12 之后有用)
-布局是选择 左边 / 下边
 ```bash
 ctrl + shift + D
 ```
 ### 切换 DevTools 的面板
 
 ```bash
-ctrl + [  或者  ctrl + ]
+ctrl + [  或者 ctrl + ]
 ```
 
 ### $_
-
-引用上一次的变量值
+上一次的变量值
 
 <img src="@other/$_.png"/>
 
@@ -67,113 +68,33 @@ class Person {
 
 普通过滤只能过滤 `url` 路径
 
+### 重新发送 XHR 的请求
+
+
 ## vcsode
 
-### 代码片段（snippets）
+### 搜索记录
 
-```json
-	"header comment": { 
-		"scope": "javascript,typescript",
-		"prefix": "comment",
-		"body": [
-			"$BLOCK_COMMENT_START",
-			"* 作者:tsk",
-			"* fileName $TM_FILENAME",
-			"* Date:$CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
-			"$BLOCK_COMMENT_END"
-		],
-		"description": "Log output to console"
-	},
-```
-1. `header comment` 提示信息
-2. `scope` 作用范围
-   > 不指定是全部文件
-3. `prefix` 快捷键
-   > "prefix": [ "header", "stub", "copyright"], 使用数组可以同时设置多个快捷键
-4. `body` 代码片段
-   每一行作为json 中的一行，如果需要缩进，可以使用 `\t`，换行使用 `\n`
-   `$BLOCK_COMMENT_START / $BLOCK_COMMENT_END / LINE_COMMENT(行注释)` 代表注释开始与结束
-   `$TM_FILENAME` 当前文件名  
-   `$CURRENT_YEAR` 今年  
-5. `description` 提示信息
-
-[🔗所有系统内置变量可查看](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variables)
-
-
-```json
-"#ifndef HEADER … #define … #endif":{
-	"prefix": "defheader",
-	"body": "#ifndef ${1:${TM_FILENAME/(.*)\\.C$/ ${1:/upcase}_H/i}} \n#define $1 \n${2:header content}\n#endif\t// $1"
-},
-```
-使用变量 `${1} / ${2}` 作为光标的位置，其中 `${0}` 是光标最后的位置，同名作为一个整体  
-带有占位符
-```js
-struct ${1:name_t} {\n\t$2\n};
-```
-作为「Placeholder」的 name_t 一方面可以提供默认的结构名称，另一方面可以作为输入的提示。
-
-```js
-${1|one,two,three|}。
-```
-当光标跳转到该位置的时候，用户将会被提供多个值（one 或 two 或 three）以供选择。
-
-### 快速滚动
-
- 「 `alt` + 鼠标滚轮 」 比 简单的使用 鼠标滚轮 要快
-
-### 复制文件
-
-直接使用 `ctrl + c` 可以把另一个文件直接复制到项目中
-
-### F2
-
-对文件 `f2`,第一次是选中**文件名**，再按一次是选中**文件类型**，再按一次是**选中全部**
-
-### 比较文件
-
-使用 `shift + 鼠标左键` 选中文件
-
-对 另一个文件 也进行一样的操作,然后选择 `选择已进行比较`
-
-使用内联模式
-<img src="@other/compare2.png"/>
-
-
-### ✈️搜索记录
-
-#### 可视化查询到的搜索记录
+#### 查看所有的搜索记录
 <img src="@other/search.png"/>
 
-可以 `ctrl + s` 保存成一个文件,下一次直接打开
+可以 `ctrl + s` 保存成一个文件
 #### 命令行打开搜索记录
-打开命令之后 搜索
+打开命令
+```bash
+ ctrl + shift + p
+```
+搜索
 ```bash
 new Search editor
 ```
+
 <img src="@other/search2.png"/>
 
 #### 局部搜索
 
 <img src="@other/search3.png"/>
 
-#### 精准跳转
-
-当使用  `ctrl + f` 搜索时，有可能有很多的匹配项，如果想要快速跳到某个匹配列表对应的下标  
-
-打开命令行，使用 
-```bash
-go to match
-```
-然后输入想去的下标即可
-
-### 还原更改
-
-打开命令行后，搜索
-```bash
-File:revert file
-```
-直接把**未保存的文件还原到上一次保存时的状态**
 
 ### 中断再次提醒
 
@@ -193,36 +114,38 @@ document.quer 一半路上,使用 `ctrl + i` 重新提示
 ### 取消选中
 
 1. 当使用 `ctrl + d`时,不需要这个的时候,可以在当前项使用 `ctrl + k,ctrl + d`取消选中
-2. 使用 `ctrl + U` 撤销光标处理，返回到上一个光标处
+2. 使用 `ctrl + U` 撤销光标处理
 
 ### 转到定义
 
 - `ctrl + p` 输入 `@` 转到定义
 - ⭐使用 `ctrl + shift + o` 出现所有变量
 
-### 📷转到上一次修改
+### 转到上一次修改
 
 和 `ctrl + ←` 不同,它是转到修改处,而不是上一次光标处
-- `ctrl + shift + p` 输入 `go to Last Edit Location` 转到定义
-- `ctrl + k` + `ctrl + q` 快捷键 
+- `ctrl + p` 输入 `go to Last Edit Location` 转到定义
+- `ctrl + k` + `ctrl + q` 
+- 
 ### ⭐切换 tab
 
-- `alt + 1` 第一个,`alt + 0`最后一个，无需选择
-- `ctrl + pageUp` 直接转到上一个,`ctrl + pageDown` 直接转到下一个，无需选择
-- `ctrl + tab` 右边切换,`ctrl + shift + tab` 左边切换，但是需要选择
+- `alt + 1` 第一个,`alt + 0`最后一个
+- `ctrl + pageUp` 直接转到上一个,`ctrl + pageDown` 直接转到下一个
+- `ctrl + tab` 右边切换,`ctrl + shift + tab` 左边切换
 
 ### 转到定义
 
 - `alt + f12` 打开定义
 - `f12` 转到定义
 
-### 跳转行号与列号
-`ctrl + g` 跳转行号，可以输入 `负数`，最后一行是 `-1`
+### 跳转行号
 
-输入 `12:32` 跳转到 `12行32列`
+- `ctrl + g` 跳转行号
+  可以输入 `负数`
+
 ### 打开文件
 
-`ctrl + e` / `ctrl + p` 打开最近使用文件
+`ctrl + e` / `ctrl + p`
 
 ### 折叠面板
 
@@ -252,15 +175,15 @@ document.quer 一半路上,使用 `ctrl + i` 重新提示
 ### 文本选择
 
 `ctrl + 左箭头/右箭头`选中横向文本  
-`alt + 上箭头/下箭头`移动纵向文本  
+`alt + 上箭头/下箭头`移动纵向文本
 `shift + alt + 上箭头/下箭头`移动并复制纵向文本
+
 
 ### 删除
 
 - ⭐`ctrl + shift + k` 删除一行 如果没有删除可以查看是否占用了快捷键
 - `delete` 删除后面一个字符
 - `ctrl + delete` 删除后面词组
-- `ctrl + 退格键` 删除前面多个字符，和上文相反
 
 ### 代码块
 
@@ -269,6 +192,13 @@ document.quer 一半路上,使用 `ctrl + i` 重新提示
 
 ### 大纲
 `ctrl + shift + p` 搜索 `大纲`，左下角选择`排序方式:类别`
+
+### 变量查找
+```bash
+ctrl + shift + p 
+```
+然后把 `>` 去掉,添加 `@`  
+和 **`ctrl + shift + o`** 一样
 
 
 ## idea

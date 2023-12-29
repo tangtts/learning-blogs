@@ -1,12 +1,7 @@
 # nest
-## IOC / DI
 
-`IOC`(Inverse Of Control) 是控制反转,反转的是对象的创建和调用的
 
-DI 是 `dependency Injection` 依赖注入,因为在容器中有很多对象，对象之间可以相互引用依赖，可以通过 `构造器` 注入，也可以通过 `set` 方式注入
 
-ioc 指代的是容器去实例化对象  
-di 指代的是对象之间相互引用
 ## 快捷键
 
 1. 生成完整的 `CRUD` 文件
@@ -55,6 +50,13 @@ PO
 
 ## IOC / DI
 
+`IOC`(Inverse Of Control) 是控制反转,反转的是对象的创建和调用的
+
+DI 是 `dependency Injection` 依赖注入,因为在容器中有很多对象，对象之间可以相互引用依赖，可以通过 `构造器` 注入，也可以通过 `set` 方式注入，即使用`@Inject`
+
+**ioc 指代的是容器去实例化对象**    
+**di 指代的是对象之间相互引用**  
+
 我们把IOC想像成一个容器，程序初始化的时候会扫描 class 上声明的依赖关系，然后把这些 class 都给 new 一个实例放到容器里。  
 
 创建对象的时候，还会把它们依赖的对象注入进去。这种依赖注入的方式叫做 Dependency Injection，简称 DI。本来是手动 new 依赖对象，然后组装起来，现在是声明依赖了啥，等待被注入。
@@ -71,24 +73,16 @@ export class AppService {
   }
 }
 ```
-它有一个 AppService 声明了 @Injectable，代表这个 class 可注入，那么 nest 就会把它的对象放到 IOC 容器里。
+它有一个 AppService 声明了 @Injectable，代表这个 class **可注入**，那么 nest 就会把它的对象放到 IOC 容器里。
 
-```ts
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
 
-@Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-}
-```
-AppController 声明了 @Controller，代表这个 class 可以被注入，nest 也会把它放到 IOC 容器里。
-
+AppController 声明了 @Controller，代表这个 class **可以被注入**，nest 也会把它放到 IOC 容器里。  
+注入：在需要用到的地方注入，即使用 `@Inject` 注入（类似于 java 中的 autowired）,也可以通过构造函数注入
+> 注入与被注入  
+> let a = new A();  
+> let b = new B(a);  
+> 此时 a 就是注入的对象，b 是被注入的对象  
+> 对应的就是 `@Injectable` 和 `@Controller`
 ```ts
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -106,8 +100,211 @@ export class AppModule {}
 
 providers 里可以被注入，也可以注入别的对象，比如这里的 AppService。
 
-### DI
-从 自己 new 到 IOC 容器帮你创建
+
+## 🚀module
+> 每个模块都有一组紧密相关的**功能 , 相当于封装**
+
+| providers | 由 Nest 注入器实例化的提供者，并且可以至少在整个模块中共享 |
+| --- | --- |
+| controllers | 必须创建的一组控制器 |
+| imports | 导入模块的列表，这些模块导出了此模块中所需提供者 |
+| exports | 由本模块提供并应在其他模块中可用的提供者的子集。 |
+
+### <blue>如果 B 模块中的 service 要使用 A 模块的 service</blue>
+1. 需要 A 模块导出 service
+2. 在 B 模块中 使用 imports 引入 A 的 module
+3. 在 B 模块使用 inject 注入 A 模块 service 即可
+备注: **不需要在使用的地方中 `providers` 引入本模块的 service,直接 使用即可**
+
+**❤️如果 `B模块` 不想使用 `imoprt`,可以在 `A模块` 的 `@Module` 上添加 `@Global`,使 `A模块` 成为全局模块,可以直接使用 `exports` 中的 `service`（inject 属性注入，构造函数注入）, 不需要在 `providers` 中引入**
+
+>redis.module.ts
+```ts
+// @Global()
+@Module({
+  providers: [ RedisService ],
+  exports: [RedisService] // [!code hl]
+})
+export class RedisModule {}
+```
+
+需要使用 `imports` 引入 RedisModule,<blue>如果使用 `@Global` 这一步可以省略</blue>
+> session.module.ts
+```ts
+@Module({
+  imports:[RedisModule], // [!code focus]
+  providers: [],
+  exports: []
+})
+export class SessionModule {}
+```
+属性注入
+> session.service.ts
+```ts
+@Injectable()
+export class SessionService {
+  @Inject(RedisService)
+  private readonly redisService: RedisService;
+}
+```
+也可以使用构造器注入
+
+```ts
+@Injectable()
+export class SessionService {
+  constructor(private readonly redisService: RedisService){}
+  ;
+}
+```
+
+### 如果B模块 `service` 之间使用
+
+```ts
+import { Global, Module } from '@nestjs/common';
+import { createClient } from 'redis';
+import { RedisService } from './redis.service';
+
+@Global()
+@Module({
+  providers: [
+    RedisService,  // [!code hl]
+    {
+      provide: 'REDIS_CLIENT',  // [!code hl]
+      async useFactory() {
+        const client = createClient({
+            socket: {
+                host: 'localhost',
+                port: 6379
+            }
+        });
+        await client.connect();
+        return client;
+      }
+    }
+  ],
+  exports: [RedisService] // [!code hl]
+})
+export class RedisModule {}
+```
+> RedisService.ts
+
+```ts
+import { Inject, Injectable } from '@nestjs/common';
+import { RedisClientType } from 'redis';
+
+@Injectable()
+export class RedisService { 
+  @Inject('REDIS_CLIENT')  // [!code hl]
+  private redisClient: RedisClientType;
+
+   async get(key: string) {
+    return await this.redisClient.get(key);
+  }
+}
+``` 
+
+### module 的 provider 
+
+#### useClass
+
+```ts
+@Module({
+  providers:[AppService]
+})
+```
+其实本质是这个
+```ts
+@Inject(AppService) // 这个 class 就是 token
+private readonly appService: AppService;
+// 本质
+{
+  provide: AppService,
+  useClass: AppService
+}
+```
+可以改为 字符串
+
+```ts
+{
+  provide: 'app_service',
+  useClass: AppService
+}
+```
+那么需要这样注入，必须提供 `token`
+```ts
+@Inject('app_service') private readonly appService: AppService
+```
+#### useValue 
+
+```ts
+{
+    provide: 'person',
+    useValue: {
+        name: 'aaa',
+        age: 20
+    }
+}
+```
+使用
+```ts
+@Inject('person') private readonly person: {name: string, age: number}
+```
+
+
+#### 指定别名
+
+```ts
+{
+  provide: 'person4',
+  useExisting: 'person2'
+}
+```
+那么注入就要使用 `person2` 这个字符串了
+
+
+
+#### useFactory
+使用 inject 注入 service,然后可以在 module 的 useFactory 中使用
+
+> Nest 将从 inject 列表中以相同的顺序将实例作为参数传递给工厂函数。
+
+```ts
+{
+  provide: 'person3',
+  useFactory(person: { name: string }, appService: AppService) {
+    return {
+      name: person.name,
+      desc: appService.getHello()
+    }
+  },
+  inject: ['person', AppService]
+}
+```
+在项目中使用
+```ts
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ".env",
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService], // [!code hl]
+      useFactory(configService: ConfigService) { // [!code hl]
+        return {
+          type: "mysql",
+          host: configService.get("mysql_server_host"), // [!code hl]
+          database: configService.get("mysql_server_database"),
+          // ....
+        };
+      },
+    }),
+  ],
+})
+```
+
+
+
 
 
 ## 装饰器
@@ -166,7 +363,8 @@ createOne(@Body() body) {
   }
 ```
 #### passthrough
-通常情况下，Nest.js会自动处理控制器方法返回的数据并将其转换为响应对象。然而，有时你可能需要更精细地控制响应过程，例如手动设置响应头、状态码或发送特定格式的响应体等。这时，你可以使用`@Res({ passthrough: true}) res: Response` 来获取响应对象并自行操作。
+你可能需要更精细地控制响应过程，例如手动设置响应头、状态码或发送特定格式的响应体等。  
+这时，你可以使用`@Res({ passthrough: true}) res: Response` 来获取响应对象并自行操作。
 ```ts
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
@@ -182,6 +380,7 @@ export class ExampleController {
   }
 }
 ```
+**如果不传递`passthrough: true`,响应就会挂起，Nest 这么设计是为了避免你自己返回的响应和 Nest 返回的响应的冲突**
 
 ##### [🔗状态码 HttpCode](https://docs.nestjs.cn/9/controllers?id=%e7%8a%b6%e6%80%81%e7%a0%81)
 ```typescript
@@ -244,25 +443,24 @@ findOne(id: string) {
 ### 自定义装饰器
 #### [🔗路由参数装饰器](https://docs.nestjs.cn/8/customdecorators?id=%e8%87%aa%e5%ae%9a%e4%b9%89%e8%b7%af%e7%94%b1%e5%8f%82%e6%95%b0%e8%a3%85%e9%a5%b0%e5%99%a8)
 
-定义,使用 `createParamDecorator`
+定义,使用 `createParamDecorator`, `data` 里面的是使用装饰器传递的参数
 ```typescript
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const User = createParamDecorator((data: unknown, ctx: ExecutionContext)
   => {
     const request = ctx.switchToHttp().getRequest();
-    console.log(data,"data")
+    console.log(data,"data")  // "page"
     return "jjjj";
 });
 ```
-使用自定义装饰器，对 page、参数进行判断
+使用自定义装饰器@User，对 page 参数进行判断,使用  
 ```typescript
 @Get("Page")
   findAll(
-    @User('page')  @Query('page') page: number,
+    @User('page') @Query('page') page: number, //[!code hl]
     @Query('limit', new DefaultValuePipe(10)) limit: number,
   ) {
-  // 如果请求中没有提供page参数或page参数的值为undefined，则page将被设置为默认值1
   // 如果请求中没有提供limit参数或limit参数的值为undefined，则limit将被设置为默认值10
     return `Finding cats. Page: ${page}, Limit: ${limit}`;
   }
@@ -276,66 +474,23 @@ pnpm i multer
 pnpm i @types/multer
 ```
 
-```typescript
-import { FileInterceptor } from "@nestjs/platform-express";
-import { UseInterceptors ,ParseFilePipeBuilder } from "@nestjs/common";
-
-@Post("upload")
-@ApiConsumes("multipart/form-data")
-  @ApiBody({
-    description: "Upload file",
-    type: UpdateUploadDto,
-  })
-  @UseInterceptors(FileInterceptor("file"))
-  uploadFile(
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({ // 限制类型为 png
-          fileType: "png",
-        })
-        // addMaxSizeValidator // 限制大小
-        .build({
-          fileIsRequired: true, // 文件必填
-        })
-    )
-    file: Express.Multer.File,
-  ) {
-    console.log(file); // 文件
-    return file.size
-  }
-```
-> UpdateUploadDto.ts
-```ts
-import { ApiProperty } from '@nestjs/swagger';
-export class UpdateUploadDto  {
-  @ApiProperty({ type: 'string', format: 'binary' })
-  @IsNotEmpty()
-  file:Express.Multer.File;
-}
-```
-
-使用 `FileInterceptor`直接保存到my-uploads 下
+使用 `FileInterceptor`直接保存到 `my-uploads` 下
 ```typescript
 import { ensureDir } from "fs-extra";
 import multer, { diskStorage } from "multer";
 import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 
-  @ApiOperation({
-    summary: "上传头像",
-  })
-  @ApiConsumes("multipart/form-data")
   @UseInterceptors(
     FileInterceptor("file", {
       storage: diskStorage({
+        // 添加保存目录
         destination:async function (req, file, cb) {
           // 确保有这个目录
           await  ensureDir("my-uploads");
           cb(null, path.join(process.cwd(), "my-uploads"));
         },
+        // 添加文件名
         filename: function (req, file, cb) {
-          file.originalname = Buffer.from(file.originalname, "latin1").toString(
-            "utf8"
-          );
           const uniqueSuffix =
             Date.now() +
             "-" +
@@ -347,13 +502,39 @@ import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
   )
   @Post("upload")
   async upload(
-    @Req() req: UploadDTO,
-    @Body() uploadDTO: UploadDTO,
-    @UploadedFile() file
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({ // 限制类型为 png
+          fileType: "png",
+        })
+        // addMaxSizeValidator // 限制大小
+        .build({
+          fileIsRequired: true, // 文件必填
+        })
+    ) file: Express.Multer.File,
+    @Body() body,
   ) {
-    // console.log(req.file,"fa",uploadDTO.name)
+    // file 保存 file 字段对应的文件
+    // 其他属性放在了 body 上
   }
 ```
+:::details 前端代码
+```ts
+async function formData4() {
+    const data = new FormData();
+    data.set('name','光');
+    data.set('age', 20);
+    data.set('aaa', fileInput.files[0]);
+    data.set('bbb', fileInput.files[1]);
+    data.set('ccc', fileInput.files[2]);
+    data.set('ddd', fileInput.files[3]);
+
+    const res = await axios.post('http://localhost:3000/ddd', data);
+    console.log(res);
+}
+```
+:::
+
 可以在 `uploadFile` 上添加校验
 
 ```ts
@@ -383,13 +564,22 @@ file: Express.Multer.File,
     }),
 )
 file: Express.Multer.File,
-
+```
+在 `main.ts` 中配置静态资源
+```ts
+const app = await NestFactory.create<NestExpressApplication>(AppModule);
+app.useStaticAssets(join(__dirname,"..","my-uploads"),{
+ prefix:"/static"
+})
+```
+可以访问
+```bash
+http://localhost:3000/static/aaa.png
 ```
 
 
-
 ### [🔗装饰器聚合](https://docs.nestjs.cn/8/customdecorators?id=%e8%a3%85%e9%a5%b0%e5%99%a8%e8%81%9a%e5%90%88)
-> 多个装饰器的组合
+> 多个装饰器的组合,使用 `applyDecorators` 函数包裹所需要的装饰器
 ```typescript
 import { applyDecorators } from '@nestjs/common';
 
@@ -408,7 +598,13 @@ export function Auth(...roles: Role[]) {
 findAllUsers() {}
 ```
 
-## 过滤器/拦截器
+
+
+## 路由守卫(gurad)
+
+Guard 是路由守卫的意思，可以用于在调用某个 Controller 之前判断权限，返回 true 或者 false 来决定是否放行
+
+<img src="@backImg/guard.webp"/>
 
 ### 路由守卫获取自定义装饰器
 
@@ -456,7 +652,6 @@ declare module 'express' {
     }
   }
 }
-
 
 @Injectable()
 export class LoginGuard implements CanActivate {
@@ -516,7 +711,8 @@ import { UserService } from "./user/user.service";
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
-  @Inject(UserService)
+
+  @Inject(UserService) // [!code hl]
   private userService: UserService;
 
   // UserService 中的方法
@@ -526,83 +722,54 @@ export class PermissionGuard implements CanActivate {
 }
 ```
 
-## 🚀module
-> 每个模块都有一组紧密相关的**功能 , 相当于封装**
+### 局部使用
 
-| providers | 由 Nest 注入器实例化的提供者，并且可以至少在整个模块中共享 |
-| --- | --- |
-| controllers | 必须创建的一组控制器 |
-| imports | 导入模块的列表，这些模块导出了此模块中所需提供者 |
-| exports | 由本模块提供并应在其他模块中可用的提供者的子集。 |
-
-### 🚀 <blue>如果别的 service 要使用本模块的 service</blue>
-1. 需要本模块导出 service
-2. 在需要的模块中 使用 imports 引入本模块的 module
-3. 在需要的地方使用 inject 注入 本模块 service 即可
-备注: **不需要在使用的地方中 `providers` 引入本模块的 service,直接 使用即可**
-
-如果别的模块不想使用 `imoprt`,可以在本模块的 `module` 上添加 `@Global`,使本模块成为全局模块
-
->redis.module.ts
 ```ts
-// @Global()
-@Module({
-  providers: [ RedisService ],
-  exports: [RedisService] // [!code hl]
-})
-export class RedisModule {}
-```
-
-需要使用 `imports` 引入 RedisModule,<blue>如果使用 Global 这一步可以省略</blue>
-> session.module.ts
-```ts
-@Module({
-  imports:[RedisModule], // [!code focus]
-  providers: [],
-  exports: []
-})
-export class SessionModule {}
-```
-
-> session.service.ts
-```ts
-@Injectable()
-export class SessionService {
-  @Inject(RedisService)
-  private redisService: RedisService;
+@UseGuards(LoginGuard)
+aa(){
+  this.testService.test();
 }
 ```
-### module 中使用别的模块的 service
-#### useFactory
-使用 inject 注入 service,然后可以在 module 的 useFactory 中使用
+### 全局使用
 
-> Nest 将从 inject 列表中以相同的顺序将实例作为参数传递给工厂函数。
 ```ts
-@Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: ".env",
-    }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService], // [!code hl]
-      useFactory(configService: ConfigService) { // [!code hl]
-        return {
-          type: "mysql",
-          host: configService.get("mysql_server_host"), // [!code hl]
-          database: configService.get("mysql_server_database"),
-          // ....
-        };
-      },
-    }),
-  ],
-})
+const app = await NestFactory.create(AppModule);
+app.useGlobalGuards(new LoginGuard());
 ```
+或者
+```ts
+import { APP_GUARD } from "@nestjs/core";
 
-## 中间件
+providers: [
+  AppService,
+  {
+    provide: APP_GUARD,
+    useClass: LoginGuard,
+  },
+]
+```
+**之前这种方式是手动 new 的 Guard 实例，不在 IoC 容器里,而用 provider 的方式声明的 Guard 是在 IoC 容器里的，可以注入别的 provider**
+
+<img src="@backImg/guard2.webp"/>
+
+## 中间件(Middleware)
+
+中间件的使用和 `AOP` 分不开的，AOP 的好处是可以把一些通用逻辑分离到切面中，保持业务逻辑的纯粹性，这样切面逻辑可以复用，还可以动态的增删。  
+
+同样的 中间件就是为了处理一些通用逻辑，比如日志，权限，错误处理等等。
+
 > 中间件是在路由处理程序 **之前** 调用的函数。 **中间件函数可以访问请求和响应对象**，
 > 以及应用程序请求响应周期中的 next() 中间件函数。 next() 中间件函数通常由名为 next 的变量表示
 
+简单使用
+
+```ts
+app.use(function(req: Request, res: Response, next: NextFunction) {
+  console.log('before', req.url);
+  next();
+  console.log('after');
+})
+```
 
 :::tip
 可以在 `函数` 中或在具有 `@Injectable()` 装饰器的类中实现自定义 Nest 中间件
@@ -626,6 +793,27 @@ export class LoggerMiddleware implements NestMiddleware {
   }
 }
 ```
+定义成 类式中间件 的原因是可以被注入
+
+```ts
+import { AppService } from './app.service';
+import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response } from 'express';
+
+@Injectable()
+export class AaaMiddleware implements NestMiddleware {
+
+  @Inject(AppService) // [!code ++]
+  private readonly appService: AppService; // [!code ++]
+
+  use(req: Request, res: Response, next: () => void) {
+    console.log('-------' + this.appService.getHello()); // [!code ++]
+    next();
+    console.log('after');
+  }
+}
+```
+
 ### 全局使用
 ```typescript
 import { logger,LoggerMiddleware } from 'src/middleware/logger.middleware';
@@ -655,12 +843,18 @@ export class UsersModule implements NestModule {
 }
 ```
 
- ## 错误处理 filter
+### middleware 与 interceptor 的区别
+
+middleware 和 interceptor 功能类似，但也有不同，interceptor 可以拿到目标 class、handler 等，也可以调用 rxjs 的 operator 来处理响应，更适合处理具体的业务逻辑。
+
+middleware 更适合处理通用的逻辑。
+
+## 错误处理(ExceptionFilter)
 ### [异常请求过滤器](https://docs.nestjs.cn/8/exceptionfilters?id=%e5%bc%82%e5%b8%b8%e8%bf%87%e6%bb%a4%e5%99%a8-1)
 >   负责捕获作为 `HttpException` 类实例的异常，并为它们设置自定义响应逻辑。
 
 使用装饰器 `@Catch` 装饰过滤器类，并**指定要捕获的异常类型**。  
-`@Catch(HttpException)` 就是捕捉 HttpException 异常
+`@Catch(HttpException)` 就是捕捉 `HttpException` 异常
 
 
 ```typescript
@@ -714,28 +908,13 @@ export class UnloginFilter implements ExceptionFilter { // [!code hl]
   }
 }
 ```
-在 AppModule 里注册这个全局 Filter
-```ts
-@Module({
-  provide: APP_FILTER,
-  useClass: UnloginFilter
-})
-```
-使用
-```ts
-throw new UnloginFilter('未登录')
-```
 
-使用 `APP_FILTER` 这种有一个好处是可以注入其他服务
-
+可以这样使用
 ```ts
-@Catch(HttpException)
-export class HelloFilter implements ExceptionFilter {
-  @Inject(AppService)
-  private service: AppService;
-}
+@UseFilters(UnloginFilter) // 捕获
+throw new UnLoginException("没有登录") // 抛出
 ```
-
+可以用自定义 Exception Filter 捕获内置的或者自定义的 Exception。
 
 ### [任意异常](https://docs.nestjs.cn/8/exceptionfilters?id=%e6%8d%95%e8%8e%b7%e5%bc%82%e5%b8%b8)
 > 为了捕获每一个未处理的异常(不管异常类型如何)，将 @Catch() 装饰器的参数列表设为空
@@ -773,22 +952,38 @@ export class AllExceptionsFilter implements ExceptionFilter {
   }
 }
 ```
-### 单个控制
+### 单个使用
 ```typescript
-@UseFilters(HttpExceptionFilter)
-@UseFilters(new HttpExceptionFilter())
+@UseFilters(HttpExceptionFilter) // [!code hl]
+@UseFilters(new HttpExceptionFilter()) // [!code hl]
 @Post('login')
 async login(@Body() param: CreateUserDto): Promise<any> {
   return this.userService.login(param);
 }
 ```
-### 全局控制
+### 全局使用
 ```typescript
  app.useGlobalFilters(new HttpExceptionFilter());
 ```
+或者使用 `APP_FILTER` 这种有一个好处是可以注入其他服务
+
+```ts
+@Module({
+  provide: APP_FILTER,
+  useClass: UnloginFilter
+})
+```
+
+```ts
+@Catch(HttpException)
+export class UnloginFilter implements ExceptionFilter {
+  @Inject(AppService)
+  private service: AppService;
+}
+```
 
 
-## [管道](https://docs.nestjs.cn/8/pipes)
+## [管道(pipe)](https://docs.nestjs.cn/8/pipes)
 > 从一侧流入，经过处理，再从另一侧流出  
 > 有两个作用，**一个是进行验证，一个是转化**  
 
@@ -799,20 +994,19 @@ async login(@Body() param: CreateUserDto): Promise<any> {
 
 ```typescript
 
-// - 其中 whiteList 可以去除不存在于 FindOneParams 的字段
+// 其中 whiteList 可以去除不存在于 FindOneParams 的字段
 // transform 可以把 id 从 字符串转为 数字
 
 /**
-class FindOneParams {
-  @IsNumberString() // "1" 字符串数字
-  id: number;
-}
- */
+  class FindOneParams {
+    @IsNumberString() // "1" 字符串数字
+    id: number;
+  }
+*/
 
 @UsePipes(new ValidationPipe({ whitelist: true }))
   @Post()
   // ValidationPipe 会对 请求体 进行 验证
-  // @Body(new ParseArrayPipe({ items: CreateUserDto }))
   findOne(@Body() body: FindOneParams) {
     console.log(body); // true
     return "This action returns a user";
@@ -831,13 +1025,13 @@ findAll(@Query(
 	   new ParseArrayPipe({ optional: true })) categories: string[]
   ) {
   // 参数重复出现如：/cats?category=small&category=medium&category=large
-console.log(categories); // 输出: ['small', 'medium', 'large']
-return 'Finding cats by categories';
+    console.log(categories); // 输出: ['small', 'medium', 'large']
+    return 'Finding cats by categories';
 }
 ```
 对 body 进行 验证
 ```typescript
-class FindOneParams {
+class P {
   @IsNumberString() // "1" 字符串数字
   id: number;
 }
@@ -845,11 +1039,10 @@ class FindOneParams {
 @Post("array")
   createBulk(
 	@Body(  
-   new ParseArrayPipe({ items: FindOneParams }))
-   createUserDtos: FindOneParams[]
-	) {
-console.log(createUserDtos[1].id);
-return "This action adds new users";
+      new ParseArrayPipe({ items: P })) createUserDtos: P[] // [!code hl]
+	 ) {
+    console.log(createUserDtos[1].id);
+    return "This action adds new users";
 }
 ```
 
@@ -874,24 +1067,20 @@ enum CatType {
     return `Finding cat of type: ${type}`;
   }
 ```
+#### 自定义内置错误码
 
-全局使用
-```typescript
-import { ValidationPipe } from '@nestjs/common';
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      // 可以做类型转化
-      transform: true,
-      // forbidNonWhitelisted: true,
-    }),
-  );
-  await app.listen(3000);
-}
-bootstrap();
+```ts
+@Query("id", new ParseIntPipe({
+    // 可以自定义错误码 
+    errorHttpStatusCode: 400,  // [!code --]
+    exceptionFactory: (err)=>{
+      // 自定义错误消息和错误码
+      console.log(err) 
+      throw new HttpException("XX"+err,HttpStatus.BAD_REQUEST) // [!code ++]
+    }
+  }))
 ```
+
 ### [自定义转化管道](https://docs.nestjs.cn/8/pipes?id=%e8%bd%ac%e6%8d%a2%e7%ae%a1%e9%81%93)
 > 实现 `PipeTransform` 接口
 ```typescript
@@ -908,12 +1097,42 @@ export class ParseIntPipe implements PipeTransform<string, number> {
   }
 }
 ```
+### 局部使用
 
-## 拦截器
+```ts
+@Get('ccc')
+ccc(@Query('num', ValidatePipe) num: number) {
+    return num + 1;
+}
+```
+
+### 全局使用
+```typescript
+import { ValidationPipe } from '@nestjs/common';
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      // 可以做类型转化
+      transform: true,
+      // forbidNonWhitelisted: true,
+    }),
+  );
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+
+## 拦截器(Interceptor)
 
 - 在函数执行之前/之后绑定**额外的逻辑**
 - 转换从函数返回的结果
 - **转换**从函数抛出的异常
+
+<img src="@backImg/interceptor.webp"/>
+
 ### 实现
 
 执行 `handle` 方法执行了下面的函数才会执行
@@ -957,7 +1176,8 @@ export class ExcludeNullInterceptor implements NestInterceptor {
 ```typescript
 app.useGlobalInterceptors(
   new TransformInterceptor(),
-  new LoggingInterceptor());
+  new LoggingInterceptor()
+);
 ```
 #### 单个使用
 ```typescript
@@ -968,8 +1188,23 @@ export class CoffeeController {
 }
 ```
 
+## aop 顺序
+
+<img src="@backImg/aop顺序.webp"/>
+
+:::tip 🏮
+Middleware 是 Express 的概念，在最外层，到了某个路由之后，会先调用 Guard，Guard 用于判断路由有没有权限访问，然后会调用 Interceptor，对 Contoller 前后扩展一些逻辑，在到达目标 Controller 之前，还会调用 Pipe 来对参数做检验和转换。所有的 HttpException 的异常都会被 ExceptionFilter 处理，返回不同的响应。
+:::
+
 ## ArgumentHost 和 ExecutionContext 类
+
+<img src="@backImg/argumentHost.webp"/>
+
+ExecutionContext 是 ArgumentHost 的子类，扩展了 getClass、getHandler 方法。  
+
+
 中间件用的是 `ArgumentHost`类
+
 ```typescript
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { Response } from 'express';
@@ -1031,3 +1266,60 @@ export class AaaGuard implements CanActivate {
   }
 }
 ```
+
+## 循环依赖
+> DddService
+```ts
+import { Injectable } from '@nestjs/common';
+import { CccService } from './ccc.service';
+
+@Injectable()
+export class DddService {
+  constructor(private cccService: CccService) {}
+
+  ddd() {
+      return this.cccService.ccc()  + 'ddd';
+  }
+}
+```
+> CccService 
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { DddService } from './ddd.service';
+
+@Injectable()
+export class CccService {
+  constructor(private dddService: DddService) {}
+
+  ccc() {
+      return 'ccc';
+  }
+
+  eee() {
+      return this.dddService.ddd() + 'eee';
+  }
+}
+```
+> appService
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { CccService } from './ccc.service';
+import { DddService } from './ddd.service';
+
+@Injectable()
+export class AppService {
+  constructor(private cccService: CccService, private dddService: DddService){}
+
+  getHello(): string {
+    return this.dddService.ddd() + this.cccService.eee();
+  }
+}
+```
+<img src="@backImg/循环依赖.webp"/>
+
+**通过 `forwardRef` 解决**
+<img src="@backImg/循环依赖1.webp"/>
+分别使用 forwardRef
+<img src="@backImg/循环依赖2.webp"/>

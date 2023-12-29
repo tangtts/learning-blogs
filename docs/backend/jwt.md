@@ -58,16 +58,17 @@ comment 该 Cookie 的用处说明，浏览器显示Cookie信息的时候显示�
 
 ## Session
 Session 的会话管理
-1. 客户端使用用户名密码进行认证
+1. 客户端使用 用户名密码 进行认证
 2. 服务端生成并存储 Session，将 SessionID 通过 Cookie 返回给客户端
 3. 客户端访问需要认证的接口时在 Cookie 中携带 SessionID
 4. 服务端通过 SessionID 查找 Session 并进行鉴权，返回给客户端需要的数据
 
 缺点:
 
-- 服务端需要存储 Session，并且由于 Session 需要经常快速查找，通常存储在内存或内存数据库中，同时在线用户较多时需要占用大量的服务器资源
+- [🔗`csrf`(跨站请求伪造)](../skill/网络.html#csrf) 验证 `referer`
 
-- 当需要扩展时，创建 Session 的服务器可能不是验证 Session 的服务器，所以还需要将所有 Session 单独存储并共享。
+- 当使用多台服务器后，`session` 不能只存储在一个服务器上，所以一种方案是 `session` 复制, 一个 `session` 发生改变, 所有服务器的 `session` 同步发生变化，另一种方案是 存储在 `redis` 中，需要 `session` 去 `redis` 中查询
+-  `cookie` 存在跨域，a.xxx.com 和 b.xxx.com 这种还好，可以把 `cookie` 存在一级域名(xxx.com)上,而且 `ajax` 需要设置 `withCredentials` 为  `true`,后端代码设置请求头 `Access-Control-Allow-Origin` 不能为 `*`
 
 ## jwt(json web tokens)
 *bearer 持票人*  

@@ -25,6 +25,16 @@ export class AppService {
 }
 ```
 
+## 更新
+可以使用 `update` 和 `insert` 方法，分别是修改和插入的，但是它们不会先 `select` 查询一次。 
+
+而 `save` 方法会先查询一次数据库来确定是插入还是修改。
+
+
+## 删除
+
+`delete` 和 `remove` 的区别是，`delete` 直接传 `id`、而 `remove` 则是传入 `entity` 对象。
+
 ## 查询
 
 ### where 查询
@@ -175,6 +185,29 @@ let r1 = await this.userRepository.find({
 });
 ```
 
+### findOneOrFail  / findOneByOrFail
+`findOneOrFail` 或者 `findOneByOrFail`，如果没找到，会抛一个 `EntityNotFoundError` 的异常：
+
+```ts
+import { AppDataSource } from "./data-source"
+import { User } from "./entity/User"
+
+AppDataSource.initialize().then(async () => {
+    try {
+        const user = await AppDataSource.manager.findOneOrFail(User, {
+            where: {
+                id: 666
+            }
+        });
+        console.log(user);
+    }catch(e) {
+        console.log(e);
+        console.log('没找到该用户');
+    }
+}).catch(error => console.log(error))
+```
+<img src="@backImg/findOneByOrFail.webp"/>
+
 ## 实体
 
 ### Column
@@ -277,7 +310,7 @@ user: User;
 ### JoinColumn
 
 #### 一对一
-<blue>这是必选项并且只能在关系的一侧设置。 你设置@JoinColumn的哪一方，哪一方的表将包含一个"relation id"和目标实体表的外键。</blue>
+<blue>你设置@JoinColumn的哪一方，哪一方的表将包含一个"relation id"和目标实体表的外键。</blue>
 
 > profile.entity.ts
 ```ts
@@ -299,9 +332,8 @@ import { Profile } from "./Profile";
 
 @Entity()
 export class User {
-
-  @OneToOne(() => Profile)
   @JoinColumn()
+  @OneToOne(() => Profile)
   profile: Profile;
 }
 ```
@@ -314,15 +346,36 @@ export class User {
 ```ts
 @Entity()
 export class User {
-
-  @OneToOne(() => Profile)
   @JoinColumn({name:Profile.name})
+  @OneToOne(() => Profile)
   profile: Profile;
 }
 ```
 
+如果没有外键的表查询到另一方,需要在这一方的添加 `OneToOne`并且加上参数,告诉 `typeorm`，外键是另一个 `Entity` 的哪个属性
+
+```ts
+@Entity()
+export class Profile {
+  @OneToOne(() => User,(u)=>u.profile)
+  profile: Profile;
+}
+```
+
+#### cascade 级联关系
+
+:::tip
+这个 `cascade` 不是数据库的那个级联，而是告诉 `typeorm` 当你增删改一个 `Entity` 的时候，是否级联增删改它关联的 `Entity`
+:::
+
+<img src="@backImg/cascade.webp"/>
+
+
+
+
 #### 一对多 `oneToMany` / `ManyToOne`
 
+一对多的关系只可能是在多的那一方保存外键  
 第一个参数是目标实体类，第二个参数是关系名称，第三个参数是关系类型(`eager`)
 
 ```ts
@@ -468,7 +521,7 @@ User {
 
 
 ### JoinTable
-通过 JoinTable 会多生成一个关联表,但是不会多生成一列
+通过 `JoinTable` 会多生成一个关联表,但是不会多生成一列
 > user.entitity.ts
 ```ts
 @Entity()

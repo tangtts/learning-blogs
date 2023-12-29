@@ -170,6 +170,10 @@ git stash list
  git stash apply 0
 ```
 
+#### git clone
+```bash
+git clone --depth 1 https://github.com/dogescript/xxxxxxx.git
+```
 ## 分支
 ### 查看
 ```bash
