@@ -1,0 +1,18 @@
+{
+  "gutterpreview.paths": {
+    "@img":"../docs/assets/img",
+    "@other":"../docs/assets/other",
+    "@backImg":"../docs/assets/backImg"
+  },
+  "liveServer.settings.port": 5501,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "node_modules":true,
+    ".vitepress":true
+  }
+}

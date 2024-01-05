@@ -166,7 +166,7 @@ Promise.any([pErr, pSlow, pFast]).then((value) => {
 });
 ```
 
-## [URLSearchParams](https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams)
+## [🔗URLSearchParams](https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams)
 
 返回一个`iterator`，可以有 `values`,`keys`,`entries`
 
@@ -190,12 +190,14 @@ console.log(params3.toString()); // // foo=1&bar=2
 ```
 
 3. 传入字符串
-
+有没有问号都无所谓，因为它会自动去除
 ```js
-var searchParams = new URLSearchParams("key1=value1&key2=value2");
-// key1,value1
-// key2,value2
+var searchParams = new URLSearchParams("?key1=value1&key2=value2");
+// var searchParams = new URLSearchParams("key1=value1&key2=value2"); 
+
 for (var pair of searchParams.entries()) {
+  // key1,value1
+  // key2,value2
   console.log(pair[0] + ", " + pair[1]);
 }
 
@@ -259,6 +261,21 @@ for (var value of searchParams.values()) {
   console.log(value);
 }
 ```
+
+### 和 URL 的关系
+
+```js
+const urlObj = new URL(location.href);
+urlObj.searchParams.get("cccc")
+
+urlObj.searchParams instanceof URLSearchParams // true
+```
+```js
+const urlObj = new URLSearchParams(location.search);
+urlObj.get("cccc")
+```
+
+<img src="@img/urlSearchParam.png"/>
 
 ## Blob
 Blob 对象表示一个**不可变、原始数据的类文件对象**。它的数据可以按**文本或二进制的格式进行读取**，也可以转换成 ReadableStream 来用于数据操作  
@@ -352,6 +369,15 @@ console.assert(clone.itself === clone); // and the circular reference is preserv
 ```
 
 ## JSON
+
+### JSON 的类型
+
+1. string
+2. number
+3. object
+4. array
+5. null
+6. boolean
 
 ### JSON.stringify
 
@@ -774,20 +800,90 @@ boxElList.forEach((el) => {
     2. 调用 `valueOf` 方法,是否可以获取原始值
     3. 调用 `toString` 方法,是否可以获取原始值
    ::: 
-  ```js
-   var a = {
-    [Symbol.toPrimitive](){
-      return 2
-    },
-    valueOf() {
-      return 1;
-    },
-    toString(){
-      return 1
-    }
-   }
-   console.log(a == 1)
-  ```
+
+`[Symbol.toPrimitive]` 接受 3 个参数 ，分别是 `default`,`string` 和 `number` ,有一些明确是用 `string` 或者是 `number`
+
+string
+- window.alert(obj)
+- 模板字符串 `${obj}`
+- test[obj] = 123
+
+number
+
+- 一元(+obj) 
+- \- ,*,/, > < 关系运算符
+- Math.pow / String.prototype.slice 内部方法
+
+default
+- 二元加(obj + obj2)
+- ==  != 
+
+**如果有 `[Symbol.toPrimitive]` 优先使用**
+```js
+let  obj = {
+  value:10,
+  [Symbol.toPrimitive](hint){
+    console.log(hint)
+    return 2
+  },
+  toString(){
+    return this.value + 10;
+  },
+  valueOf(){
+    return this.value + 20;
+  }
+}
+
+let x0 = obj == 1;
+x0 // hint default
+
+let x =  obj + 1;
+x // hint default
+
+let x2 =  obj + ''
+x2 // hint default
+
+let x3 =  +obj
+x3 // hint number
+```
+
+如果没有
+
+```js
+let  obj = {
+  value:10,
+  toString(){
+    return this.value + 10;
+  },
+  valueOf(){
+    return this.value + 20;
+  }
+}
+
+
+// true
+let x0 = obj == 30;
+
+// 31
+let x =  obj + 1;
+
+// "30" 
+let x2 =  obj + ''
+
+// 30
+let x3 =  +obj
+
+//'20'
+let x4 = `${obj}`
+```
+**除非特别是 string,否则使用 valueOf**
+
+<iframe src="https://unpkg.com/javascript-playgrounds@1.2.5/public/index.html#data=%7B%22code%22%3A%22let%20%20obj%20%3D%20%7B%5Cn%20%20value%3A10%2C%5Cn%20%20toString()%7B%5Cn%20%20%20%20return%20this.value%20%2B%2010%3B%5Cn%20%20%7D%2C%5Cn%20%20valueOf()%7B%5Cn%20%20%20%20return%20this.value%20%2B%2020%3B%5Cn%20%20%7D%5Cn%7D%5Cn%5Cn%5Cn%2F%2F%20true%5Cnlet%20x0%20%3D%20obj%20%3D%3D%2030%3B%5Cnconsole.log(x0)%5Cn%5Cn%2F%2F%2031%5Cnlet%20x%20%3D%20%20obj%20%2B%201%3B%5Cnconsole.log(x)%5Cn%2F%2F%20%5C%2230%5C%22%20%5Cnlet%20x2%20%3D%20%20obj%20%2B%20''%5Cnconsole.log(x2)%5Cn%5Cn%2F%2F%2030%5Cnlet%20x3%20%3D%20%20%2Bobj%5Cnconsole.log(x3)%5Cn%5Cn%2F%2F'20'%5Cnlet%20x4%20%3D%20%60%24%7Bobj%7D%60%5Cnconsole.log(x4)%22%7D"
+ height="800"
+  width="100%"
+  frameborder="1"
+ ></iframe>
+
 ## + 相加规则
 
 ###  `[1,2] + {n:1}`
@@ -959,4 +1055,40 @@ for (let i = 0; i < arr.length; i++) {
 }
 ```
 由于会不断的执行 `表达式2`,所以会造成死循环
+
+## [🔗falsy](https://developer.mozilla.org/zh-CN/docs/Glossary/Falsy)
+
+假值（falsy，有时写为 falsey）是在 `Boolean` 上下文中认定为 `false` 的值。
+
+**JavaScript 在需要用到布尔类型值的上下文中使用强制类型转换将值转换为布尔值，例如条件语句和循环语句。**
+
+1. 0
+2. false
+3. undefined
+4. null
+5. NaN
+6. ''
+
+```js
+if (undefined) {
+  // 执行不到这里
+}
+
+if (0) {
+  // 执行不到这里
+}
+
+if (NaN) {
+  // 执行不到这里
+}
+
+if ("") {
+  // 执行不到这里
+}
+
+// && 只有当 第一个参数是 true 时才会走到下一个变量处
+console.log(false && "dog"); // false
+
+console.log(0 && "dog"); // 0
+```
 

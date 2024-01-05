@@ -382,7 +382,7 @@ const todosForUserMap = todos.reduce((accumulator, todo)=>{
 	return accumulator;
 },{})
 ```
-因为 `prev[cur]++` 是 `NaN`,所以会执行 `prev[cur] = 1`  
+因为 `prev[cur]++` 是 [`🔗NaN`](/JS/window.html#🔗falsy),所以会执行 `prev[cur] = 1`  
 由于 `,` 运算符优先级较低,所以要用`()`包裹
 ```ts
 const str = "abcdefa"
@@ -394,6 +394,32 @@ const restult = [...str].reduce(
 // { a: 2, b: 1, c: 1, d: 1, e: 1, f: 1 }
 restult
 ```
+
+使用 `reduce` 实现多个 `promise` 链式调用 
+
+```js
+function runPromise(arr, initData) {
+  return arr.reduce((promise, next) => {
+    return promise.then(data=>next(data)); // 不断更新 promise
+  }, Promise.resolve(initData));// 初始值为 promise(initData)  // [!code hl]
+}
+
+function Login(arg) {
+  return Promise.resolve(arg);
+}
+
+function getDetail(arg) {
+  return Promise.resolve({
+    ...arg,
+    detail: "detail",
+  });
+}
+
+runPromise([Login, getDetail], { name: "zs" }).then(res => {
+  console.log(res);
+});
+```
+
 ## 判断类型
 ```js
 // NaN 也是一个number 类型
@@ -435,8 +461,9 @@ let c =  Object.prototype.toString.call([])
 //   '[object Array]': 'array' }
 let e = class2type[c] // array
 ```
-## 判断对象/数组 是否为空
-只需要使用 `for in` 判断即可  
+## 判断 对象/数组 是否为空
+只需要使用 `for in` 判断 `对象/数组` 即可 
+
 **for in 能遍历原型链上的方法或者属性,前提是自己定义，而不是系统定义。自己定义的**
 自己定义的 `enumerable` 是 true
 ```js
@@ -462,6 +489,8 @@ let r = isEmptyObject(obj);
 在数组上自己定义属性
 ```js
 let obj = [];
+// 如果不加上则为 true
+// 加上则为 false
 obj.__proto__.name = "zs"
 function isEmptyObject(obj) {
   for (let name in obj) {
@@ -486,3 +515,47 @@ function a(obj) {
 let r = a(obj.prototype); // false
 ```
 
+## let/var
+
+由于 `let / const` 定义的变量不在 `window` 上,所以 `this.age` 为 `undefined`
+
+```js
+let age = "az";
+
+let person = {
+  age: "John",
+  getName:()=>{
+		
+    console.log(this.age,age) // undefined az
+  }
+
+	// getName:function(){
+  //   console.log(this.age,age) // az az
+  // }
+}
+
+let p = person.getName
+p()
+```
+**当访问第二个 `age` 时,由于是查找的是 <blue>静态变量</blue>，先从自己身上作用域找，找不到就去上一个作用域上找,对象字面量没有作用域**
+
+## 沙箱语法糖
+
+```js
+function outer() {
+  let a = 100
+  let b = 200
+
+  return {
+      get a() { return a },
+      get b() { return b },
+      set a(val) { a = val }
+  }
+}
+
+let res = outer()
+console.log(res.a)
+console.log(res.b)
+res.a = 999
+console.log(res.a)   // 999 
+```

@@ -171,7 +171,8 @@ let x2: c1=...
 ```
 
 <iframe 
-width="100%" height="600"
+width="100%" 
+height="600"
 src="https://www.typescriptlang.org/play?target=1&module=1#code/JYOwLgpgTgZghgYwgAgB7IN4ChnLgLmQGcwpQBzHZAI0JLJEoF8stRJZEUBPTKg4qQpUEhEAFcAttWhYWWMNwAOKBMgC8aZADJk3ANwLlqgIwatAHz2HWilcgDCAe0lLxkACYAeACoA+c2xcAG0AaWRQZABrCG4nGGQfAF1kfB8wpLlbY2QAMTNNZ1d3CG8EEz9WLAAbCDA0ACZCcs0gvEIAIhMOgBoqWmQOht6RQga++SA" />
 
 
@@ -327,6 +328,10 @@ sum().age / sum.name;
 :::
 逆变推导出交叉类型
 
+:::tip 🚩逆变推导出交叉
+ 很容易理解，因为为了保证 **类型安全**,所以必须要满足所有函数中的参数类型，只能联合类型
+:::
+
 ```ts
 type Bar<T> = T extends { a: (x: infer U) => void; b: (x: infer U) => void }
   ? U
@@ -334,6 +339,17 @@ type Bar<T> = T extends { a: (x: infer U) => void; b: (x: infer U) => void }
 
 type T20 = Bar<{ a: (x: string) => void; b: (x: string) => void }>; // string
 type T21 = Bar<{ a: (x: string) => void; b: (x: number) => void }>; // string & number
+```
+
+```ts
+type X3 = ((x:{a:string})=>any) | ((x:{b:number})=>any);
+
+let X4= function (cb:X3){
+  cb({
+    a:"a",
+    b:10
+  })
+}
 ```
 
 协变推导出联合类型

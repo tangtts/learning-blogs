@@ -36,6 +36,7 @@ CREATE TABLE student (
 - PRIMARY KEY - NOT NULL 和 UNIQUE 的结合。确保某列（或两个列多个列的结合）有唯一标识，有助于更容易更快速地找到表中的一个特定的记录。
 - FOREIGN KEY - 保证一个表中的数据匹配另一个表中的值的参照完整性。
 - CHECK - 保证列中的值符合指定的条件。
+  > age int check( age > 0 && age <= 120) comment "年龄"
 - DEFAULT - 规定没有给列赋值时的默认值。
 
 #### 添加约束
@@ -46,11 +47,16 @@ CREATE TABLE Persons
     P_Id int NOT NULL,
     LastName varchar(255) NOT NULL,
     PRIMARY KEY (P_Id)  // [!code hl]
+    FOREIGN KEY (P_Id) REFERENCES Persons(P_Id) // [!code hl]
 )
 ```
 当表已被创建时，如需在 "P_Id" 列创建 PRIMARY KEY 约束
 ```sql
 ALTER TABLE Persons ADD PRIMARY KEY (P_Id)
+```
+当表已被创建时，如需在 添加 外键约束
+```sql
+ALTER TABLE Orders ADD FOREIGN KEY (P_Id) REFERENCES Persons(P_Id)
 ```
 
 添加 default 约束
@@ -64,10 +70,6 @@ CREATE TABLE Persons
 ```
 ```sql
 ALTER TABLE Persons ALTER City SET DEFAULT 'SANDNES'
-```
-撤销 DEFAULT 约束
-```sql 
-ALTER TABLE Persons ALTER City DROP DEFAULT
 ```
 
 #### 修改约束（alter / modify）
@@ -86,30 +88,24 @@ ALTER TABLE Persons MODIFY Age int NULL
 ALTER TABLE employee MODIFY age varchar(10)
 ```
 
-#### 删除约束（alter / deop）
+#### 删除约束（alter / drop）
+由于 主键只有一个，不需要指定列名
 ```sql
 ALTER TABLE Persons DROP PRIMARY KEY
 ```
-
-#### 外键约束（FOREIGN KEY / REFERENCES）
-添加外键约束
-```sql
-CREATE TABLE Orders
-(
-O_Id int NOT NULL,
-P_Id int,
-PRIMARY KEY (O_Id),
-FOREIGN KEY (P_Id) REFERENCES Persons(P_Id)
-)
+删除 DEFAULT 约束
+> alter table 用于修改表,alter column 用于修改 列名
+```sql 
+ALTER TABLE Persons ALTER City DROP DEFAULT
 ```
-当 "Orders" 表已被创建时，如需在 "P_Id" 列创建 FOREIGN KEY 约束
-```sql
-ALTER TABLE Orders ADD FOREIGN KEY (P_Id) REFERENCES Persons(P_Id)
-```
-撤销 FOREIGN KEY 约束
+删除 FOREIGN KEY 约束
 ```sql
 ALTER TABLE Orders DROP FOREIGN KEY fk_PerOrders
 ```
+
+
+
+
 
 ### 修改列(ALTER TABLE)
 
@@ -125,7 +121,7 @@ alter TABLE employee add c int default 0
 ```
 
 
-### 删除
+### 删除表
 
 ```sql
 drop table if exists student;
@@ -134,6 +130,18 @@ drop table student
 ```
 
 ## 查询 where
+`select` 就是 `find` 操作，*可以看做数组的 `find` 方法*  
+`from` 是源数组  
+`select` 是解构变量，如果是 `*` 则是不解构  
+`where` 就是 `find` 判断条件  
+
+多个表相当于多个数组在 `find `内部  
+
+聚合函数可以想象为自己编写的一个函数，可以把多个值聚合成一个值，如求和、求平均值、求最大值、求最小值等
+
+```sql
+select avg(e.salary) from emp e, dept d where e.dept_id = d.id and d.name = "研发部"
+```
 
 ### 全部 
 第一个是数据库名字 第二个是数据表名
@@ -282,6 +290,16 @@ SELECT * FROM employee WHERE (age = 50 or age = 60) and not name = "张三";
 Select * from emp where comm is null;
 ```
 
+#### all
+满足所有条件
+<img src="@other/sqlAll.png"/>
+
+#### any
+
+满足其中一个条件
+<img src="@other/sqlAny.png"/>
+
+
 
 ### 🏮子查询
 
@@ -339,9 +357,62 @@ SELECT name FROM department
     );
 ```
 
-### 集合
+### 流程控制语句
 
-### 限制
+#### if
+```sql
+SELECT name,if(score >=60,"及格","不及格") as "是否及格" from student;
+```
+<img src="@backImg/if运算.png"/>
+
+
+#### if null
+
+```sql
+SELECT 
+  last_name,
+  salary * (1 + IFNULL(commission_pct, 0)) * 12 "年工资" 
+FROM
+  employees ;
+```
+
+#### case when
+case  +  (when 条件语句 then 结果) (when 条件语句 then 结果) else as "xxx"
+```sql
+SELECT 
+  score, 
+  CASE
+    WHEN score >=90 
+        THEN '优秀' 
+    WHEN score >=60 
+        THEN '良好' 
+    ELSE '差' 
+  END AS '档次' 
+FROM student;
+```
+
+<img src="@backImg/case运算.png"/>
+
+#### case exp
+```sql
+SELECT 
+  last_name,
+  department_id,
+  CASE
+    department_id 
+    WHEN 10 
+    THEN salary * 1.1 
+    WHEN 20 
+    THEN salary * 1.2 
+    WHEN 30 
+    THEN salary * 1.3 
+    ELSE salary * 1.4 
+  END "工资"
+FROM
+  employees ;
+```
+
+### 限制 limit
 limit 第一个参数是起始索引(查询页码 - 1) * 每页记录数，第二个参数要返回的数量  
 如果是第一页，可以省略
 ```sql
@@ -455,7 +526,6 @@ select class, count(*) as count from student group by class order by count asc;
 SELECT COUNT(DISTINCT site_id) AS nums FROM access_log;
 ```
 
-
 #### avg/max/min/count/sum
 
 ```sql
@@ -470,7 +540,7 @@ SELECT ROUND(1.234567, 2), CEIL(1.234567), FLOOR(1.234567), ABS(-1.234567), MOD(
 <img src="@backImg/数值运算.webp"/>
 
 #### 日期函数
-对日期、时间进行处理，比如 DATE、TIME、YEAR、MONTH、DAY
+对日期、时间进行处理，比如 DATE、TIME、YEAR、MONTH、DAY、DATEDIFF(date1,date2)*时间间隔*、CURDATE(当前日期)、CURTIME(当前时间)、NOW
 
 ```sql
 SELECT YEAR('2023-06-01 22:06:03') as "year", MONTH('2023-06-01 22:06:03') as "month",DAY('2023-06-01 22:06:03') as "day",DATE('2023-06-01 22:06:03') as "date", TIME('2023-06-01 22:06:03') as "time";
@@ -488,21 +558,14 @@ SELECT DATE_FORMAT('2022-01-01', '%Y年%m月%d日') as "date";
 SELECT STR_TO_DATE("August 10 2017", "%M %d %Y");
 ```
 
-#### 条件语句
-##### if
+## 执行顺序
+
+<img src="@other/sql执行顺序.png"/>
+
 ```sql
-SELECT name,if(score >=60,"及格","不及格") as "是否及格" from student;
+select e.name ename,e.age eage from emp e where e.age > 15 order by eage asc;
 ```
-<img src="@backImg/if运算.png"/>
-
-##### case
-case  +  (when 条件语句 then 结果) (when 条件语句 then 结果) else as "xxx"
-```sql
-SELECT name, score, CASE WHEN score >=90 THEN '优秀' WHEN score >=60 THEN '良好' ELSE '差' END AS '档次' FROM student;
-```
-<img src="@backImg/case运算.png"/>
-
-
+先执行 `from`, 后执行 `where`，然后执行 `select`，然后执行 `orderby`(所以可以使用 select 的别名)，最后执行 `limit`
 ## 插入
 
 ```sql
@@ -515,6 +578,59 @@ INSERT INTO student (name, gender, age, class, score)
 ```
 
 ## 多表
+
+### 行子查询
+
+```sql
+select * from emp where (salary,managerid) = (12500,1)
+```
+一行多列
+```sql
+select * from emp where (salary,managerid) = (select salary,managerid from emp where name = "张无忌")
+```
+
+
+### 内连接
+
+隐式内连接
+
+```sql
+select 字段 from 表1,表2 where 条件
+```
+
+```sql
+select emp.name,dept.name from emp,dept where emp.id = dept.id
+```
+
+显式内连接
+
+```sql
+select 字段 from 表1 [inner] join 表2 on 条件;
+```
+```sql
+select e.name,d.name from emp e inner join dept d on e.id = d.id;
+```
+内连接返回多表除 `null` 的部分
+
+### 外连接
+#### 左外连接
+
+```sql
+select 字段 from 表1 left join 表2 on 条件;
+```
+```sql
+select e.name,d.name from emp e left outer join dept d on e.id = d.id;
+```
+
+### 自连接
+
+```sql
+select 字段列表 from 表A 别名A JOIN 表A 别名B on where xxx
+```
+这一张表可以看做两张表
+<img src="@other/sql自连接1.png"/>
+查询自己领导
+<img src="@other/sql自连接2.png"/>
 
 ### 一对一
 
@@ -571,6 +687,54 @@ SELECT user.id, name, id_card.id as card_id, card_name
 
 - RESTRICT：只有没有从表的关联记录时，才允许删除主表记录或者更新主表记录的主键 id
 
+### 多表中间表
+
+```sql
+create table student_course (
+    id int auto_increment primary key comment "主键",
+    studentId int not null comment "学生id",
+    courseId int not null comment "课程id",
+    constraint fl_courseid foreign key(courseId) references course(id),
+    constraint fl_studentId foreign key(studentId) references student(id)
+)
+```
+
+## 并发
+
+<img src="@other/事务并发问题.png"/>
+
+
+### 脏读
+一个事务还没 commit，另一个事务已经读取了，但是第一个事务还有可能要回滚
+<img src="@other/事务并发问题-脏读.png"/>
+
+### 不可重复读
+一个事务读取，另一个事务更新并提交，此时第一个事务再次读取，但是已经发生了变化
+<img src="@other/事务并发问题-不可重复读.png"/>
+
+### 幻读
+一个事务查询发现没有，另一个事务更新并提交，此时第一个事务插入数据，但是已经发现已经存在了，再次读取发现仍然没有（因为已经解决了不可重复读的问题）
+<img src="@other/事务并发问题-幻读.png"/>
+
+### 解决办法
+
+对号表示依旧会出现的问题
+<img src="@other/事务并发问题-解决办法.png"/>
+
+查看
+
+```sql
+select @@transaction_isolation
+```
+修改
+
+```sql
+set [session | global] transaction isolation level [read uncommitted | read committed | repeatable read | serializable]
+```
+
+```sql
+set session transaction isolation level read committed;
+```
 
 ## update
 如果省略了 `WHERE` 子句,所有的数据都会更新
