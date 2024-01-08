@@ -69,6 +69,7 @@ export default defineConfig({
           { text: "java", link: "/java/base", activeMatch: "/java/base" },
           { text: "sql", link: "/backend/sql", activeMatch: "/backend/sql" },
           { text: "nginx", link: "/backend/nginx", activeMatch: "/backend/nginx" },
+          { text: "docker", link: "/backend/docker", activeMatch: "/backend/docker" },
         ],
       },
       {
@@ -337,7 +338,8 @@ export default defineConfig({
             { text: "nest", link: "/nest/nest/index"},
             { text: "java", link: "/java/base" },
             { text: "sql", link: "/backend/sql" },
-            { text: "nginx", link: "/backend/nginx" }
+            { text: "nginx", link: "/backend/nginx" },
+            { text: "docker", link: "/backend/docker" },
           ],
         },
       ],
