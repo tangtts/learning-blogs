@@ -52,3 +52,69 @@ public class User {
    }
 }
 ```
+## 拦截器
+
+请求之前使用 `preHandle`,请求之后使用 `afterCompletion`
+
+```java
+@Component
+public class LoginInterceptor implements HandlerInterceptor {
+
+  @Autowired
+  private StringRedisTemplate stringRedisTemplate;
+
+     @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception { // [!code hl]
+
+        // 令牌验证
+        String token = request.getHeader("Authorization");
+        //验证token
+        try {
+            //从redis中获取相同的token
+            ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+            String redisToken = operations.get(token);
+
+            if (redisToken == null){
+                //token已经失效了
+                throw new RuntimeException();
+            }
+
+            Map<String, Object> claims = JwtUtil.parseToken(token);
+
+            //把业务数据存储到ThreadLocal中
+            ThreadLocalUtil.set(claims);
+            //放行
+            return true;
+        } catch (Exception e) {
+            //http响应状态码为401
+            response.setStatus(401);
+            //不放行
+            return false;
+        }
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception { // [!code hl]
+        //清空ThreadLocal中的数据
+        ThreadLocalUtil.remove();
+    }
+}
+```
+
+注册使用
+
+```java
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private LoginInterceptor loginInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        //登录接口和注册接口不拦截
+        registry.addInterceptor(loginInterceptor).excludePathPatterns("/user/login","/user/register");
+    }
+}
+```
+

@@ -59,6 +59,20 @@ const a: A = "this is string";
 
 **A1，A2 两个接口，满足 A2 的接口一定可以满足 A1**，所以条件为真，A 的类型取 string
 
+## 类型关系
+
+<img src="@img/类型关系.webp"/>
+
+**类型之间的并集（|）会向上取顶部的类型。即 `never | 'a' => 'a'，unknown | 'a' => 'unknown'`**  
+
+**类型之间的交集（&）会向下取底部的类型。即 `never & 'a' = never，unknown & 'a' => 'a'`**
+
+```ts
+type A = number | 1; // number 
+type B = never | string; // string （never 前面说了是所有类型的子类型）
+```
+利用 `never | others = others` 的特性可以实现 `object` 的过滤
+
 ## 联合 / 交叉
 
 交叉类型会把多个类型给扩大成一个总类型,也可以说是生成的类型 要满足多个类型      
@@ -82,6 +96,12 @@ type C<T> = {
 // 交叉类型是一个是马老师的粉丝,一个是蔡徐坤的粉丝,他们共有的粉丝是交叉类型
 type g3 = C<X3>;
 ```
+声明多个同名 类型变量 也会被推断为联合类型
+```ts
+type A<T> = T extends { a: infer U, b: infer U } ? U : any; 
+type Foo = A<{ a: number, b: string }> // type Foo = string | number
+```
+
 
 ## 鸭子类型
 只要满足所定义的类型即可
@@ -313,7 +333,42 @@ sum().age / sum.name;
 
 <iframe src="https://www.typescriptlang.org/play?#code/C4TwDgpgBAYgrgOwMYF4oAoCUKB8BvBAQwFsIAuAZ2ACcBLBAcwBpCHyE5iAjCagXwBQAgDYRgUCpzLxkIsVABmARihosuPFGpi41BFAIlyAcgBeFY30GjxCgEyqM2fNuC79moqTJmLLNmR2AAxMbAgAJrxkKlZCAPRxUIClRoCYqUyAiDqAAHKAVHKAK-GAe2qAPAoCksQoykKl5XZAA" width="100%" height="600"/>
 
-### 总结
+### 总结逆变协变
+
+类型系统中，如果一个类型的属性更具体，则该类型是子类型  
+
+普通情况下，子类型可以赋值给父类型。但是在作为函数参数时，子类型参数的函数不再可以赋值给接受父类型参数的函数。即 **`type Fn<T> = (arg: T) => void`** 构造器构造后，父子关系逆转了，此时成为“逆变”。
+
+
+**对于函数类型来说，函数参数的类型兼容是反向的，我们称之为 逆变 ，返回值的类型兼容是正向的，称之为 协变** 
+
+```ts
+let fn1!: (a: string, b: number) => string;
+let fn2!: (a: string, b: number) => string | number | boolean;
+fn2 = fn1; // correct 
+fn1 = fn2 // error: 不可以将 string|number|boolean 赋给 string 类型
+```
+
+```ts
+type IParent = () => void;
+type IChild = (val: string) => void;
+
+let parentTest: IParent = () => {};
+let childTest: IChild = (val) => { console.log(val)};
+
+childTest = parentTest; // ok
+parentTest = childTest; // error
+
+
+let parentTest2: IParent = (val) => { console.log(val)}; // error
+let childTest2: IChild = () => { }; // ok
+```
+
+:::tip
+**把类型声明当成生产方，实现当成消费方，消费了生产方不存在的参数是行不通的，也就是实现不能比类型定义多出参数。但是生产方提供了更多的内容，消费方不处理是没关系的，也就是实现可以比类型定义少参数。**
+:::
+
+
 1. 协变是返回类型多的函数可以赋值给返回类型少的函数，可以保证安全
 2. 逆变和协变是**相反**的，反正函数体没用到,你随便多传几个参数无所谓的
 3. 只要记住一个 协变即可
@@ -427,6 +482,27 @@ fun2("aaa", 1);
 
 <iframe src="https://www.typescriptlang.org/play?ssl=12&ssc=36&pln=3&pc=1#code/FDAuE8AcFMAIEkDCBDANqgQsgxgawIywC8sAPACoB8AFAJajQC2AXLOQDSy0AmAHqwDsArowBG0AE4BKYpVgA3APY8A3CAD062IH95QBSugUuNAx8qA300B2HoCztQN4+gaPVAMP+BpI0AVSoAJ5QKaKsMFDhI0mHLgo5EjoGFjZOHn5YYTFJGSI5JVUNdSc3YFRoUFgAMyEBZh90LDxSAGdQCVoBAHMg2BCmdkipBIBvAF8U2EBAz0AjazTXdkADtUAuOUBg7UAQtxtARh1AejM2WA9M7LyBACZClGL-QiJGxma+VspOoA" width="100%" height="600"/>
 
+## excess property check
+
+
+当传入的参数是一个对象字面量时，会进行额外属性检查。
+
+```ts
+function getPointX(point: { x: number }) {
+  return point.x
+}
+
+getPointX({ x: 1, y: '2' }) // error // [!code error]
+
+const point = {
+	x: 1,
+  y: '2'
+}
+
+getPointX(point) // OK // [!code warning]
+```
+
+
 ## 字符串
 
 ### 固定后缀字符串
@@ -528,10 +604,10 @@ object：⭐表示任何非原始类型的值，包括对象、数组、函数�
 
 Object 表示一个 js 的顶级对象,任何时候都不建议使用,只能使用 `Object` 上的公共方法
 
-{} 表示一个空对象,*不允许添加属性*, 是 Object 的实例,和 Object 一样，可以使用 `Object` 上的原型方法,但是没有提示
+{} 表示一个空对象,*不允许添加属性*, 是 Object 的实例,和 Object 一样，可以使用 `Object` 上的原型方法,但是没有提示,**不可以赋值给 `null / undefined`**
 :::
 
-<iframe src="https://www.typescriptlang.org/play?#code/FDA2FMBcAIHsCMBWAuOTwGNIG5gMdALzQDeAvttAPRXSAQKoKs2gMP+BeXoJ-aghjGD0ZmopjIG8fQNHqeJEWgBtALqUa9ZoAdTQCN+PfP2jDRBYgAoAlEQB8pCtVqMmgX8UFq9Fg0j84gIyVo7s9EB66QwA0PADsAVwBbeHAAJwcQCBh8ACZUAHk7HC148XJZc2Z2bmgUvntNBPFpbPkmZR5C9RKkDN0DQmMszwtrGtTo0uJnDwH2v36uosEREGhY6AAPVDV7YgAiAAtwUFBYJYrAWDkLQHVtQDJvQCY5LkB85UBpzWEmHdsx6LAoaABPZO7lgHdYCNAAE22hkxRnUJs8AHSQWAAZUgEQAlgEAObAcEANwAhqAguAkgAzGJPABeyHImTInmAhLB6JcAAZPD4QFTITD4UjPIToIBquMAUHKAQptAJDmgG+5QCq8oAF40AXJ5MQBi8lxAPfKgFO5QD+8oAKVzOQkAnaYMSlgjFYnH4x4wEIk8nLdFLIYgYBAA" width="100%" height="600"/>
+<iframe src="https://www.typescriptlang.org/play?#code/FDA2FMBcAIHsCMBWAuOTwGNIG5gMdALzQDeAvttAPRXSAQKoKs2gMP+BeXoJ-aghjGD0ZmopjIG8fQNHqeJEWgBtALqUa9ZoAdTQCN+PfP2jDRBYgAoAlEQB8pCtVqMmgX8UFq9Fg0j84gIyVo7s9EB66QwA0PADsAVwBbeHAAJwcQCBh8ACZUAHk7HC148XJZc2Z2bmgUvntNBPFpbPkmZR5C9RKkDN0DQmMszwtrGtTo0uJnDwH2v36uosEREGhY6AAPVDV7YgAiAAtwUFBYJYrAWDkLQHVtQDJvQCY5LkB85UBpzWEmHdsx6LAoaABPZO7lgHdYCNAAE22hkxRnUJs8AHSQWAAZUgEQAlgEAObAcEANwAhqAguAkgAzGJPABeyHImTInmAhLB6JcAAZPD4QFTITD4UjPIToIBquMAUHKAQptAJDmgG+5QCq8oAF40AXJ5MQBi8lxAPfKgFO5QD+8oAKVzOQkAnaYMSlgjFYnH4x4wPXY1BZEBySBrADO4Gg6IidsxoGguIR4F80HgQRgIThiJWMACsBg4Wg4BmAAd+OBfsATXa+rgE+IlrjYFtk5jseJ9EZ7RAIpAdGmM0s9Fn9WTKzniCRXRnUEt4A6ltAKBbaFbwLb7Y7wxEIt9rfHs4noEEAr9wG6ArGa+PghtcCAgA" width="100%" height="1000"/>
 
 ## Class
 ### 类型
@@ -896,14 +972,114 @@ type MyInstanceType = InstanceType<typeof MyClass>;
 const instance: MyInstanceType = new MyClass("Alice", 30);
 ```
 
+### const 断言
+
+当定义可变类型或者属性时，ts 通常会扩大值，以确保我们可以在以后不需要编写显式类型情况下赋值
+> When declaring a mutable variable or property, TypeScript often widens values to make sure that we can assign things later on without writing an explicit type.
+
+```ts
+let x = "hello";
+
+// hurray! we can assign to 'x' later on!
+x = "world";
+```
+
+When we construct new literal expressions with const assertions, we can signal to the language that  
+
+1. no literal types in that expression should be widened (e.g. no going from "hello" to string)
+2. object literals get readonly properties
+
+```ts
+// Type '10'
+let x = 10 as const;
+
+// Type 'readonly [10, 20]'
+let y = [10, 20] as const;
+
+// Type '{ readonly text: "hello" }'
+let z = { text: "hello" } as const;
+```
+或者
+
+```ts
+// Type '10'
+let x = <const>10;
+
+// Type 'readonly [10, 20]'
+let y = <const>[10, 20];
+
+// Type '{ readonly text: "hello" }'
+let z = <const>{ text: "hello" };
+```
+
+```ts
+// Works with no types referenced or declared.
+// We only needed a single const assertion.
+function getShapes() {
+    let result = [
+        { kind: "circle", radius: 100, },
+        { kind: "square", sideLength: 50, },
+    ] as const;
+    
+    return result;
+}
+
+for (const shape of getShapes()) {
+    // Narrows perfectly!
+    if (shape.kind === "circle") {
+        console.log("Circle radius", shape.radius);
+    }
+    else {
+        console.log("Square side length", shape.sideLength);
+    }
+}
+```
+
+```ts
+export const Colors = {
+    red: "RED",
+    blue: "BLUE",
+    green: "GREEN",
+} as const;
+
+// or use an 'export default'
+
+export default {
+    red: "RED",
+    blue: "BLUE",
+    green: "GREEN",
+} as const;
+```
+
+
 ## any / unknown
 ### ⭐keyof any 为啥是 string | number | symbol
+
 **因为 keyof 本意是提取 `key` 值,`key` 的类型只能是 string / number / symbol**
 
 :::info
 unknown 是 top type  
 any 有时候是 top type，有时候是 bottom type
+
+`unknown` 指的是 **不可预先定义的类型**
 :::
+
+不可预先定义的类型
+```ts
+// 在不确定函数参数的类型时
+// 将函数的参数声明为unknown类型而非any
+// TS同样会对于unknown进行类型检测，而any就不会
+function resultValueBySome(val:unknown) { 
+  if (typeof val === 'string') {  
+    // 此时 val 是string类型   
+    // do someThing 
+  } else if (typeof val === 'number') { 
+    // 此时 val 是number类型   
+    // do someThing  
+  } 
+  // ...
+}
+```
 
 
 顶级类型

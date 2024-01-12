@@ -356,6 +356,8 @@ export default defineConfig({
             { text: "集合", link: "/java/api/集合" },
             { text: "常用工具", link: "/java/api/常用工具" },
             { text: "io", link: "/java/api/io" },
+            { text: "AtomicInteger", link: "/java/api/AtomicInteger" },
+            { text: "@interface", link: "/java/api/@interface" },
           ],
         },
         {
@@ -364,6 +366,7 @@ export default defineConfig({
           items: [
             { text: "spring 基础", link: "/java/spring-boot/index" },
             { text: "lombok", link: "/java/spring-boot/lombok" },
+            { text: "mybatis", link: "/java/spring-boot/mybatis" },
           ],
         },
       ],

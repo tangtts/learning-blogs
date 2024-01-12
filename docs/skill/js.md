@@ -559,3 +559,35 @@ console.log(res.b)
 res.a = 999
 console.log(res.a)   // 999 
 ```
+
+## 给fetch添加超时功能
+
+```js
+function fetchWithTimeout(timeout = 5000) {
+  return function(url, options) {
+    return new Promise((resolve, reject) => {
+      const controller = new AbortController();
+       options = options || {};
+
+      //  如果用户传了 signal
+       if(options.signal){
+        const signal = options.signal;
+        signal.addEventListener('abort',()=>{
+          controller.abort();
+        })
+       }
+      //
+
+       options.signal = controller.signal;
+
+       fetch(url, options).then(resolve).catch(reject);
+
+       setTimeout(()=>{
+         reject(new Error('请求超时'))
+         controller.abort();
+       },timeout)
+
+    })
+  }
+}
+```

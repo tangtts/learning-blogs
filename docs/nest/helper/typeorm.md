@@ -31,6 +31,9 @@ export class AppService {
 而 `save` 方法会先查询一次数据库来确定是插入还是修改。
 
 
+:::tip
+`update` 默认不会返回更新后的值，但是 `save` 会
+:::
 ## 删除
 
 `delete` 和 `remove` 的区别是，`delete` 直接传 `id`、而 `remove` 则是传入 `entity` 对象。

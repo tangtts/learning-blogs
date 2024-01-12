@@ -88,4 +88,19 @@ java.util.List list = new java.util.ArrayList();
 | boolean | false | true/false | --- |
 | char | '\u0000' | 0 ~ 65535 | --- |
 
+## 注解
+
+### JsonFormat
+
+序列化和反序列化
+
+如果前端传来的为字符串格式的日期：“2022年07月29日 09时41分22秒”，则需要如下配置：
+
+```java
+@JsonFormat(pattern = “yyyy年MM月dd日 HH时mm分ss秒”)
+private Date createTime;
+```
+
+解析后存入DB中的则为：2022-07-29 09:41:22，而在查询时返回的数据则为：“2022年07月29日 09时41分22秒”
+
 
