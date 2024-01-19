@@ -147,6 +147,11 @@ export default defineConfig({
             activeMatch: "/algorithm/回溯",
           },
           {
+            text: "双指针",
+            link: "/algorithm/双指针",
+            activeMatch: "/algorithm/双指针",
+          },
+          {
             text: "动态规划",
             link: "/algorithm/动规",
             activeMatch: "/algorithm/动规",
@@ -349,6 +354,7 @@ export default defineConfig({
           text: "api",
           collapsed: true,
           items: [
+            { text: "其他知识", link: "/java/api/其他知识" },
             { text: "class", link: "/java/api/class" },
             { text: "时间", link: "/java/api/date" },
             { text: "数字", link: "/java/api/number" },
@@ -356,10 +362,10 @@ export default defineConfig({
             { text: "字符串", link: "/java/api/string" },
             { text: "错误", link: "/java/api/错误" },
             { text: "集合", link: "/java/api/集合" },
-            { text: "常用工具", link: "/java/api/常用工具" },
             { text: "io", link: "/java/api/io" },
             { text: "AtomicInteger", link: "/java/api/AtomicInteger" },
-            { text: "@interface", link: "/java/api/@interface" },
+            { text: "注解", link: "/java/api/注解" },
+            { text: "反射", link: "/java/api/反射" },
           ],
         },
         {

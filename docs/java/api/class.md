@@ -101,6 +101,54 @@ public class User {
 }
 ```
 
+## 构造方法
+
+在类的初始值的 时候，会有一个无参构造,构造函数的名称和类名相同  
+
+```java
+class Person {
+ private String name;
+ private int age;
+
+ public Person(String name, int age) {
+     this.name = name;
+     this.age = age;
+ }
+
+ public Person(String name) {
+     this.name = name;
+     this.age = 12;
+ }
+
+ public Person() {
+ }
+}
+```
+
+也可以调用另一个构造方法
+
+```java
+class Person {
+ private String name;
+ private int age;
+
+ public Person(String name, int age) {
+     this.name = name;
+     this.age = age;
+ }
+
+ public Person(String name) {
+     this(name, 18); // 调用另一个构造方法Person(String, int)
+ }
+
+ public Person() {
+     this("Unnamed"); // 调用另一个构造方法Person(String)
+ }
+}
+```
+
+
+
 ## 封装/继承/多态的理解
 
 2023/12/21 10:18  
@@ -234,6 +282,21 @@ public class Person{
 ```
 可以修改内部变量,外界是无法感知的，只要对外暴露的方法名不变即可
 
+如果不封装，很有可能失去安全性，因为改变属性的值没有一个统一的入口，而且无法预测  
+
+比如
+```java
+cat.height = 0
+```
+使用封装，可以保护属性的安全
+```java
+public void setHeight(int height){
+  if(height>9){
+    this.height = height;
+  }
+}
+```
+我们可以将属性标记为 `private`, 把 `getter` 和 `setter` 标记为 `public`
 
 ## 静态方法
 
@@ -267,7 +330,9 @@ static  public class Chinese {
 
 ```java
 enum Color {
-   RED, GREEN, BLUE;
+   RED, 
+   GREEN, 
+   BLUE;
 }
 ```
 - values 返回枚举类中所有的值
@@ -305,7 +370,34 @@ enum Season {
 
 ```java
 Season s = Season.AUTUMN;
+// 秋高气爽
 System.out.println(s.seasonDesc);
+```
+
+```java
+enum InputUserNameEnum{
+
+  USERNAME(1), // [!code hl]
+
+  PHONE(2);   // [!code hl]
+
+  private final Integer value;
+
+  Integer value() {
+    return value;
+  }
+
+  InputUserNameEnum(Integer value) {
+    this.value = value;
+  }
+}
+```
+可以设置值，可以获取值
+```java
+InputUserNameEnum inputUserNameEnum = null;
+inputUserNameEnum = InputUserNameEnum.PHONE;
+
+System.out.println(inputUserNameEnum.value());
 ```
 
 
@@ -353,4 +445,45 @@ class OuterClass {
 OuterClass x2 = new OuterClass();
 OuterClass.InnterClass x3 = x2.new InnterClass();
 x3.eat();
+```
+
+### 匿名内部类
+
+```java
+public class Hello { 
+
+Runnable r = new Runnable() {
+      public void run() {
+          System.out.println("Hello"+w.getA());
+      }
+  };
+r.run();
+}
+```
+
+### 静态内部类
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        Outer.StaticNested sn = new Outer.StaticNested();
+        sn.hello();
+    }
+}
+
+class Outer {
+    private static String NAME = "OUTER";
+
+    private String name;
+
+    Outer(String name) {
+        this.name = name;
+    }
+
+    static class StaticNested {
+        void hello() {
+            System.out.println("Hello, " + Outer.NAME);
+        }
+    }
+}
 ```

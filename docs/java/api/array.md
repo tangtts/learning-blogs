@@ -27,6 +27,28 @@ String[][] names = new String[3][3];
 names[0][1] = "zs"
 ```
 
+<img src="@backImg/java数组.png"/>
+
+## 方法
+
+### 遍历
+
+### forEach
+
+可以把 `:` 想象成 `in`,这种方法拿不到 `索引`
+```java
+int[] ns = { 1, 4, 9, 16, 25 };
+  for (int n : ns) {
+    System.out.println(n);
+} 
+```
+### 访问
+
+```java
+int[] ns = { 1, 1, 2, 3, 5, 8 };
+// [1, 1, 2, 3, 5, 8]
+System.out.println(Arrays.toString(ns));
+```
 
 ## 数组和集合的区别
 
@@ -84,10 +106,6 @@ System.out.println(Arrays.equals(is, 0, 5, is2, 0, 5));
 
 ### asList
 将数组转换成集合
-
-
-
-
 ```java
 List<Integer> integers = Arrays.asList(1, 2, 3, 4);
 

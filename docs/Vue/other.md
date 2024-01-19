@@ -355,3 +355,10 @@ declare module '*.vue' {
   export default component;
 }
 ```
+
+## --host
+
+```js
+"dev": "vite --host=0.0.0.0",
+```
+你可以将 Vite 服务器设置为监听所有可用的网络接口，而不仅仅是默认的本地回环地址（127.0.0.1）

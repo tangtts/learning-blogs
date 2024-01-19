@@ -88,6 +88,12 @@ java.util.List list = new java.util.ArrayList();
 | boolean | false | true/false | --- |
 | char | '\u0000' | 0 ~ 65535 | --- |
 
+
+<img src="@backImg/java数据类型.png"/>
+
+
+<blue>小杯子的东西倒入大杯子可以，但是大杯子不能倒入小杯子</blue>
+
 ## 注解
 
 ### JsonFormat

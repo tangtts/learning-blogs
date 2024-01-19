@@ -15,3 +15,13 @@
 .vp-doc a > code{
   font-weight: bolder;
 }
+/* 阮一峰课程 */
+pre.ascii{
+  font-size: 14px;
+  line-height: 14px;
+  padding: 10px 0;
+  border: none;
+  background-color: transparent;
+  font-family: JetBrainsMono, "Courier New", Consolas, monospace !important;
+  word-break: normal !important;
+}

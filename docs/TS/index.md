@@ -482,6 +482,23 @@ fun2("aaa", 1);
 
 <iframe src="https://www.typescriptlang.org/play?ssl=12&ssc=36&pln=3&pc=1#code/FDAuE8AcFMAIEkDCBDANqgQsgxgawIywC8sAPACoB8AFAJajQC2AXLOQDSy0AmAHqwDsArowBG0AE4BKYpVgA3APY8A3CAD062IH95QBSugUuNAx8qA300B2HoCztQN4+gaPVAMP+BpI0AVSoAJ5QKaKsMFDhI0mHLgo5EjoGFjZOHn5YYTFJGSI5JVUNdSc3YFRoUFgAMyEBZh90LDxSAGdQCVoBAHMg2BCmdkipBIBvAF8U2EBAz0AjazTXdkADtUAuOUBg7UAQtxtARh1AejM2WA9M7LyBACZClGL-QiJGxma+VspOoA" width="100%" height="600"/>
 
+### void
+
+忽略返回值，如果返回了一个 `void` 说明在意的是函数执行，而不是返回值
+
+```ts
+function a ():void{
+    obj.name = "zs"
+}
+
+let obj  ={
+  name:'lisi'  
+}
+
+let x = a()
+```
+
+
 ## excess property check
 
 
@@ -607,9 +624,33 @@ Object 表示一个 js 的顶级对象,任何时候都不建议使用,只能使�
 {} 表示一个空对象,*不允许添加属性*, 是 Object 的实例,和 Object 一样，可以使用 `Object` 上的原型方法,但是没有提示,**不可以赋值给 `null / undefined`**
 :::
 
-<iframe src="https://www.typescriptlang.org/play?#code/FDA2FMBcAIHsCMBWAuOTwGNIG5gMdALzQDeAvttAPRXSAQKoKs2gMP+BeXoJ-aghjGD0ZmopjIG8fQNHqeJEWgBtALqUa9ZoAdTQCN+PfP2jDRBYgAoAlEQB8pCtVqMmgX8UFq9Fg0j84gIyVo7s9EB66QwA0PADsAVwBbeHAAJwcQCBh8ACZUAHk7HC148XJZc2Z2bmgUvntNBPFpbPkmZR5C9RKkDN0DQmMszwtrGtTo0uJnDwH2v36uosEREGhY6AAPVDV7YgAiAAtwUFBYJYrAWDkLQHVtQDJvQCY5LkB85UBpzWEmHdsx6LAoaABPZO7lgHdYCNAAE22hkxRnUJs8AHSQWAAZUgEQAlgEAObAcEANwAhqAguAkgAzGJPABeyHImTInmAhLB6JcAAZPD4QFTITD4UjPIToIBquMAUHKAQptAJDmgG+5QCq8oAF40AXJ5MQBi8lxAPfKgFO5QD+8oAKVzOQkAnaYMSlgjFYnH4x4wPXY1BZEBySBrADO4Gg6IidsxoGguIR4F80HgQRgIThiJWMACsBg4Wg4BmAAd+OBfsATXa+rgE+IlrjYFtk5jseJ9EZ7RAIpAdGmM0s9Fn9WTKzniCRXRnUEt4A6ltAKBbaFbwLb7Y7wxEIt9rfHs4noEEAr9wG6ArGa+PghtcCAgA" width="100%" height="1000"/>
+<iframe src="https://www.typescriptlang.org/play?#code/FDA2FMBcAIHsCMBWAuOTwGNIG5gMdALzQDeAvttAPRXSAQKoKs2gMP+BeXoJ-aghjGD0ZmopjIG8fQNHqeJEWgBtALqUa9ZoAdTQCN+**PfP2jDRBYgAoAlEQB8pCtVqMmgX8UFq9Fg0j84gIyVo7s9EB66QwA0PADsAVwBbeHAAJwcQCBh8ACZUAHk7HC148XJZc2Z2bmgUvntNBPFpbPkmZR5C9RKkDN0DQmMszwtrGtTo0uJnDwH2v36uosEREGhY6AAPVDV7YgAiAAtwUFBYJYrAWDkLQHVtQDJvQCY5LkB85UBpzWEmHdsx6LAoaABPZO7lgHdYCNAAE22hkxRnUJs8AHSQWAAZUgEQAlgEAObAcEANwAhqAguAkgAzGJPABeyHImTInmAhLB6JcAAZPD4QFTITD4UjPIToIBquMAUHKAQptAJDmgG**+5QCq8oAF40AXJ5MQBi8lxAPfKgFO5QD+8oAKVzOQkAnaYMSlgjFYnH4x4wPXY1BZEBySBrADO4Gg6IidsxoGguIR4F80HgQRgIThiJWMACsBg4Wg4BmAAd+OBfsATXa+rgE+IlrjYFtk5jseJ9EZ7RAIpAdGmM0s9Fn9WTKzniCRXRnUEt4A6ltAKBbaFbwLb7Y7wxEIt9rfHs4noEEAr9wG6ArGa+PghtcCAgA" width="100%" height="1000"/>
 
 ## Class
+
+### 抽象
+
+抽象的类不能被实例化,只能被继承，同样的，抽象方法也只能存在于抽象类中，而且抽象方法没有方法体
+
+```ts
+abstract class Animal {
+  abstract makeSound(): void;
+  drink(){
+    console.log('喝水')
+  }
+}
+```
+动物发出的声音是不一样的，但是动物喝水是一定的  
+
+抽象方法其实就是一种协议，约定子类必须实现该方法
+
+优点是：
+**多态！**比如狗和猫都是动物，但是狗和猫发出声音是不一样的，但是你只需要把 `Aniaml` 作为参数类型，那么就可以调用 `makeSound` 和 `drink` 方法，不管以后怎么扩展子类型
+
+
+
+
+
 ### 类型
 - 当把类直接作为类型时，该类型约束的是该类型必须是类的实例；即该类型获取的是该类上的实例属性和实例方法（也叫原型方法）;
 - 当把typeof 类作为类型时，约束的满足该类的类型；即该类型获取的是该类上的静态属性和方法。
@@ -641,6 +682,15 @@ const p4: typeof People = People;
 p4.a
 ``` 
 ### 继承
+
+:::tip 使用 `is-A` 判断是否应该继承
+使用 `is-A` 判断是否应该继承
+- 三角形是一个多边形 ok
+- 外科医生是一个医生 ok
+- 澡盆是一个浴室  fail
+使用 `is-A` 来判断，而不是 `has-A`
+:::
+
 
 ```ts
 class Person {
