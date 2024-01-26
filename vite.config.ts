@@ -16,6 +16,7 @@ export default defineConfig({
     alias: {
       "@": resolve(__dirname, "src/"),
       utils: resolve(__dirname, "src/utils/"),
+      vuex: resolve(__dirname, "src/store/"),
     },
   },
   build:{

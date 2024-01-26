@@ -1,45 +1,74 @@
 <template>
   <div>
-    <el-button @click="toggleHeight">切换高度</el-button>
-    {{ count }}
-    <Fn :a="1" />
+    {{ count }} - {{doubleCount}}
+    <el-button @click="increment">
+      +
+    </el-button>
+
+    <el-button @click="decrement">
+      -
+    </el-button>
+    <div id="abcd">
+
+    </div>
+
   </div>
 </template>
 <script lang="tsx" setup>
 
-// const Fn = ({ a }) => {
-//   return h("div",{ onClick:()=>{ console.log(123) }  }, a);
-// };
+import { computed,nextTick,onMounted } from 'vue';
 
-const Fn = ({ a }) => {
-  return <div>{a}afdfaf</div>;
-};
 
-import { onMounted, ref, computed, reactive, watch, render } from "vue";
-const count = ref(0);
 
-function animate(duration, from, to, onProgress) {
-  let value = from;
-  let speed = (to - from) / duration;
-  let startTime = Date.now();
-  function _run() {
-    let now = Date.now();
-    const time = now - startTime;
-    if (time >= duration) {
-      value = to;
-      onProgress?.(value);
-      return;
+import { createStore } from "@/store"
+
+const { commit, state, getters,dispatch } = createStore({
+  state: {
+    count: 0,
+    age: "111"
+  },
+  getters:{
+    age(state){
+      return state.age
+    },
+    doubleCount(state){
+      return  state.count * 2
     }
-    value = from + speed * time;
-    onProgress?.(value);
-    requestAnimationFrame(_run);
+  },
+  actions:{
+    upload({commit}){
+      commit("increment",10)
+    }
+  },
+  mutations: {
+
+    increment(state, payload) {
+      state.count += payload;
+    },
+
+    decrement(state, payload) {
+      state.count -= payload
+    }
   }
-  _run();
+})
+
+const count = computed(() => {
+  return state.count
+})
+
+const doubleCount = computed(() => {
+  return getters.doubleCount
+})
+
+
+const increment = () => {
+  commit('increment', 1)
+  commit('increment', 1)
+  commit('increment', 1)
 }
 
-const toggleHeight = () => {
-  animate(1000, 1000, 0, (value: number) => {
-    count.value = +value.toFixed(2);
-  });
-};
+const decrement = () => {
+  commit('decrement', 1)
+  dispatch("upload",20)
+}
 </script>

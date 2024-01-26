@@ -20,5 +20,7 @@ app.use(Loading, {
   duration:400
 });
 
+
+
 app.directive("ripple",Ripple)
 app.mount("#app");
