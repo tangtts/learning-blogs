@@ -54,7 +54,7 @@ div.append("Some text", p)
 console.log(div.childNodes) // NodeList [ #text "Some text", <p> ]
 ```
 ### appendChild
-如果将被插入的节点已经存在于当前文档的文档树中，那么 appendChild() 只会将它从原先的位置移动到新的位置，这意味着，一个节点不可能同时出现在文档的不同位置，如果想保留，使用 `Node.cloneNode()` 创建一个副本，再将副本附加到目标父节点下
+如果将被插入的节点已经存在于当前文档的文档树中，那么 appendChild() 只会将它从原先的位置移动到新的位置，这意味着，**一个节点不可能同时出现在文档的不同位置**，如果想保留，使用 `Node.cloneNode()` 创建一个副本，再将副本附加到目标父节点下
 
 :::danger
 appendChild() 返回的是被附加的子元素,不支持多参数，不支持 string

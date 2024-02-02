@@ -1,11 +1,5 @@
 # scss
-:::tip
-其中 $animal 类似于变量 `var`, 使用变量 `#${xx}`,主要是为了区别普通值和变量值
 
-如果只有变量，直接使用 `${xx}`
-
-scss 尽可能的简洁
-:::
 
 ## @import / @use
 ### @import
@@ -42,9 +36,9 @@ scss 尽可能的简洁
       color: red
    }
 ```
-<blue>相当于直接放到顶部位置</blue>
+**<blue>相当于直接放到顶部位置</blue>**
 
-##### 问题
+##### ❔问题
 1. 容易混淆, css 也使用 import，但是他是运行时，但是 scss 是编译时
 2. 命名冲突,如果多个文件使用了同一变量,后者会覆盖前者
 3. 没有私有变量
@@ -70,7 +64,7 @@ $_n:10
 ```
 ## 变量
 ### $
-SCSS中变量名使用中划线或下划线都是指向同一变量的
+**🐶SCSS中变量名使用中划线或下划线都是指向同一变量的**
 
 1. $border-color 和$border_color 是同一个变量
 2. 后定义的会被忽略,但是会执行赋值
@@ -86,16 +80,26 @@ $border_color:#ccc;
   .a{
       color:$border_color;
   }
- 
 ```
+
+```scss
+$bg-image-center:no-repeat center/cover;
+.img {
+  background:url("xxxx") $bg-image-center
+}
+```
+
 ### [🔗#{}](https://sass-lang.com/documentation/interpolation/)
 
+:::tip
+其中 $animal 类似于变量 `var`, 使用变量 `#${xx}`,主要是为了区别普通值和变量值
+
+**如果只有变量，直接使用 `${xx}`,如果有字符串，使用 `${xx}` 会有歧义**
+:::
 
 <blue> ⭐将 SassScript 变量嵌入到字符串或选择器中</blue>
 
-作用是引用表达式   
-
-这个时候不能使用 ${name}
+作用是引用表达式，这个时候不能使用 ${name}
 ```scss
 @mixin corner-icon($name, $top-or-bottom, $left-or-right) {
   .icon-#{$name} {
@@ -118,11 +122,6 @@ $border_color:#ccc;
 }
 ```
 
-:::tip
-插值对于将值 ***注入字符串*** 非常有用，但除此之外，它在SassScript表达式中很少需要。  
-您绝对不需要仅在属性值中使用变量。不用写作 color: #{$accent}，您可以写作  color: $accent！
-:::
-
 也可以写入属性中
 
 ```scss
@@ -143,7 +142,9 @@ $positionType:(
 ## 嵌套
 
 scss识别一个属性以分号结尾时则判断为一个属性  
-**以大括号结尾时则判断为一个嵌套属性**  
+
+**🐕以大括号结尾时则判断为一个嵌套属性** 
+
 规则是将外部的属性以及内部的属性通过中划线连接起来形成一个新的属性
 1. 属性值嵌套
 ```scss
@@ -171,6 +172,7 @@ li {
   }
 }
 ```
+结果
 ```css
 .info-page {
   margin: auto;
@@ -180,24 +182,34 @@ li {
 ```
 3. 类名嵌套
   ```scss
-      $prefix: fade;
-      .#{$prefix}{
-
-        &-enter-active,
-        &-leave-active {
-          transition: opacity 1.5s;
-        }
+  $prefix: fade;
+  .#{$prefix}{
+     &-enter-active,
+     &-leave-active {
+        transition: opacity 1.5s;
       }
+   }
 
-      .#{$prefix}{
-        &-enter-from,
-        &-leave-to {
-          opacity: 0;
-        }
+  .#{$prefix}{
+      &-enter-from,
+      &-leave-to {
+        opacity: 0;
       }
+  }
   ```
+ 结果
 
-## [🔗隐藏变量](https://sass-lang.com/documentation/style-rules/declarations/#hidden-declarations)
+ ```css
+.fade-enter-active, .fade-leave-active {
+   transition: opacity 1.5s;
+}
+
+.fade-enter-from, .fade-leave-to {
+   opacity: 0;
+}
+ ```
+
+## [🔗if](https://sass-lang.com/documentation/style-rules/declarations/#hidden-declarations)
 ```scss
 $rounded-corners: false;
 
@@ -209,6 +221,22 @@ $rounded-corners: false;
 ```css
 .button {
   border: 1px solid black;
+}
+```
+## @if
+@if 没有括号,if 与 `@if` 不同
+```scss
+$type: monster;
+p {
+  @if $type == ocean {
+    color: blue;
+  } @else if $type == matador {
+    color: red;
+  } @else if $type == monster {
+    color: green;
+  } @else {
+    color: black;
+  }
 }
 ```
 
@@ -281,15 +309,16 @@ $i: 6;
 }
 p { @include sexy-border(blue, 1in); }
 ```
-#### 使用关键词参数
-
-:::info
-虽然不够简明，但是阅读起来会更方便。关键词参数给函数提供了更灵活的接口，以及容易调用的参数。关键词参数可以打乱顺序使用，如果使用默认值也可以省缺
-:::
+#### 使用默认参数
 
 ```scss
-p { @include sexy-border($color: blue); }
-h1 { @include sexy-border($color: blue, $width: 2in); }
+p { 
+  @include sexy-border($color: blue);
+}
+
+h1 { 
+  @include sexy-border($color: blue, $width: 2in); 
+}
 ```
 #### 多参数扩展运算符
 ```scss
@@ -317,16 +346,48 @@ $color: white;
  @include colors { 
   color: $color;
  }
-  // 也可以
-  @include colors(yellow) { 
-    color: $color; // [!code ++]
-   } 
+  // 也可以  // [!code warning]
+  @include colors(yellow) { // [!code warning]
+    color: $color; // [!code warning]
+   } // [!code warning]
 }
 ```
+不传递参数为
+
+```scss
+$color: white;
+@mixin colors($color: blue) {
+  background-color: $color;
+  @content;
+  border-color: $color;
+}
+
+.colors {
+ @include colors { 
+  color: $color;
+ }
+}
+
+// 编译结果为
+.colors {
+  background-color: blue;
+  color: white;
+  border-color: blue;
+}
+```
+
+
 传递参数编译为 css
 ```scss
 /*编译为  */
 $color: white;
+@mixin colors($color: blue) {
+  background-color: $color;
+  @content;
+  border-color: $color;
+}
+
+
 .colors {
   @include colors(yellow) { 
     color: $color; // [!code ++]
@@ -334,6 +395,7 @@ $color: white;
   } 
 }
 
+// 编译为
 .colors {
   background-color: yellow; // [!code ++]
   color: white;
@@ -365,33 +427,20 @@ $background-color:(
   @if not map-has-key($background-color,$color){
      @warn "No color found for`#{$color}` in map "
    };
-	  @return map-get($map:$background-color , $key:$color)
-    // 简写方式
-    @return map-get($background-color,$color) 
+	@return map-get($map:$background-color , $key:$color)
+  // 简写方式
+  @return map-get($background-color,$color) // [!code ++]
 };
 
 .jerryColor {
   color: colors(jerry)
 }
 ```
-## @if
-@if 没有括号
-```scss
-$type: monster;
-p {
-  @if $type == ocean {
-    color: blue;
-  } @else if $type == matador {
-    color: red;
-  } @else if $type == monster {
-    color: green;
-  } @else {
-    color: black;
-  }
-}
-```
+
 ## @for 
-through是[1-3]，to 是 [1-3)
+
+**through是[1-3]，to 是 [1-3)**
+
 ```scss
 @for $i from 1 through 3 {
  .item-#{$i} {
@@ -400,10 +449,14 @@ through是[1-3]，to 是 [1-3)
 }
 ```
 ## map
-在 scss 中,map 可以使用 `()` 来表示,同时 数组也可以使用 `()` 来表示
+
+在 scss 中,map 可以使用 `()` 来表示,同时数组也可以使用 `()` 来表示
+
+**map 使用的是 k:v 结构，数组使用的 v**
+
+`map-get` 表示从 map 中取出某一项    
+`type-of` 判断类型  
 `nth` 表示从 数组中取出某一项  
-`map-get` 表示从 map 中取出某一项  
-`type-of` 判断类型
 ```scss
 $map:(
  phone:(red,green),
@@ -417,13 +470,14 @@ $map:(
     $background:nth($bg,1);
     $fontColor:nth($bg,2);
     .color{
-        background:$background;
-        color:$fontColor;
+      background:$background;
+      color:$fontColor;
     }
-  }@else{
-      .color{
-        background:$bg;
-        color:$bg;
+   }
+   @else{
+    .color{
+      background:$bg;
+      color:$bg;
     }
   }
 };
@@ -432,6 +486,19 @@ $map:(
  @include responseTo(phone)
 }
 ```
+## percentage
+
+```scss
+@function col($col){
+    @return percentage(1 / $col)
+}
+
+// width:10% 
+.a {
+    width:col(10);
+}
+```
+
 ## type-of
 ### number
 ```scss
@@ -485,6 +552,8 @@ $colors:(
  "red":red
 );
 $numbers: 50 100 200 300 400 500 600 700 800 900;
+
+
 @each $colorType,$color in $colors {
 	@each $number in $numbers {
 		.text-#{$colorType}-#{$number}{

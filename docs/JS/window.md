@@ -1,8 +1,9 @@
+
 # windowAPI
 
 主要是记录 windowAPI 的使用
 
-## defer / async
+## 🐕defer / async
 
 defer 和 async 都是异步加载
 
@@ -34,15 +35,16 @@ jquery.js 可能在 script2 和 script3 之前或之后调用，如果这样，�
 - 如果脚本无需等待页面解析，且无依赖独立运行，那么应使用 async。
 - 如果脚本需要等待页面解析，且**依赖于其它脚本**，调用这些脚本时应使用 defer，将关联的脚本按所需顺序置于 HTML 中。
 
-### preload
+### preload 提前加载并不执行
 
 :::tip
 提供一种声明式的命令,让浏览器提前加载资源(加载后并不执行),在需要执行的时候再执行
 - 将加载和执行分离开，不阻塞渲染和 document 的 onload 事件
 - 提前加载指定资源，不再出现依赖的 font 字体隔了一段时间才刷出
 :::
+
 #### 使用 HTTP 响应头的 Link 字段创建
-如我们常用到的 antd 会依赖一个 CDN 上的 font.js 字体文件，我们可以设置为提前加载，以及有一些模块虽然是按需异步加载，但在某些场景下知道其必定会加载的，则可以设置 preload 进行预加载，如：
+某些场景下知道其必定会加载的，则可以设置 preload 进行预加载，如：
 
 ```html
 <link rel="preload" as="font"   href="https://at.alicdn.com/t/font_zck90zmlh7hf47vi.woff">
@@ -56,7 +58,6 @@ jquery.js 可能在 script2 和 script3 之前或之后调用，如果这样，�
 - preload 是告诉浏览器页面必定需要的资源，浏览器一定会加载这些资源;不管资源是否被使用
 - prefetch 是告诉浏览器页面可能需要的资源，浏览器不一定会加载这些资源(有空闲时加载)
 #### 避免错用 preload 加载跨域资源
-若 css 中有应用于已渲染到 DOM 树的元素的选择器，且设置了 @font-face 规则时，会触发字体文件的加载。而字体文件加载中时，DOM 中的这些元素，是处于不可见的状态。对已知必加载的 font 文件进行预加载，除了有性能提升外，更有体验优化的效果。
 
 在我们的场景中，已知 antd.css 会依赖 font 文件，所以我们可以对这个字体文件进行 preload:
 ```html
@@ -65,7 +66,7 @@ jquery.js 可能在 script2 和 script3 之前或之后调用，如果这样，�
 然而我发现这个文件加载了两次：
 <img src="@img/v2-49ecba5aac6bbbd1fac6fd4789905f2b_720w.png"/>
 
-原因是对跨域的文件进行 preload 的时候，我们必须加上 crossorigin 属性：
+原因是对**跨域的文件进行 preload 的时候，我们必须加上 crossorigin 属性**：
 ```html
   <link rel="preload" as="font" crossorigin href="https://at.alicdn.com/t/font_zck90zmlh7hf47vi.woff">
 ```
@@ -77,6 +78,7 @@ jquery.js 可能在 script2 和 script3 之前或之后调用，如果这样，�
 ## Promise
 
 ### all
+是一个空数组
 
 ```vue
 <script setup>
@@ -103,7 +105,10 @@ Promise.race([]).then(res=>{
 </script>
 <p>Promise.all([])的结果是:{{all}}</p>
 
+
 ### race
+
+一个 pending 状态的 promise
 
 ```vue
 <script setup>
@@ -116,12 +121,12 @@ Promise.race([]).then(res => {
 </script>
 ```
 
-<p>Promise.race([])的结果是:{{race}}即:一个`pending`状态</p>
+<p>Promise.race([])的结果是:{{race}}即:一个 `pending` 状态</p>
 
 ### await
 [🔗await使用](../Vue/functions/useFetch.html#使用-await-同步请求数据)  
 
-**可以模拟,只需要返回一个 `then` 函数**
+**可以模拟,只需要返回一个 `then` 函数,相当于一个回调函数**
 ```js
   function a() {
   return {
@@ -131,8 +136,8 @@ Promise.race([]).then(res => {
   };
 }
 
-async function b() {
-  return await a();
+function b() {
+  return a();
 }
 
 b().then(
@@ -213,7 +218,7 @@ console.log(params.toString());
 
 ```js
 let url = new URL("https://example.com?foo=1&bar=2");
-let params = new URLSearchParams(url.search.slice(1));
+let params = new URLSearchParams(url.search);
 
 //添加第二个 foo 搜索参数。
 params.append("foo", 4);
@@ -233,7 +238,7 @@ let address = params.get("address"); // null
 
 ```js
 let url = new URL("https://example.com?foo=1&bar=2");
-let params = new URLSearchParams(url.search.slice(1));
+let params = new URLSearchParams(url.search);
 
 params.has("bar") === true; //true
 ```
@@ -244,8 +249,9 @@ params.has("bar") === true; //true
 // 建立一个测试用 URLSearchParams 对象
 var searchParams = new URLSearchParams("key1=value1&key2=value2");
 
-// 输出键值对
+// 输出键
 for (var key of searchParams.keys()) {
+  // key1,key2
   console.log(key);
 }
 ```
@@ -253,11 +259,11 @@ for (var key of searchParams.keys()) {
 #### values
 
 ```js
-// 创建一个测试用 URLSearchParams 对象
 var searchParams = new URLSearchParams("key1=value1&key2=value2");
 
 // 输出值
 for (var value of searchParams.values()) {
+  // value1,value2
   console.log(value);
 }
 ```
@@ -278,9 +284,9 @@ urlObj.get("cccc")
 <img src="@img/urlSearchParam.png"/>
 
 ## Blob
-Blob 对象表示一个**不可变、原始数据的类文件对象**。它的数据可以按**文本或二进制的格式进行读取**，也可以转换成 ReadableStream 来用于数据操作  
+Blob 对象表示一个<blue>不可变、原始数据的类文件对象</blue>。它的数据可以按**文本或二进制的格式进行读取**，也可以转换成 ReadableStream 来用于数据操作  
 
-Blob 表示的不一定是 JavaScript 原生格式的数据。File 接口基于 Blob，继承了 blob 的功能并将其扩展以支持用户系统上的文件
+File 接口基于 Blob，继承了 blob 的功能并将其扩展以支持用户系统上的文件
 
 ```js
 const obj = { hello: "world" };
@@ -305,7 +311,7 @@ reader.addEventListener("loadend", () => {
 reader.readAsArrayBuffer(blob);
 ```
 
-## [URL.createObjectURL()](https://developer.mozilla.org/zh-CN/docs/Web/API/URL/createObjectURL_static)
+## [🔗URL.createObjectURL](https://developer.mozilla.org/zh-CN/docs/Web/API/URL/createObjectURL_static)
 
 ```js
 objectURL = URL.createObjectURL(object);
@@ -321,6 +327,9 @@ object
 :::warning
 内存管理
 在每次调用 createObjectURL() 方法时，都会创建一个新的 URL 对象，即使你已经用相同的对象作为参数创建过。当不再需要这些 URL 对象时，每个对象必须通过调用 URL.revokeObjectURL() 方法来释放。
+
+
+**🐩Blob URL不是持久化的URL，不能被保存或分享。它仅在创建它的文档中有效，并且对其他文档不可见**。
 :::
 
 ```js
@@ -333,27 +342,51 @@ img.onload = function () {
 };
 ```
 
-### [FileReader](https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader)
+#### revokeObjectURL()  
+销毁之前使用URL.createObjectURL()方法创建的 URL 实例。
+
+## [🔗FileReader](https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader)
 
 :::info
-FileReader 对象允许 Web 应用程序异步读取存储在用户计算机上的文件（或原始数据缓冲区）的内容，使用 File 或 Blob 对象指定要读取的文件或数据。
+
+**FileReader 对象异步访问使用 File 或 Blob 对象指定要读取的文件或数据。**
 
 ---
 
 其中 File 对象可以是来自用户在一个\<input>元素上选择文件后返回的 FileList 对象，也可以来自拖放操作生成的 DataTransfer 对象
 :::
 
-#### 方法
 
-##### FileReader.readAsDataURL()
+### FileReader.readAsDataURL
 
 开始读取指定的 Blob 中的内容。一旦完成，result 属性中将包含一个 **data: URL** 格式的 **Base64 字符串**以表示所读取文件的内容。
 
-##### FileReader.readAsText()
+```js
+function previewFile() {
+  var preview = document.querySelector("img");
+  var file = document.querySelector("input[type=file]").files[0];
+  var reader = new FileReader();
 
-开始读取指定的 Blob 中的内容。一旦完成，result 属性中将包含一个字符串以表示所读取的文件内容。
+  reader.addEventListener(
+    "load",
+    function () {
+      preview.src = reader.result;
+    },
+    false,
+  );
 
-### [🚀structuredClone](https://developer.mozilla.org/zh-CN/docs/Web/API/structuredClone)
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+}
+```
+
+
+### FileReader.readAsText
+
+开始读取指定的 Blob 中的内容。一旦完成，result 属性中将包含一个字符串以表示所读取的文件内容。会触发 `loadend` 方法
+
+## [🔗structuredClone](https://developer.mozilla.org/zh-CN/docs/Web/API/structuredClone)
 
 ```js {6}
 // Create an object with a value and a circular reference to itself.
@@ -379,47 +412,28 @@ console.assert(clone.itself === clone); // and the circular reference is preserv
 5. null
 6. boolean
 
+**只有这6种类型**
 ### JSON.stringify
 
 ```js
-console.log(JSON.stringify({ x: 5, y: 6 }));
 // Expected output: "{"x":5,"y":6}"
+console.log(JSON.stringify({ x: 5, y: 6 }));
 
+
+// Expected output: "[3,"false",false]"
 console.log(
   JSON.stringify([new Number(3), new String("false"), new Boolean(false)])
 );
-// Expected output: "[3,"false",false]"
 
-console.log(JSON.stringify({ x: [10, undefined, function () {}, Symbol("")] }));
+
 // Expected output: "{"x":[10,null,null,null]}"
+console.log(
+  JSON.stringify({ x: [10, undefined, function () {}, Symbol("")] })
+);
 
-console.log(JSON.stringify(new Date(2006, 0, 2, 15, 4, 5)));
+
 // Expected output: ""2006-01-02T15:04:05.000Z""
-```
-
-#### 描述
-
-`JSON.stringify()` 将值转换为相应的 JSON 格式：
-
-- 转换值如果有 toJSON() 方法，使用其返回值
-- 布尔值、数字、字符串的包装对象在序列化过程中会自动转换成对应的原始值
-- 函数、undefined 和 Symbol 单独转化返回 `undefined`,如果出现在 **数组** 中，转化为 null
-- 循环引用会报错
-- Date 类型调用 `toString`,转化为字符串
-- NaN、infinite 和 null 转化 为 null
-
-```js
-JSON.stringify([new Number(1), new String("false"), new Boolean(false)]);
-// '[1,"false",false]'
-
-JSON.stringify({ x: undefined, y: Object, z: Symbol("") });
-// '{}'
-
-JSON.stringify([undefined, Object, Symbol("")]);
-// '[null,null,null]'
-
-JSON.stringify({ [Symbol("foo")]: "foo" });
-// '{}'
+console.log(JSON.stringify(new Date(2006, 0, 2, 15, 4, 5)));
 
 var obj = {
   foo: "foo",
@@ -429,6 +443,42 @@ var obj = {
 };
 JSON.stringify(obj); // '"bar"'
 JSON.stringify({ x: obj }); // '{"x":"bar"}'
+
+// '{}'
+JSON.stringify({ [Symbol("foo")]: "foo" });
+```
+
+#### 描述
+
+`JSON.stringify()` 将值转换为相应的 JSON 格式：
+
+- **转换值如果有 toJSON() 方法，使用其返回值**
+- 布尔值、数字、字符串的包装对象在序列化过程中会自动转换成对应的原始值
+- 函数、undefined 和 Symbol 单独转化返回 `undefined`,如果出现在 **数组** 中，转化为 null
+- 循环引用会报错
+- Date 类型调用 `toString`,转化为字符串
+- NaN、infinite 和 null 转化 为 null
+
+
+#### replacer
+如果 replacer 是一个数组，数组的值代表将被序列化成 JSON 字符串的属性名。
+```js
+JSON.stringify(foo, ['week', 'month']);
+// '{"week":45,"month":7}', 只保留“week”和“month”属性值。
+```
+replacer 一个函数
+```js
+function replacer(key, value) {
+  if (typeof value === "string") {
+    return undefined;
+  }
+  return value;
+}
+
+var foo = {foundation: "Mozilla", model: "box", week: 45, transport: "car", month: 7};
+
+// {"week":45,"month":7}
+var jsonString = JSON.stringify(foo, replacer);
 ```
 
 ### Json.parse
@@ -485,7 +535,7 @@ a.push(231);
 var a = [];
 ```
 ##  捕获错误
-### 捕获Promise错误
+### 捕获Promise错误 - unhandledrejection
 ```js
 window.addEventListener("unhandledrejection", event => {
 	// 要阻止默认事件，否则还是有错误
@@ -506,7 +556,7 @@ a();
 ### dragover/drop
 
 :::tip
-必须要阻止 元素的 dragover 默认事件，默认事件是打开文件
+必须要阻止 元素的 dragover 默认事件，**默认事件是打开文件**
 :::
 
 ```vue{4}
@@ -527,9 +577,11 @@ a();
 ### 事件捕获
 默认是 `false`,冒泡事件
 :::info
-**事件执行先捕获，后冒泡,但是不执行绑定的函数，否则怎么捕获呢？等遇到父级元素的`cature`之后在执行**
+**事件执行先捕获,然后找到对应的元素,然后冒泡到父级元素**  
+
 捕获就像捕鱼一样，从上往下执行  
-第三个参数传递 **true 使用捕获模式**，先从 window,然后到 people  
+
+第三个参数传递 **true 切换为捕获模式**，可以在捕获时触发事件 
 :::
 
 :::tip
@@ -555,7 +607,7 @@ document.getElementById("people").addEventListener("click", () => {
 ```
 <iframe src="/demo/冒泡.html" width="100%" height="400"></iframe>
 
-### 阻止事件执行
+### 阻止事件执行 signal
 ```js
 let abortController = new  AbortController()
 
@@ -569,31 +621,20 @@ setTimeout(()=>{
   abortController.abort()
 },2000)
 ```
+
 ### mouseenter & mouseover
 
 <iframe src="/demo/mouseEnter.html" width="100%" height="400"></iframe>
 
-## [requestAnimationFrame](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame)
-并且要求浏览器在下次重绘之前调用指定的回调函数更新动画。该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行。
+## [🔗requestAnimationFrame](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame)
+
+**浏览器在重绘之前调用指定的回调函数更新动画。**
 
 :::tip
- 若你想在浏览器下次重绘之前继续更新下一帧动画，那么回调函数自身必须再次调用 requestAnimationFrame()。requestAnimationFrame() 是一次性的。
+ 若你想在浏览器重绘之前继续更新下一帧动画，那么回调函数自身必须再次调用 requestAnimationFrame()。  
+ 
+ requestAnimationFrame() 是一次性的。
 :::
-
-
-举个栗子：
-
-假设屏幕每隔16.7ms刷新一次，而setTimeout每隔10ms设置图像向左移动1px， 就会出现如下绘制过程：
-
-1. 第0ms: 屏幕未刷新，等待中，setTimeout也未执行，等待中；
-2. 第10ms: 屏幕未刷新，等待中，setTimeout开始执行并设置图像属性left=1px；
-2. 第16.7ms: 屏幕开始刷新，屏幕上的图像向左移动了1px， setTimeout 未执行，继续等待中；
-2. 第20ms: 屏幕未刷新，等待中，setTimeout开始执行并设置left=2px;
-3. 第30ms: 屏幕未刷新，等待中，setTimeout开始执行并设置left=3px;
-4. 第33.4ms:屏幕开始刷新，屏幕上的图像向左移动了3px， setTimeout未执行，继续等待中；
-…
-
-从上面的绘制过程中可以看出，屏幕 *`没有更新left=2px`* 的那一帧画面，图像直接从 `1px` 的位置跳到了 `3px` 的的位置，这就是丢帧现象，这种现象就会引起动画卡顿。
 
 ```js
 var start = null;
@@ -634,7 +675,7 @@ function nextTickFrame(fn: FrameRequestCallback) {
 }
 ```
 
-## [encodeURIComponent](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent)/[encodeURI](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/encodeURI)
+## [🔗encodeURIComponent](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent)/[🔗encodeURI](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/encodeURI)
 
 :::tip
 与 encodeURI() 相比，此函数会编码更多的字符，包括 URI 语法的一部分。
@@ -661,7 +702,7 @@ console.log(encodeURIComponent(set4)); // ABC%20abc%20123 (空格被编码为 %2
 
 ```
 
-## [URL](https://developer.mozilla.org/zh-CN/docs/Web/API/URL)
+## [🔗URL](https://developer.mozilla.org/zh-CN/docs/Web/API/URL)
 
 <img src="@img/URL.webp" style="margin-bottom:10px"/>
 
@@ -669,46 +710,19 @@ console.log(encodeURIComponent(set4)); // ABC%20abc%20123 (空格被编码为 %2
 let s = new URL(
 "http://zs:123456@localhost:8080/directorPerformance/todo?id=1#name=zs#age=5"
 );
-
-console.log(s)
 ```
 
-<img src="@img/url.png" style="margin-bottom:10px"/>
+<img src="@img/url.png"/>
 
-
-<iframe
-  height="280"
-  width="100%"
-  frameborder="1"
-  src="//unpkg.com/javascript-playgrounds@^1.0.0/public/index.html?#data=%7B%22code%22%3A%22let%20s%20%3D%20new%20URL(%5Cn%20%20%5C%22http%3A%2F%2Fzs%3A123456%40localhost%3A8080%2FdirectorPerformance%2Ftodo%3Fid%3D1%23name%3Dzs%23age%3D5%5C%22)%3B%5Cn%20%20console.log(s)%22%7D"
-></iframe>
-
-### 属性
-- search  
-指示 URL 的参数字符串；如果提供了任何参数，则此字符串包括所有参数，并以开头的`"?"`开头 字符。
-
-- searchParams 只读  
+### [searchParams 只读对象](#%F0%9F%94%97urlsearchparams)  
 URLSearchParams对象，可用于访问`search`中找到的各个查询参数。
 ```js
 // https://some.site/?id=123
 const parsedUrl = new URL(window.location.href);
 console.log(parsedUrl.searchParams.get("id")); // "123"
 ```
-- hash
-包含'#'的USVString，后跟 URL 的片段标识符。
 
-- pathname
-以 '/' 起头紧跟着 URL 文件路径的 DOMString。
-
-
-### 静态方法
-createObjectURL()  
-返回一个DOMString ，包含一个唯一的 blob 链接（该链接协议为以 blob:，后跟唯一标识浏览器中的对象的掩码）。
-
-revokeObjectURL()  
-销毁之前使用URL.createObjectURL()方法创建的 URL 实例。
-
-### 可写
+### url可写
 
 ```js
 function constructURL(param) {
@@ -744,15 +758,13 @@ console.log(r);
   src="https://unpkg.com/javascript-playgrounds@1.2.3/public/index.html#data=%7B%22code%22%3A%22function%20constructURL(param)%20%7B%5Cn%20%20const%20%7B%20category%2C%20limit%2C%20userId%20%7D%20%3D%20param%3B%5Cn%20%20const%20baseURL%20%3D%20%5C%22https%3A%2F%2Ffakestoreapi.com%2Fproducts%5C%22%3B%5Cn%20%20const%20url%20%3D%20new%20URL(baseURL)%3B%5Cn%20%20const%20params%20%3D%20new%20URLSearchParams()%3B%5Cn%5Cn%20%20if%20(category)%20url.pathname%20%2B%3D%20%60%2Fcategory%2F%24%7Bcategory%7D%60%3B%5Cn%20%20if%20(limit)%20params.append('limit'%2C%20Number(limit).toString())%3B%5Cn%20%20if%20(userId)%20params.append('userId'%2C%20Number(userId).toString())%3B%5Cn%2F%2F%20%E5%8F%AF%E8%AF%BB%E5%8F%AF%E5%86%99%5Cn%20%20url.search%20%3D%20params.toString()%3B%5Cn%20%20return%20url.toString()%3B%5Cn%7D%5Cnlet%20r%20%3D%20constructURL(%7B%5Cn%20%20category%3A%20'mugs'%2C%5Cn%20%20limit%3A%2010%2C%5Cn%20%20userId%3A%201%5Cn%7D)%5Cnconsole.log(r)%3B%22%7D"
 ></iframe>
 
-
-
-
-
 ## IntersectionObserver
 
 ```js
 var observer = new IntersectionObserver(callback[, options])
 ```
+因为可以监听多个元素,所以 callback 回调函数的第一个参数是数组,数组中的每个元素都是一个 `IntersectionObserverEntry` 对象。
+
 options:
 -  root
    监听元素的祖先元素的element 对象,其边界盒作为视口
@@ -784,7 +796,7 @@ boxElList.forEach((el) => {
 });
 
 ```
-## == 比较规则
+## 🐹== 比较规则
 1. 两端类型相同,比较值
 2. 只要存在`NaN`,返回`false`
 3. `undefined` 和 `null` 只有与自身比较，或者互相比较，返回 `true`
@@ -794,7 +806,7 @@ boxElList.forEach((el) => {
     console.log(a == 1) // false
     //a 转化为数字是 NaN, NaN 比较任何值都是false
    ``` 
-5. ⭐<blue>一端是原始类型，一端是对象类型，把对象转换成原始类型后进行第一步</blue>
+5. ⭐<blue>一端是原始类型，一端是对象类型，把对象转换成原始类型后进行第1步</blue>
    :::tip 对象转原始类型
     1. 先使用 `[Symbol.toPrimitive]` 方法,判断是否可以获取到原始值
     2. 调用 `valueOf` 方法,是否可以获取原始值
@@ -1013,6 +1025,8 @@ for(let i = 0; i < 100; i++){}
 2. 只要 i 小于 100 就执行
 3. 每次遍历结束后 +1
 
+所以遍历完毕, i = 100;
+
 ## [🔗falsy](https://developer.mozilla.org/zh-CN/docs/Glossary/Falsy)
 
 假值（falsy，有时写为 falsey）是在 `Boolean` 上下文中认定为 `false` 的值。
@@ -1049,11 +1063,30 @@ console.log(false && "dog"); // false
 console.log(0 && "dog"); // 0
 ```
 
-## 创建对象
+
+## if else
+else if 包含了前面 if 为 非 的条件  
+
+其实是两个条件
+
+ ```js
+let a = 1;
+let b = 2;
+
+if(a == 1){
+  // 不可以进入
+}else if(b == 2){
+  console.log(1)
+}
+```
 
 ```js
-Dog mydog = new Dog();
+let a = 1;
+let b = 2;
+
+if(a == 2){
+  // 可以进入，因为 a != 2
+}else if(b == 2){
+  console.log(1)
+}
 ```
-1. 创建一个空间并命名为 mydog
-2. 分配堆对象 Dog
-3. 把 Dog 的引用给 mydog

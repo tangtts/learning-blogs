@@ -7,7 +7,7 @@
   <title>Document</title>
   <style>
     #people{
-      width: 100px;
+      width: 220px;
       height: 100px;
       background-color: red;
       color: #fff;
@@ -16,14 +16,14 @@
 </head>
 <body>
   <div id="people">
-    打开 F12 查看结果
+    事件冒泡：打开 F12 查看结果
   </div>
   <script>
   // 如果想阻拦全局a标签的跳转，使用e.preventDefault
 window.addEventListener(
   "click",
   function (e) {
-    console.log("window", e.target.nodeName);
+    alert("window")
     e.stopPropagation();
     e.preventDefault();
   },
@@ -31,7 +31,7 @@ window.addEventListener(
 );
 
 document.getElementById("people").addEventListener("click", () => {
-  console.log("people");
+  alert("people")
 });
   </script>
 </body>

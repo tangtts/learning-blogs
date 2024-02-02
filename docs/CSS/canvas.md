@@ -2,7 +2,7 @@
 **主要是 api 的使用**
 
 ```js
-var canvas = document.getElementById('canvas');;
+var canvas = document.getElementById('canvas');
 const cxt = canvas.getContext('2d');
 ```
 ## 线条
@@ -21,9 +21,9 @@ const cxt = canvas.getContext('2d');
 ```js
 cxt.arc(150, 150, 100, 0, 2 * Math.PI);
 ```
-| 参数1     | 参数2     | 参数3 | 参数4    | 参数5    |
-| --------- | --------- | ----- | -------- | -------- |
-| 圆心x坐标 | 圆心y坐标 | 半径  | 起始角度 | 终止角度 |
+| 参数1     | 参数2     | 参数3 |参数4 | 参数5    | 参数6    | 参数7 | 
+| --------- | --------- | -----| ----- | -------- | -------- | -------- |
+| x横坐标 | x纵坐标 | y横坐标  | y纵坐标 |半径  | 起始角度 | 终止角度 |
 ### 2. arcTo
 ```js
 cxt.moveTo(20,20);           // 创建开始点
@@ -33,10 +33,6 @@ cxt.lineTo(150,120);         // 创建垂直线
 cxt.stroke();
 ```
 <img src="@img/arcTo.webp"/>
-
-
-
-
 
 ## 文字
 ### 1.大小及字体

@@ -14,7 +14,8 @@
   - display 属性为 inline, inline-block, inline-table 的元素，会生成 inline-level box。并且参与 inline formatting context
 
 ### Formatting Context
-它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。  
+**<blue>它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。</blue>**  
+
 最常见的 `Formatting context` 有 `Block fomatting context` (简称BFC) 和 `Inline formatting context` (简称IFC)。
 
 :::tip
@@ -25,7 +26,7 @@ BFC 是一个独立的布局环境，其中的元素布局是不受外界的影�
 1. box 的垂直方向由 `margin` 决定,属于 **同一个BFC** 的 margin 会发生折叠
 2. BFC 的区域不会和 `float` 重叠
 3. 计算 `float` 的高度时，`float` 元素的高度会被计算在内
-4. BFC 是一个独立的容器,里面的子元素不会影响到 外面
+4. BFC 是一个独立的容器,里面的子元素不会影响到外面
 
 ## 如何创建 BFC
 1. float的值不是none
@@ -267,5 +268,6 @@ BFC的区域不会与float box重叠。
 ::: tip 
 🚀 `BFC` 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素   
 当 `BFC`外部存在浮动时，不与浮动元素重叠    
-当 `BFC` 内部有浮动时，为了不影响外部元素的布局，`BFC` 计算高度时会包括浮动的高度
+
+当 `BFC` 内部有浮动时，**为了不影响外部元素的布局**，`BFC` 计算高度时会包括浮动的高度
 :::
