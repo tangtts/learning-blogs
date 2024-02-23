@@ -140,7 +140,7 @@ export default defineConfig({
             text: "hash",
             link: "/algorithm/hash",
             activeMatch: "/algorithm/hash",
-          },
+          }, 
           {
             text: "回溯",
             link: "/algorithm/回溯",
@@ -328,6 +328,7 @@ export default defineConfig({
         { text: "jwt", link: "/nest/helper/jwt" },
         { text: "config", link: "/nest/helper/config" },
         { text: "redis", link: "/nest/helper/redis" },
+        { text: "JOI", link: "/nest/helper/joi" },
       ],
       backend: [
         {

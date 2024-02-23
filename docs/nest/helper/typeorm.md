@@ -34,9 +34,26 @@ export class AppService {
 :::tip
 `update` 默认不会返回更新后的值，但是 `save` 会
 :::
+
+<img src="@backImg/saveOrUpdate.png"/>
+
 ## 删除
 
-`delete` 和 `remove` 的区别是，`delete` 直接传 `id`、而 `remove` 则是传入 `entity` 对象。
+1. `delete` 和 `remove` 的区别是，`delete` 直接传 `id`、而 `remove` 则是传入 `entity` 对象。
+
+2. remove 可以触发钩子方法
+
+```js
+@AfterRemove()
+aftermove(){
+  // xxxx
+}
+```
+
+同样的，`insert` 可以触发钩子方法，但是  save 不会
+
+
+<img src="@backImg/removeOrDelete.png"/>
 
 ## 查询
 
@@ -64,6 +81,61 @@ let r = await this.userRepository.find({
     },{
       username:"李四"
     }
+  ]
+});
+```
+#### 查询关联表的属性
+
+```js
+let r = await this.userRepository.find({
+  relations:{
+    profile:true,
+    roles:true
+  },
+  where:[
+    {
+      username:"张三"
+    },
+    // 关联表
+    profile:{  // [!code hl]
+      gender:1 // [!code hl]
+    },        // [!code hl]
+    roles:{ // [!code hl]
+      id:0 // [!code hl]
+    } // [!code hl]
+  ]
+});
+```
+查找关联表 `profile`,`role` 中的字段
+
+#### 返回部分属性
+
+**返回部分属性，包括关联表**
+
+```js:line-numbers{2-8,18-23}
+let r = await this.userRepository.find({
+  select:{
+    id:true,
+    username:true,
+    profile:{
+      gender:true
+    }
+  },
+  relations:{
+    profile:true,
+    roles:true
+  },
+  where:[
+    {
+      username:"张三"
+    },
+    // 关联表
+    profile:{  
+      gender:1 
+    },        
+    roles:{ 
+      id:0 
+    } 
   ]
 });
 ```
@@ -141,7 +213,7 @@ let r2 = await this.userRepository.find({
       where: {
         username:ILike('%Zs%')
       }
-    });
+});
 ```
 
 #### 非 where 的 完整查询
@@ -313,7 +385,7 @@ user: User;
 ### JoinColumn
 
 #### 一对一
-<blue>你设置@JoinColumn的哪一方，哪一方的表将包含一个"relation id"和目标实体表的外键。</blue>
+<blue>你设置@JoinColumn的哪一方，哪一方的表将包含一个 "relation id" 和目标实体表的外键。</blue>
 
 > profile.entity.ts
 ```ts
@@ -335,8 +407,9 @@ import { Profile } from "./Profile";
 
 @Entity()
 export class User {
-  @JoinColumn()
+
   @OneToOne(() => Profile)
+  @JoinColumn()
   profile: Profile;
 }
 ```
@@ -349,8 +422,10 @@ export class User {
 ```ts
 @Entity()
 export class User {
-  @JoinColumn({name:Profile.name})
+
   @OneToOne(() => Profile)
+  // @JoinColumn({name:Profile.name})
+  @JoinColumn({name:"pid"})
   profile: Profile;
 }
 ```
@@ -377,14 +452,16 @@ export class Profile {
 
 
 #### 一对多 `oneToMany` / `ManyToOne`
+<br/>
+<blue>一对多的关系只可能是在多的那一方保存外键</blue>  
+<br/> 
 
-一对多的关系只可能是在多的那一方保存外键  
-第一个参数是目标实体类，第二个参数是关系名称，第三个参数是关系类型(`eager`)
+第一个参数是目标实体类，第二个参数是关系名称，第三个参数是关系类型( `eager` )
 
 ```ts
 @Entity()
 class User {
-@OneToMany((_type) => Task, (task) => task.user, { eager: false })
+@OneToMany(() => Task, (task) => task.user, { eager: false })
   tasks: Task[];
 }
 ```
@@ -425,7 +502,7 @@ export class Post {
 对于一对多关系中的一方（例如 User 实体），
 通常不需要在数据库中显式地存储关联实体（例如 Post）的外键（即 post_id）。
 这是因为在一对多关系中，多方实体（Post）通常会包含一个表示关联到一方实体（User）的外键。
-在本例中，Post 实体有一个指向 User 的外键 user_id
+在本例中，Post 实体有一个指向 User 的外键 **user_id**
 
 通过将外键放在多方实体中，可以更轻松地访问和管理一对多关系。
 通过查询多方实体（Post），我们可以轻松获取与之关联的一方实体（User），而无需在一方实体（User）中存储关联的多方实体（Post）的外键。
@@ -524,40 +601,180 @@ User {
 
 
 ### JoinTable
-通过 `JoinTable` 会多生成一个关联表,但是不会多生成一列
-> user.entitity.ts
+
+**<blue>通过 `JoinTable` 会多生成一个关联表,不会多生成一列</blue>**
+
+> Album.entitity.ts
 ```ts
-@Entity()
-export class User {
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    // .....
-    @ManyToMany(() => Role)
-    @JoinTable({
-        name: 'user_role_relation'
-    })
-    roles: Role[] 
-}
-```
-> role.entity.ts
-```ts
-import { Column, CreateDateColumn, Entity,JoinTable,ManyToMany,PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Permission } from "./permission.entity";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
 
 @Entity()
-export class Role {
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    @ManyToMany(() => Permission)
-    @JoinTable({
-        name: 'role_permission_relation'
-    })
-    permissions: Permission[] 
+export class Album {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToMany(type => Photo, photo => photo.albums)
+  @JoinTable()
+  photos: Photo[];
 }
 ```
+> Photo.entity.ts
+```ts
+export class Photo {
+  /// ... other columns
+
+  @ManyToMany(type => Album, album => album.photos)
+  albums: Album[];
+}
+```
+运行后，ORM 将创建album_photos_photo_albums_联结表。    
+
+```
++-------------+--------------+----------------------------+
+|                album_photos_photo_albums                |
++-------------+--------------+----------------------------+
+| album_id    | int(11)      | PRIMARY KEY FOREIGN KEY    |
+| photo_id    | int(11)      | PRIMARY KEY FOREIGN KEY    |
++-------------+--------------+----------------------------+
+```
+也可以更改
+```ts
+  @ManyToMany(type => Photo, photo => photo.albums)
+  @JoinTable({name:"album_photos"})
+  photos: Photo[];
+```
+
+## [🔗querybuilder](https://typeorm.bootcss.com/select-query-builder)
+
+### 使用 repository 创建 QueryBuilder
+```js
+import { getRepository } from "typeorm";
+
+const user = await getRepository(User)
+  .createQueryBuilder("user")
+  .where("user.id = :id", { id: 1 })
+  .getOne();
+```
+
+### 获取值
+
+```js
+const timber = await getRepository(User)
+  .createQueryBuilder("user")
+  .where("user.id = :id OR user.name = :name", { id: 1, name: "Timber" })
+  .getOne();
+```
+要从数据库中获取所有用户，请使用getMany
+
+使用查询构建器查询可以获得两种类型的结果：entities 或 raw results。  
+大多数情况下，你只需要从数据库中选择真实实体，例如 users。 为此，你可以使用getOne和getMany。 
 
 
+ **但有时你需要选择一些特定的数据，比方说所有sum of all user photos。 此数据不是实体，它称为原始数据。 要获取原始数据，请使用getRawOne和getRawMany。**
 
+```js
+const { sum } = await getRepository(User)
+  .createQueryBuilder("user")
+  .select("SUM(user.photosCount)", "sum")
+  .where("user.id = :id", { id: 1 })
+  .getRawOne();
+  // 结果会像这样: [{ id: 1, sum: 25 }, { id: 2, sum: 13 }, ...]
+```
 
+### 使用参数来转义数据
+
+因为有可能被 SQL 注入。 安全的方法是使用这种特殊的语法：where（"user.name =name"，{name:"Timber"}），其中name是参数名，值在对象中指定： {name:"Timber"}。
+
+```js
+.where("user.name = :name", { name: "Timber" })
+```
+还可以提供一组值，并使用特殊的扩展语法将它们转换为SQL语句中的值列表：
+
+```js
+// WHERE user.name IN ('Timber', 'Cristal', 'Lina')
+.where("user.name IN (:...names)", { names: [ "Timber", "Cristal", "Lina" ] })
+```
+### 添加WHERE表达式
+
+```js
+createQueryBuilder("user")
+  .where("user.firstName = :firstName", { firstName: "Timber" })
+  .andWhere("user.lastName = :lastName", { lastName: "Saw" });
+```
+将会生成以下 SQL 语句：
+```sql
+SELECT ... FROM users user WHERE user.firstName = 'Timber' AND user.lastName = 'Saw'
+```
+
+你可以使用Brackets将复杂的WHERE表达式添加到现有的WHERE中：
+
+```js
+createQueryBuilder("user")
+    .where("user.registered = :registered", { registered: true })
+    .andWhere(new Brackets(qb => {
+        qb.where("user.firstName = :firstName", { firstName: "Timber" })
+          .orWhere("user.lastName = :lastName", { lastName: "Saw" })
+```
+将会生成以下 SQL 语句：
+
+```sql
+SELECT ... FROM users user WHERE user.registered = true AND (user.firstName = 'Timber' OR user.lastName = 'Saw')
+```
+### orderBy
+
+```js
+createQueryBuilder("user")
+  .orderBy("user.name")
+  .addOrderBy("user.id");
+```
+还可以使用排序字段作为一个 map：
+
+```js
+createQueryBuilder("user").orderBy({
+  "user.name": "ASC",
+  "user.id": "DESC"
+});
+```
+
+### 获取生成的sql查询语句
+
+```js
+const users = await createQueryBuilder("user")
+  .where("user.firstName = :firstName", { firstName: "Timber" })
+  .orWhere("user.lastName = :lastName", { lastName: "Saw" })
+  .printSql()
+  .getMany();
+```
+此查询将返回 users 并将使用的 sql 语句打印到控制台。
+
+### 使用分页
+
+```js
+const users = await getRepository(User)
+  .createQueryBuilder("user")
+  .leftJoinAndSelect("user.photos", "photo")
+  .skip(5)
+  .take(10)
+  .getMany();
+```
+
+### 查询部分字段
+
+```js
+const users = await getRepository(User)
+  .createQueryBuilder("user")
+  .select(["user.id", "user.name"])
+  .getMany();
+```
+这只会选择User的id和name。
+
+### 例子
+<img src="@backImg/queryBuilder1.png"/>
+<br/>
+
+多个条件可以这样简化
+<img src="@backImg/queryBuilder2.png"/>
+
+## leftjoin / innerjoin
+
+<img src="@backImg/leftOrInnerJoin.png"/>

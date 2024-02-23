@@ -31,22 +31,37 @@ nest g service redis --no-spec
     "spec": false //[!code ++]
   }, //[!code ++]
  ``` 
+
+6. 模拟生成文件
+  先看看可能会生成哪些目录，再确定是否要生成
+
+```bash
+   nest g s src/testService -d
+```
+-d 是 `dry-run`
+
+## mvc
+**Model View Controller 模型 视图 控制**
+
+当视图(即浏览器)发出一个事件后，即发送一个请求，控制层收到这个请求，找到对应的接收方，然后修改模型(即数据库)，当模型修改之后，会反过来修改视图(浏览器)
+
 ## DTO / DAO / VO
 
 DTO：Data Transfer Object，数据传输对象
 > 客户端传输给服务端的数据对象,服务端传给客户端的数据对象
 
 DAO：Data Access Object，数据访问对象
-> 服务端对数据库的访问对象,也就是在 service 中对数据库(CRUD)时传的 参数
-
+> 服务端对数据库的访问对象,也就是在 service 中对数据库(CRUD)时传的参数 
+>  
+> DAO 是一层逻辑，包含实体类，数据库操作(CRUD)，数据校验，错误处理等， nestJs 做了一层更高级的处理，使用 orm 库与这些数据库进行对接，而这些orm 库就是 dao 层
+ 
 VO
 > View Object，视图对象,展示在页面上的数据
 
 PO
 > Persistent Object，持久化对象,基本上相当于 `entity`
 
-
-<img src="@backImg/nestCore.jpeg"/>
+<img src="@backImg/nest基本概念.png"/>
 
 ## IOC / DI
 
@@ -100,6 +115,32 @@ export class AppModule {}
 
 providers 里可以被注入，也可以注入别的对象，比如这里的 AppService。
 
+
+## inject
+```js
+import 'reflect-metadata';
+
+function Inject(target: any, key: string) {
+  target[key] = new (Reflect.getMetadata('design:type', target, key))();
+}
+
+class A {
+  sayHello() {
+    console.log('hello');
+  }
+}
+
+class B {
+  @Inject // 编译后等同于执行了 @Reflect.metadata("design:type", A)
+  a!: A;
+
+  say() {
+    this.a.sayHello(); // 不需要再对class A进行实例化
+  }
+}
+
+new B().say(); // hello
+```
 
 ## 🚀module
 > 每个模块都有一组紧密相关的**功能 , 相当于封装**
@@ -1323,3 +1364,32 @@ export class AppService {
 <img src="@backImg/循环依赖1.webp"/>
 分别使用 forwardRef
 <img src="@backImg/循环依赖2.webp"/>
+
+
+# 通过环境变量读取不同的.env文件
+
+利用 dotenv 中的 `parse` 方法
+
+```ts
+import * as dotenv from 'dotenv';
+
+// 通过环境变量读取不同的.env文件
+function getEnv(env: string): Record<string, unknown> {
+  if (fs.existsSync(env)) {
+    return dotenv.parse(fs.readFileSync(env));
+  }
+  return {};
+}
+```
+通过dotENV来解析不同的配置
+
+```ts
+function buildConnectionOptions() {
+   const defaultConfig = getEnv('.env');
+  const envConfig = getEnv(`.env.${process.env.NODE_ENV || 'development'}`);
+  // configService
+  const config = { ...defaultConfig, ...envConfig };
+}
+```
+
+

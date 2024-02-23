@@ -2260,3 +2260,38 @@ function zip(source: Array<number>, target: Array<number>) {
 // [[1,1],[2,2],[3,3],[undefined,4]]
 let r = zip([1, 2, 3], [1, 2, 3, 4, 5]); 
 ```
+## 枚举代替变量
+
+> LogEnum.ts
+```ts
+export enum LogEnum {
+  LOG_LEVEL = 'LOG_LEVEL',
+  LOG_ON = 'LOG_ON',
+}
+```
+定义
+> .env
+```ts
+LOG_ON=true
+LOG_LEVEL=info
+```
+
+使用
+>index.ts
+
+```ts
+import { LogEnum } from '../enum/config.enum';
+
+function transports(){
+  return configService.get(LogEnum.LOG_ON)
+}
+```
+
+
+:::tip
+ 通过枚举类型代替变量，方便替换并且易于维护
+:::
+
+
+
+
