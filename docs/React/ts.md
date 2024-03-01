@@ -59,6 +59,17 @@ interface MyComponentProps {
 }
 ```
 
+## 添加元素
+
+```ts
+type x = React.ComponentPropsWithoutRef<"div">; // [!code ++]
+type z = React.ComponentProps<"div"> //[!code --] 
+type y = React.HtmlHTMLAttributes<"div"> // [!code --]
+```
+**使用 ComponentPropsWithoutRef 可以更好地管理函数组件的 props 类型，并提供更好的类型检查。**
+
+`type x = React.ComponentPropsWithoutRef<typeof Test>;` 可以把 Test 组件的 prop 抽离出来
+
 
 ## Props
 

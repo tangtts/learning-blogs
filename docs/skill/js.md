@@ -591,3 +591,42 @@ function fetchWithTimeout(timeout = 5000) {
   }
 }
 ```
+## 使用 iife 提升性能
+
+如果这样写，每次调用 `click` 都会执行判断
+```js
+const click = (ele, handler) => {
+  if (ele.addEventListener) {
+    ele.addEventListener("click", handler);
+  } else if (ele.attachEvent) {
+    ele.attachEvent("onclick", handler);
+  } else {
+    ele.onclick = handler; //IE
+  }
+}
+```
+
+可以使用 `iife`,这样不用每次都判断了 
+
+```js
+const click2 = (function () {
+  return function (ele, handler) {
+    if (ele.addEventListener) {
+      ele.addEventListener("click", handler);
+    } else if (ele.attachEvent) {
+      ele.attachEvent("onclick", handler);
+    } else {
+      ele.onclick = handler; //IE
+    }
+  }
+})()
+```
+
+```js
+const removeSpace = (function () {
+  let reg = /\s/g;
+  return function (str) {
+    return str.replace(reg, "");
+  }
+})()
+```

@@ -239,6 +239,22 @@ p {
   }
 }
 ```
+配合 `or` 使用
+
+```scss
+$alignType: (start, center, end, baseline);
+
+@each $type in $alignType {
+  .items-#{$type} {
+    @if $type == end or $type == start {
+      align-items: flex-#{$type};
+    } @else {
+      align-items: $type;
+    }
+  }
+}
+```
+
 
 ## @each
 ```scss
@@ -489,13 +505,39 @@ $map:(
 ## percentage
 
 ```scss
-@function col($col){
-    @return percentage(1 / $col)
+@function row($col){
+  @return percentage( 1 / $col);
 }
 
-// width:10% 
-.a {
-    width:col(10);
+@for $i from 1 through 6 {
+  .col-#{$i}{
+    width:row($i);
+  }
+}
+```
+```css
+.col-1 {
+  width: 100%;
+}
+
+.col-2 {
+  width: 50%;
+}
+
+.col-3 {
+  width: 33.3333333333%;
+}
+
+.col-4 {
+  width: 25%;
+}
+
+.col-5 {
+  width: 20%;
+}
+
+.col-6 {
+  width: 16.6666666667%;
 }
 ```
 

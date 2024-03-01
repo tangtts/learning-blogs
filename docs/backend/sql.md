@@ -1,6 +1,6 @@
 # sql
 
-sql 是不区分大小写的,但是建议还是使用标准的写法，比如 关键字 使用大写
+sql 是<blue>不区分大小写</blue>的,但是建议还是使用标准的写法，比如 关键字 使用大写
 
 
 ## 表设计的经验
@@ -258,7 +258,7 @@ select  e.age  from  employee  as e where e.name = "王五";
 ```
 
 ### 去重distinct 
-
+> 不能部分使用 `distinct`, 他应用于所有列而不是前置的列
 ```sql
 select class from student;
 ```
@@ -318,6 +318,10 @@ select * from  employee where name not Like("%三")
 ```sql
 select  * from  employee where name REGEXP '^[A-H]';
 ```
+选择 a1 或者 aa 或者是 a2
+```sql
+SELECT * FROM income WHERE remark REGEXP 'a1|aa|a2';
+```
 
 
 ### 运算符
@@ -357,6 +361,19 @@ not
 
 ```sql
 select * from emp where not sal > 1500;
+```
+
+注意顺序
+
+```sql
+select a from b where id = 1 OR id = 2 AND price = 10 
+```
+由于 `and` 的优先级较高, 代表了 `id = 1` 或者是 `id = 2 & price = 10`;
+
+使用 `()` 控制优先级
+
+```sql
+select a from b where (id = 1 OR id = 2) AND price = 10 
 ```
 
 ```sql
@@ -509,6 +526,19 @@ select * from student limit 0,5;
 select * from student limit 6,5;
 ```
 
+由于有误会，所以增加了 `offset`;
+
+```sql
+limit 3,4
+```
+可以写成
+
+```sql
+limit 4 offset 3
+```
+
+从第三行取四行
+
 ### 排序order by
 
 :::info
@@ -549,7 +579,7 @@ select class, count(*) as count from student group by class  having count = 6;
 分组之后，查询的字段一般为 **聚合函数和分组字段**，查询其他字段无意义
 
 :::tip where 和 having 的区别
-1. 执行时机不同，`where` 是分组之前进行过滤，不满足 `where` 条件不参与分组，而 `having` 是分组之后对结果进行过滤
+1. 执行时机不同，`where` 是**分组之前**进行过滤，不满足 `where` 条件不参与分组，而 `having` 是**分组之后**对结果进行过滤
 2. 判断条件不同，`where` 不能对聚合函数进行判断，而 `having` 可以
 :::
 
@@ -558,7 +588,6 @@ select class, count(*) as count from student group by class  having count = 6;
 select workaddress,count(*) address_count from emp where age < 45 group by workaddress having address_count >=3
 ```
 先 使用 where，然后计算 count，最后 使用 having
-
 
 ### 内置函数
 
@@ -625,12 +654,40 @@ SELECT ROUND(1.234567, 2), CEIL(1.234567), FLOOR(1.234567), ABS(-1.234567), MOD(
 <img src="@backImg/数值运算.webp"/>
 
 #### 日期函数
+
 对日期、时间进行处理，比如 DATE、TIME、YEAR、MONTH、DAY、DATEDIFF(date1,date2)*时间间隔*、CURDATE(当前日期)、CURTIME(当前时间)、NOW
 
 ```sql
 SELECT YEAR('2023-06-01 22:06:03') as "year", MONTH('2023-06-01 22:06:03') as "month",DAY('2023-06-01 22:06:03') as "day",DATE('2023-06-01 22:06:03') as "date", TIME('2023-06-01 22:06:03') as "time";
 ```
 <img src="@backImg/日期运算.png"/>
+
+
+`payTime` 的值是 `2024-02-25 15:31:59` 
+
+```sql
+SELECT * FROM income where Date("2024-02-25 15:31:59") = DATE(payTime)
+```
+
+或者使用
+
+```sql
+SELECT * FROM income where "2024-02-25 15:31:59" = payTime
+```
+
+<blue>强烈建议使用 `yyyy-dd-mm` 形式来保存日期形式</blue>
+
+这样的好处有
+
+```sql
+SELECT * FROM income where Date("2024-02-25") = DATE(payTime); 
+```
+
+```sql
+SELECT * FROM income where Date(payTime) BETWEEN '2024-02-22' AND '2024-02-26'; 
+```
+
+使用起来比较方便
 
 ##### 格式化日期
 ```sql
