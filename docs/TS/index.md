@@ -1101,6 +1101,27 @@ export default {
 } as const;
 ```
 
+也可以使用 函数 来替代 
+
+```ts
+function tuplify<T extends any[]>(...element: T) {
+  return element
+}
+
+// [string, () => 12]
+function a() {
+  return tuplify("1", () => 12)
+}
+```
+
+如果不使用 `tuplify`, 则需要
+
+```ts
+function a() {
+  return ["1", () => 12] as const
+}
+```
+
 
 ## any / unknown
 ### ⭐keyof any 为啥是 string | number | symbol

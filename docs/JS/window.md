@@ -1074,8 +1074,8 @@ let a = 1;
 let b = 2;
 
 if(a == 1){
+  }else if(b == 2){
   // 不可以进入
-}else if(b == 2){
   console.log(1)
 }
 ```
@@ -1085,8 +1085,33 @@ let a = 1;
 let b = 2;
 
 if(a == 2){
+  }else if(b == 2){
   // 可以进入，因为 a != 2
-}else if(b == 2){
   console.log(1)
 }
 ```
+
+## 原型链
+
+**一个对象的 `__proto__` 是与 它的构造函数的 `prototype` 是相同的，通过这样，可以把
+实例和构造函数联系起来**
+
+**prototype 属性本身会有一个属性 constructor，该属性的值为prototype所在的函数**
+
+又因为 `prototype` 也是一个对象，所以它的 `__proto__` 指向 `Object.prototype`
+
+同时，`function` 比较特殊，`function.__proto__` 与 `fucntion.protyptype` 是相同的，那么`Function.prototype.constructor` 
+
+简单来说
+
+
+```js
+
+function A(){}
+let a = new A();
+
+a.__proto__ === A.prototype;
+A.prototype.constructor === A;
+```
+
+<img  src="@img/原型链.png"/>

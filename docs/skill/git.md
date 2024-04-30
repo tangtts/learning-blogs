@@ -68,6 +68,8 @@ git commit --amend --no-edit
 
 ### git reset 
 
+**本质是移动 HEAD 指针**
+
 ```bash
 # 将暂存区的所有文件恢复到工作区
 git reset HEAD
@@ -529,7 +531,7 @@ git log --graph --oneline --decorate --all
 * 24c9f3f bcd heihei
 ```
 
-## 打标签
+## tag
 
 ### 列出标签
 
@@ -728,3 +730,12 @@ $ git merge client
 |+(pattern-list)|匹配1次或多次给定的模式|a.+(txt\|bin)|a.txt, a.bin, a.txtbin|a., a|
 |@(pattern-list)|匹配给定的模式|a.@(txt\|bin)|a.txt, a.bin|a., a.txtbin|
 |!(pattern-list)|匹配非给定的模式|a.!(txt\|bin)|a., a.txtbin|a.txt, a.bin|
+
+## 问题解决方案
+
+### 强制拉取并覆盖本地 git
+
+```bash
+git fetch --all
+git reset --hard origin/main
+```

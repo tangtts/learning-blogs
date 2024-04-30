@@ -118,3 +118,154 @@ public class WebConfig implements WebMvcConfigurer {
 }
 ```
 
+[推荐](https://springdoc.cn/spring-boot/using.html#using.spring-beans-and-dependency-injection)
+
+推荐使用构造函数注入
+
+```java
+@Service
+public class MyAccountService implements AccountService {
+
+    private final RiskAssessor riskAssessor;
+
+    public MyAccountService(RiskAssessor riskAssessor) {
+        this.riskAssessor = riskAssessor;
+    }
+}
+```
+如果一个Bean有多个构造函数，你需要用 @Autowired 注解来告诉Spring该用哪个构造函数进行注入。
+
+```java
+@Service
+public class MyAccountService implements AccountService {
+
+    private final RiskAssessor riskAssessor;
+
+    private final PrintStream out;
+
+    @Autowired
+    public MyAccountService(RiskAssessor riskAssessor) {
+        this.riskAssessor = riskAssessor;
+        this.out = System.out;
+    }
+
+    public MyAccountService(RiskAssessor riskAssessor, PrintStream out) {
+        this.riskAssessor = riskAssessor;
+        this.out = out;
+    }
+}
+```
+> 上面示例中通过构造器注入的 riskAssessor 字段被标识为了 final，表示一旦Bean创建这个字段就不被改变了。这也是我们推荐的做法。
+
+
+注入 
+
+```java
+ @Value("${name}")
+ private String name;
+```
+application.properties
+```js
+name  = "zs"
+```
+
+可以引用，也可以使用占位符
+
+
+(属性占位符)[https://springdoc.cn/spring-boot/features.html#features.external-config.files.property-placeholders]
+```js
+app.name=MyApp
+app.description=${app.name} is a Spring Boot application written by ${x:Unknown}
+```
+
+> 假设 x 属性没有在其他地方设置，app.description 的值将是 MyApp is a Spring Boot application written by Unknown。
+
+:::info
+你应该始终使用占位符中的属性名称的规范形式（仅使用小写字母的kebab-case）来引用它们。 这将允许Spring Boot使用与宽松绑定 @ConfigurationProperties 时相同的逻辑。
+
+例如，${demo.item-price} 将从 application.properties 文件中获取 demo.item-price 和 demo.itemPrice 形式的属性，以及从系统环境中获取 DEMO_ITEMPRICE 。 如果你用 ${demo.itemPrice} 的话， demo.item-price 和 DEMO_ITEMPRICE 就不会被考虑。
+:::
+
+使用配置项
+
+这个 `my.main-project.person` 是在配置文件的前缀词
+```java
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(prefix = "my.main-project.person")
+public class MyPersonProperties {
+
+    private String firstName;
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+}
+```
+对以上的代码来说，以下的属性名称都可以使用。
+
+my.main-project.person.first-name
+
+Kebab 风格（短横线隔开），建议在 .properties 和 YAML 文件中使用。
+
+my.main-project.person.firstName
+
+标准的驼峰语法。
+
+my.main-project.person.first_name
+
+下划线，这是一种用于 .properties 和 YAML 文件的替代格式。
+
+MY_MAINPROJECT_PERSON_FIRSTNAME
+
+大写格式，在使用系统环境变量时建议使用大写格式。
+
+使用
+
+
+```java
+class A {
+    private final MyProperties properties;
+
+    public DemoApplication(MyProperties properties) {
+        this.properties = properties;
+    }
+}
+
+      System.out.println(properties.getName());
+```
+
+添加校验
+
+```java
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+@Component
+@ConfigurationProperties("app")
+@Validated
+@Getter
+@Setter
+public class MyProperties {
+
+    private String name;
+
+    @NotNull
+    @Max(10)
+    @Min(0)
+    private  Integer age;
+
+}
+```
+:::info
+如果你确实想使用 @Value，我们建议你使用属性名称的规范形式（仅使用小写字母的kebab-case）来引用属性名称。 这将允许Spring Boot使用与 宽松绑定 @ConfigurationProperties 时相同的逻辑。
+
+例如，@Value("${demo.item-price}") 将从 application.properties 文件中获取 demo.item-price 和 demo.itemPrice 形式，以及从系统环境中获取 DEMO_ITEMPRICE。 如果你用 @Value("${demo.itemPrice}") 代替，demo.item-price 和 DEMO_ITEMPRICE 将不会被考虑。
+:::

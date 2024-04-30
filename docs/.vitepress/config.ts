@@ -196,8 +196,17 @@ export default defineConfig({
             link: "/source/继承",
             activeMatch: "/source/继承",
           },
+          {
+            text: "async/await源码",
+            link: "/source/await",
+            activeMatch: "/source/await",
+          }
         ],
       },
+      {
+        text: "面试",
+        link:"/面试/index"
+      }
     ],
     sidebar: {
       HTML: [
