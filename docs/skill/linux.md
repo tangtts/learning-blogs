@@ -1,6 +1,13 @@
 # linux
 
 
+查看所有端口占用
+```bash
+netstat -tlnp
+```
+
+<img src="@other/netstat.png"/>
+
 ## 文件操作
 
 ### 新增文件（touch）
@@ -232,10 +239,31 @@ tar -xvf test.tar abd.txt bcd.txt -C /usr // 指定解压的位置
 ### 防火墙操作
 ```bash
  ##centos7 防火墙操作
+  systemctl start firewalld  // 开启防火墙
   systemctl status firewalld.service     //查看防火墙状态
   systemctl stop firewalld.service       //关闭运行的防火墙
   systemctl disable firewalld.service    //永久禁止防火墙服务
 ```
+
+```bash
+firewall-cmd --zone=public --list-ports // 查询已开放的端口列表
+netstat -apn | grep  80 端口号 // 查询指定端口是否开放
+firewall-cmd --query-port=80/tcp // 查询指定端口是否已开
+```
+
+当服务器未安装 netstat 工具时，查看端口监听状态会提示如下报错 “command not found”。
+
+```bash
+yum install net-tools
+```
+
+
+
+```bash
+firewall-cmd --add-port=80/tcp --permanent // 添加指定需要开放的端口
+firewall-cmd --reload // 重载入添加的端口
+firewall-cmd --permanent --remove-port=123/tcp // 移除指定端口：
+````
 
 ### 查看网络
 

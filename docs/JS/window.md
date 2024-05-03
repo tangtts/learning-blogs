@@ -1115,3 +1115,47 @@ A.prototype.constructor === A;
 ```
 
 <img  src="@img/原型链.png"/>
+## [showOpenFilePicker](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/showOpenFilePicker)
+
+```js
+  const pickerOpts = {
+    types: [
+      {
+        description: "Images",
+        accept: {
+          "image/*": [".png", ".gif", ".jpeg", ".jpg"],
+        },
+      },
+    ], 
+    excludeAcceptAllOption: true, // 不允许使用所有类型
+    multiple: false, // 不能选择多个文件。
+  };
+
+  async function getTheFile() {
+    // 打开文件选择器并从结果中解构出第一个句柄
+    const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+
+    // 获取文件内容
+    const fileData = await fileHandle.getFile();
+    console.log("🚀 ~ getTheFile ~ fileData:", fileData);
+  }
+```
+options 可选
+选项对象，包含以下属性：
+
+- multiple
+> 布尔值，默认为 false。设为 true 时允许用户选择多个文件。
+
+- excludeAcceptAllOption
+> 布尔值，默认为 false。默认情况下，文件选择器带有一个允许用户选择所有类型文件的过滤选项（展开于文件类型选项中）。设置此选项为 true 以使该过滤选项不可用。
+
+- types
+表示允许选择的文件类型的 Array 数组，其中的元素为包含以下选项的对象：
+
+- description
+> 可选，对此允许文件类型集合的描述。
+
+- accept
+> Object 对象，带有键名为 MIME 类型、键值为包含文件扩展名的 Array 数组的键值对（参考下方的示例）
+
+

@@ -6,29 +6,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-  
-
     .container {
       width: 200px;
       height: 100px;
       background-color: #000;
-      border:10px solid red;
+      border: 10px solid red;
     }
-
-  
-
-   
   </style>
 </head>
 
 <body>
-    <div class="container">
-     
+  <button class="container">
+
     </div>
 </body>
 <script>
-    let container = document.querySelector(".container");
-    const width=  container.offsetWidth;
-    console.log(width)
+  let container = document.querySelector(".container");
+
+
+  async function returnPathDirectories(directoryHandle) {
+    // 通过显示文件选择器来获得一个文件句柄
+    const [handle] = await self.showOpenFilePicker();
+    if (!handle) {
+      // 如果用户取消了选择或者打开文件失败
+      return;
+    }
+
+    // 检查文件句柄是否存在于目录句柄的目录中
+    const relativePaths = await directoryHandle.resolve(handle);
+
+    if (relativePaths === null) {
+      // 不在目录句柄中
+    } else {
+      // relativePaths 是一个包含名称的数组，指示相对路径
+
+      for (const name of relativePaths) {
+        // 打印数组的每个元素
+        console.log(name);
+      }
+    }
+  }
+  container.addEventListener("click", getTheFile)
 </script>
+
 </html>

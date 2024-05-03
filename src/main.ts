@@ -4,7 +4,10 @@ import Lazy from "./plugins/loadImg";
 import Loading from "./plugins/loading";
 import "./styles/index.scss"
 import Ripple from "./plugins/ripple";
+import { createPinia } from "./pinia";
 const app = createApp(App);
+
+app.use(createPinia())
 
 app.use(Lazy, {
   preload: 1.1,

@@ -117,6 +117,82 @@ public class WebConfig implements WebMvcConfigurer {
     }
 }
 ```
+## serverlet
+
+### get
+
+#### 直接传递参数
+
+```bash
+?from=1&size=2
+```
+
+```java
+/*
+	 * 功能描述：测试GetMapping
+	 * @param from
+	 * @param size
+	 * @return
+	 **/
+	@GetMapping()
+	public Object pageUser(int from,int size) {
+		params.put("from", from);
+		params.put("size", size);
+		return params;
+	}
+```
+### 请求参数设置默认值
+
+使用 `RequestParam` 可以设置默认值，也可以使用 `name` 重命名
+
+```java
+@GetMapping()
+public Object pageUser(@RequestParam(defaultValue="0",name="page") int from,int size) {
+		params.put("from", from);
+		params.put("size", size);
+		return params;
+	}
+```
+因为有`name`,所以使用 page
+```bash
+?page=1&size=2
+```
+
+## post
+
+```java
+//相当于定义一个POJO
+public class User {
+ 
+	private int age;
+	private String name;
+	
+	public int getAge() {
+		return age;
+	}
+	
+	public void setAge(int age) {
+		this.age=age;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name=name;
+	}
+}
+```
+
+```java
+	@RequestMapping("/v1/save_user")
+	public Object saveUser(@RequestBody User user) {
+		params.clear();
+		params.put("user",user);
+		return params;
+	}
+```
 
 [推荐](https://springdoc.cn/spring-boot/using.html#using.spring-beans-and-dependency-injection)
 

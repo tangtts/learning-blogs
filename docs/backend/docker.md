@@ -8,19 +8,17 @@ docker run -d -p 6379:6379 --name redis redis:latest
 
 命令参考：https://docs.docker.com/engine/reference/commandline/run/
 
---detach -d Run container in background and print container ID
---publish -p Publish a container's port(s) to the host
---name Assign a name to the container
---env	-e		Set environment variables
+- --detach -d  -d是 `Detached`(守护进程) 的缩写
+- --publish -p 暴露端口
+- --name 给容器命名
+- --env	-e	设置环境变量
+- -it  -it是 Interactive(交互式)和 tty(伪终端)的缩写
 
 ## 常用命令
 
 
-
 1. docker pull 拉取镜像
-
 2. docker push 推送镜像到DockerRegistry
-
 3. docker images 查看本地镜像
 4. docker rmi 删除本地镜像
 5. docker run 创建并运行容器（不能重复创建）
@@ -262,7 +260,6 @@ show databases;
 
 因此，自定义镜像本质就是依次准备好程序运行的基础环境、依赖、应用本身、运行配置等文件，并且打包而成。
 
-<img src="@backImg/docker-镜像.png"/>
 
 |指令  |说明 | 示例|
 |:--:|:--:| :--:|
@@ -296,9 +293,6 @@ EXPOSE 8080
 # 入口，java项目的启动命令
 ENTRYPOINT ["java", "-jar", "/app.jar"]
 ```
-
-
-<img src="@backImg/docker-镜像build.png"/>
 
 ```bash
 cd /root/demo

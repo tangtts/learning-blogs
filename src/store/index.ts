@@ -76,7 +76,6 @@ class Store<T> {
     Object.entries(wrappedGetters).forEach(([key,fn])=>{
 
       computedObj[key] = partial(fn, store)
-      console.log("🚀 ~ Store<T> ~ Object.entries ~ computedObj[key]:", computedObj[key]);
       // computedObj[key] = fn(store)
       computedCache[key] = computed(() => computedObj[key]())
 

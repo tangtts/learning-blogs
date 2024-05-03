@@ -20,7 +20,7 @@ start nginx.exe
 ```
 快速停止服务
 ```bash
-nginx.exe -s stop	  
+  nginx.exe -s stop	  
 ```
 优雅的 停止服务
 ```bash
@@ -35,6 +35,17 @@ nginx.exe -s reload
 
  ```bash
  nginx.exe -s reopen
+ ```
+
+ 找到 nginx 所在位置
+
+ ```bash
+whereis nginx
+ ```
+
+检查nginx语法
+ ```bash
+./nginx -t
  ```
 
 
@@ -426,3 +437,39 @@ location /2 {
     > uri = /exactmatch/10  
     > $request_uri = /exactmatch/10?id=3
 
+
+安装全局命令
+
+
+我们刚安装nginx后,使用需要先找到sbin文件夹下的nginx,
+执行命令要输入路径 ./nginx
+
+直接输入命令
+
+```bash
+ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/
+```
+ln –s 源文件 目标文件夹  
+源文件: /usr/local/nginx/sbin/nginx 就是nginx位置  
+目标文件夹: /usr/local/bin/ 就是环境变量目录  
+
+
+重启失败  
+重新指定配置文件。
+```bash
+/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+```
+
+> 这是一个用于启动 Nginx 服务器的命令，下面是各部分的解释：
+
+> - `/usr/local/nginx/sbin/nginx`: 这部分指定了 Nginx 可执行文件的路径。通常情况下，Nginx 可执行文件位于 `/usr/local/nginx/sbin/nginx` 这个路径下。通过执行这个可执行文件，可以启动 Nginx 服务器。
+
+> - `-c /usr/local/nginx/conf/nginx.conf`: 这部分是通过命令行参数指定了 Nginx 使用的配置文件路径。`-c` 表示后面跟着配置文件的路径，这里指定的是 `/usr/local/nginx/conf/nginx.conf`，即 Nginx 的配置文件所在的路径。Nginx 在启动时会读取这个配置文件来加载配置信息。
+
+> 因此，执行 `/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf` 这个命令会启动 Nginx 服务器，并且告诉 Nginx 服务器在启动时要加载指定的配置文件 `/usr/local/nginx/conf/nginx.conf`。
+
+然后执行
+
+```bash
+  nginx -s reload
+```
