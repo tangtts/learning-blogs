@@ -9,7 +9,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/learning-blogs/",
+  base: "./",
   server: {
     port: 5000,
   },

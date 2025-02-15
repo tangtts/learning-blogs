@@ -4,6 +4,7 @@ import AutoImport from "unplugin-auto-import/vite";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 export default defineConfig({
   vite: {
+    base:"/learning-blogs/",
     server: {
       port: 5001,
     },
