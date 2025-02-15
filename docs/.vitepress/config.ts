@@ -3,8 +3,8 @@ import { fileURLToPath, URL } from "node:url";
 import AutoImport from "unplugin-auto-import/vite";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 export default defineConfig({
+  base: "/learning-blogs/",
   vite: {
-    base:"/learning-blogs/",
     server: {
       port: 5001,
     },
