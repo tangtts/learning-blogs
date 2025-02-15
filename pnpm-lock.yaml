@@ -16,10 +16,10 @@ importers:
         version: 1.1.6(vue@3.3.4)
       '@vitepress-demo-preview/component':
         specifier: ^2.3.2
-        version: 2.3.2(vitepress@1.0.0-beta.6)(vue@3.3.4)
+        version: 2.3.2(vitepress@1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(async-validator@4.2.5)(sass@1.64.1)(search-insights@2.7.0))(vue@3.3.4)
       '@vitepress-demo-preview/plugin':
         specifier: ^1.2.1
-        version: 1.2.1(markdown-it-container@3.0.0)(vitepress@1.0.0-beta.6)(vue@3.3.4)
+        version: 1.2.1(markdown-it-container@3.0.0)(vitepress@1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(async-validator@4.2.5)(sass@1.64.1)(search-insights@2.7.0))(vue@3.3.4)
       element-plus:
         specifier: ^2.3.9
         version: 2.3.9(vue@3.3.4)
@@ -31,7 +31,7 @@ importers:
         version: 2.0.0
       unplugin-icons:
         specifier: ^0.16.5
-        version: 0.16.5
+        version: 0.16.5(@vue/compiler-sfc@3.3.4)(vue-template-compiler@2.7.14)
       vue:
         specifier: ^3.3.4
         version: 3.3.4
@@ -41,10 +41,10 @@ importers:
         version: 20.4.5
       '@vitejs/plugin-vue':
         specifier: ^4.2.3
-        version: 4.2.3(vite@4.4.7)(vue@3.3.4)
+        version: 4.2.3(vite@4.4.7(@types/node@20.4.5)(sass@1.64.1))(vue@3.3.4)
       '@vitejs/plugin-vue-jsx':
         specifier: ^3.0.2
-        version: 3.0.2(vite@4.4.7)(vue@3.3.4)
+        version: 3.0.2(vite@4.4.7(@types/node@20.4.5)(sass@1.64.1))(vue@3.3.4)
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.27)
@@ -61,20 +61,20 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       typescript:
-        specifier: ^5.0.2
+        specifier: ^5.1.6
         version: 5.1.6
       unplugin-auto-import:
         specifier: ^0.16.6
-        version: 0.16.6
+        version: 0.16.6(@vueuse/core@10.2.1(vue@3.3.4))(rollup@3.26.3)
       unplugin-vue-components:
         specifier: ^0.25.1
-        version: 0.25.1(vue@3.3.4)
+        version: 0.25.1(@babel/parser@7.22.10)(rollup@3.26.3)(vue@3.3.4)
       vite:
-        specifier: ^4.4.5
+        specifier: ^4.4.7
         version: 4.4.7(@types/node@20.4.5)(sass@1.64.1)
       vitepress:
         specifier: 1.0.0-beta.6
-        version: 1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(sass@1.64.1)(search-insights@2.7.0)
+        version: 1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(async-validator@4.2.5)(sass@1.64.1)(search-insights@2.7.0)
       vue-tsc:
         specifier: ^1.8.5
         version: 1.8.5(typescript@5.1.6)
@@ -767,8 +767,8 @@ packages:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
 
-  caniuse-lite@1.0.30001520:
-    resolution: {integrity: sha512-tahF5O9EiiTzwTUqAeFjIZbn4Dnqxzz7ktrgGlMYNLH43Ul26IgTMH/zvL3DG0lZxBYnlT04axvInszUsZULdA==}
+  caniuse-lite@1.0.30001699:
+    resolution: {integrity: sha512-b+uH5BakXZ9Do9iK+CkDmctUSEqZl+SP056vc5usa0PL+ev5OHw003rZXcnjNDv3L8P5j6rwT6C0BPKSikW08w==}
 
   chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -1949,11 +1949,13 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
-  '@rollup/pluginutils@5.0.2':
+  '@rollup/pluginutils@5.0.2(rollup@3.26.3)':
     dependencies:
       '@types/estree': 1.0.1
       estree-walker: 2.0.2
       picomatch: 2.3.1
+    optionalDependencies:
+      rollup: 3.26.3
 
   '@styils/vue@1.1.6(vue@3.3.4)':
     dependencies:
@@ -1975,7 +1977,7 @@ snapshots:
 
   '@types/web-bluetooth@0.0.17': {}
 
-  '@vitejs/plugin-vue-jsx@3.0.2(vite@4.4.7)(vue@3.3.4)':
+  '@vitejs/plugin-vue-jsx@3.0.2(vite@4.4.7(@types/node@20.4.5)(sass@1.64.1))(vue@3.3.4)':
     dependencies:
       '@babel/core': 7.22.10
       '@babel/plugin-transform-typescript': 7.22.10(@babel/core@7.22.10)
@@ -1985,22 +1987,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-vue@4.2.3(vite@4.4.7)(vue@3.3.4)':
+  '@vitejs/plugin-vue@4.2.3(vite@4.4.7(@types/node@20.4.5)(sass@1.64.1))(vue@3.3.4)':
     dependencies:
       vite: 4.4.7(@types/node@20.4.5)(sass@1.64.1)
       vue: 3.3.4
 
-  '@vitepress-demo-preview/component@2.3.2(vitepress@1.0.0-beta.6)(vue@3.3.4)':
+  '@vitepress-demo-preview/component@2.3.2(vitepress@1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(async-validator@4.2.5)(sass@1.64.1)(search-insights@2.7.0))(vue@3.3.4)':
     dependencies:
-      vitepress: 1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(sass@1.64.1)(search-insights@2.7.0)
+      vitepress: 1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(async-validator@4.2.5)(sass@1.64.1)(search-insights@2.7.0)
       vue: 3.3.4
 
-  '@vitepress-demo-preview/plugin@1.2.1(markdown-it-container@3.0.0)(vitepress@1.0.0-beta.6)(vue@3.3.4)':
+  '@vitepress-demo-preview/plugin@1.2.1(markdown-it-container@3.0.0)(vitepress@1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(async-validator@4.2.5)(sass@1.64.1)(search-insights@2.7.0))(vue@3.3.4)':
     dependencies:
       '@flypeng/tool': 5.3.1
       markdown-it: 13.0.1
       markdown-it-container: 3.0.0
-      vitepress: 1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(sass@1.64.1)(search-insights@2.7.0)
+      vitepress: 1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(async-validator@4.2.5)(sass@1.64.1)(search-insights@2.7.0)
       vue: 3.3.4
 
   '@volar/language-core@1.9.2':
@@ -2073,8 +2075,9 @@ snapshots:
       '@vue/shared': 3.3.4
       minimatch: 9.0.3
       muggle-string: 0.3.1
-      typescript: 5.1.6
       vue-template-compiler: 2.7.14
+    optionalDependencies:
+      typescript: 5.1.6
 
   '@vue/reactivity-transform@3.3.4':
     dependencies:
@@ -2134,12 +2137,14 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@vueuse/integrations@10.2.1(focus-trap@7.5.2)(vue@3.3.4)':
+  '@vueuse/integrations@10.2.1(async-validator@4.2.5)(focus-trap@7.5.2)(vue@3.3.4)':
     dependencies:
       '@vueuse/core': 10.2.1(vue@3.3.4)
       '@vueuse/shared': 10.2.1(vue@3.3.4)
-      focus-trap: 7.5.2
       vue-demi: 0.14.5(vue@3.3.4)
+    optionalDependencies:
+      async-validator: 4.2.5
+      focus-trap: 7.5.2
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -2203,7 +2208,7 @@ snapshots:
   autoprefixer@10.4.14(postcss@8.4.27):
     dependencies:
       browserslist: 4.21.10
-      caniuse-lite: 1.0.30001520
+      caniuse-lite: 1.0.30001699
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -2231,7 +2236,7 @@ snapshots:
 
   browserslist@4.21.10:
     dependencies:
-      caniuse-lite: 1.0.30001520
+      caniuse-lite: 1.0.30001699
       electron-to-chromium: 1.4.490
       node-releases: 2.0.13
       update-browserslist-db: 1.0.11(browserslist@4.21.10)
@@ -2240,7 +2245,7 @@ snapshots:
 
   camelcase@6.3.0: {}
 
-  caniuse-lite@1.0.30001520: {}
+  caniuse-lite@1.0.30001699: {}
 
   chalk@2.4.2:
     dependencies:
@@ -2645,8 +2650,9 @@ snapshots:
   postcss-load-config@4.0.1(postcss@8.4.27):
     dependencies:
       lilconfig: 2.1.0
-      postcss: 8.4.27
       yaml: 2.3.1
+    optionalDependencies:
+      postcss: 8.4.27
 
   postcss-nested@6.0.1(postcss@8.4.27):
     dependencies:
@@ -2802,9 +2808,9 @@ snapshots:
 
   ufo@1.1.2: {}
 
-  unimport@3.1.0:
+  unimport@3.1.0(rollup@3.26.3):
     dependencies:
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2(rollup@3.26.3)
       escape-string-regexp: 5.0.0
       fast-glob: 3.3.1
       local-pkg: 0.4.3
@@ -2818,20 +2824,22 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  unplugin-auto-import@0.16.6:
+  unplugin-auto-import@0.16.6(@vueuse/core@10.2.1(vue@3.3.4))(rollup@3.26.3):
     dependencies:
       '@antfu/utils': 0.7.5
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2(rollup@3.26.3)
       fast-glob: 3.3.1
       local-pkg: 0.4.3
       magic-string: 0.30.1
       minimatch: 9.0.3
-      unimport: 3.1.0
+      unimport: 3.1.0(rollup@3.26.3)
       unplugin: 1.4.0
+    optionalDependencies:
+      '@vueuse/core': 10.2.1(vue@3.3.4)
     transitivePeerDependencies:
       - rollup
 
-  unplugin-icons@0.16.5:
+  unplugin-icons@0.16.5(@vue/compiler-sfc@3.3.4)(vue-template-compiler@2.7.14):
     dependencies:
       '@antfu/install-pkg': 0.1.1
       '@antfu/utils': 0.7.5
@@ -2840,13 +2848,16 @@ snapshots:
       kolorist: 1.8.0
       local-pkg: 0.4.3
       unplugin: 1.4.0
+    optionalDependencies:
+      '@vue/compiler-sfc': 3.3.4
+      vue-template-compiler: 2.7.14
     transitivePeerDependencies:
       - supports-color
 
-  unplugin-vue-components@0.25.1(vue@3.3.4):
+  unplugin-vue-components@0.25.1(@babel/parser@7.22.10)(rollup@3.26.3)(vue@3.3.4):
     dependencies:
       '@antfu/utils': 0.7.5
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2(rollup@3.26.3)
       chokidar: 3.5.3
       debug: 4.3.4
       fast-glob: 3.3.1
@@ -2856,6 +2867,8 @@ snapshots:
       resolve: 1.22.2
       unplugin: 1.4.0
       vue: 3.3.4
+    optionalDependencies:
+      '@babel/parser': 7.22.10
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -2877,22 +2890,22 @@ snapshots:
 
   vite@4.4.7(@types/node@20.4.5)(sass@1.64.1):
     dependencies:
-      '@types/node': 20.4.5
       esbuild: 0.18.16
       postcss: 8.4.27
       rollup: 3.26.3
-      sass: 1.64.1
     optionalDependencies:
+      '@types/node': 20.4.5
       fsevents: 2.3.2
+      sass: 1.64.1
 
-  vitepress@1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(sass@1.64.1)(search-insights@2.7.0):
+  vitepress@1.0.0-beta.6(@algolia/client-search@4.19.1)(@types/node@20.4.5)(async-validator@4.2.5)(sass@1.64.1)(search-insights@2.7.0):
     dependencies:
       '@docsearch/css': 3.5.1
       '@docsearch/js': 3.5.1(@algolia/client-search@4.19.1)(search-insights@2.7.0)
-      '@vitejs/plugin-vue': 4.2.3(vite@4.4.7)(vue@3.3.4)
+      '@vitejs/plugin-vue': 4.2.3(vite@4.4.7(@types/node@20.4.5)(sass@1.64.1))(vue@3.3.4)
       '@vue/devtools-api': 6.5.0
       '@vueuse/core': 10.2.1(vue@3.3.4)
-      '@vueuse/integrations': 10.2.1(focus-trap@7.5.2)(vue@3.3.4)
+      '@vueuse/integrations': 10.2.1(async-validator@4.2.5)(focus-trap@7.5.2)(vue@3.3.4)
       body-scroll-lock: 4.0.0-beta.0
       focus-trap: 7.5.2
       mark.js: 8.11.1
