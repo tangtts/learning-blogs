@@ -38,11 +38,17 @@ jobs:
         with:
           node-version: 20
           cache: pnpm # 或 pnpm / yarn
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8 # 指定 pnpm 的版本
+ 
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Install dependencies
         run: pnpm install # 或 pnpm install / yarn install / bun install
-      - name: Build with VitePress
+      - name: Build with VitePress3
         run: pnpm docs:build # 或 pnpm docs:build / yarn docs:build / bun run docs:build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
